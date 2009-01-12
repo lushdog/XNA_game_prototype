@@ -47,13 +47,17 @@ namespace MyFirstGame
             activeInput = new GamepadInput();
 #endif
 #if !XBOX
-            if (!useWiimote)
+            if (false)
             {
                 activeInput = new KeyboardInput();
             }
-            else
+            else if (false)
             {
                 activeInput = new WiiInput();
+            }
+            else
+            {
+                activeInput = new MouseInput();
             }
 #endif
 
@@ -100,24 +104,31 @@ namespace MyFirstGame
                 this.Exit();
 
             // TODO: Add your update logic here
-
-            //TODO: refactor input processing
-            float posX = 0.0f;
-            float posY = 0.0f;
-            float moveX = activeInput.GetX();
+            
+            //TODO: refactor this to GetInputState()
+            float moveX = activeInput.GetX(); 
             float moveY = activeInput.GetY();
 
-            if (activeInput is KeyboardInput)
-            {
-                posX = crosshair.position.X - (moveX * SCROLL_SPEED);
-                posY = crosshair.position.Y - (moveY * SCROLL_SPEED);
-            }
-            else if (activeInput is GamepadInput)
+            //TODO: movement is handled by GameObject class
+            float posX = 0.0f;
+            float posY = 0.0f;
+
+            if (activeInput is GamepadInput)
             {
                 posX = crosshair.position.X + (moveX * SCROLL_SPEED);
                 posY = crosshair.position.Y - (moveY * SCROLL_SPEED);
             }
 #if !XBOX
+            else if (activeInput is MouseInput)
+            {
+                posX = moveX;
+                posY = moveY;
+            }
+            else if (activeInput is KeyboardInput)
+            {
+                posX = crosshair.position.X - (moveX * SCROLL_SPEED);
+                posY = crosshair.position.Y - (moveY * SCROLL_SPEED);
+            }
             else if (activeInput is WiiInput)
             {
                 posX = moveX * (float)viewportRectangle.Width;
@@ -130,12 +141,11 @@ namespace MyFirstGame
 #if DEBUG
             Console.WriteLine("MoveX = " + moveX.ToString());
             Console.WriteLine("MoveY = " + moveY.ToString());
-            Console.WriteLine("PosX = " + posX.ToString());
-            Console.WriteLine("PosY = " + posY.ToString());
-            Console.WriteLine("CrosshairX = " + crosshair.position.X.ToString());
-            Console.WriteLine("CrosshairY = " + crosshair.position.Y.ToString());
+            //Console.WriteLine("PosX = " + posX.ToString());
+            //Console.WriteLine("PosY = " + posY.ToString());
+            //Console.WriteLine("CrosshairX = " + crosshair.position.X.ToString());
+            //Console.WriteLine("CrosshairY = " + crosshair.position.Y.ToString());
 #endif
-
             base.Update(gameTime);
         }
 

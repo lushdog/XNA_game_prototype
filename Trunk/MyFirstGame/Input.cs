@@ -16,7 +16,9 @@ namespace MyFirstGame
         public abstract float GetY();
         public abstract bool GetFire();
         public abstract bool GetExit();
-    }   
+    }
+
+#if !XBOX
 
     public class KeyboardInput : Input
     {
@@ -70,38 +72,6 @@ namespace MyFirstGame
         }
     }
 
-    public class GamepadInput : Input
-    {
-            
-        public GamepadInput()
-        {
-            
-        }
-
-        public override float GetY()
-        {
-            GamePadState _gamePadState = GamePad.GetState(PlayerIndex.One);
-            return _gamePadState.ThumbSticks.Left.Y;
-        }
-
-        public override float GetX()
-        {
-            GamePadState _gamePadState = GamePad.GetState(PlayerIndex.One);
-            return _gamePadState.ThumbSticks.Left.X;
-        }
-
-        public override bool GetFire()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool GetExit()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-#if !XBOX
     public class WiiInput : Input
     {
         Wiimote _wiimote;
@@ -176,6 +146,67 @@ namespace MyFirstGame
             return wiimote;
         }
     }
+
+    public class MouseInput : Input
+    {
+        public MouseInput()
+        {
+
+        }
+
+        public override float GetY()
+        {
+            MouseState _mouseState = Mouse.GetState();
+            return _mouseState.Y;
+        }
+
+        public override float GetX()
+        {
+            MouseState _mouseState = Mouse.GetState();
+            return _mouseState.X;
+        }
+
+        public override bool GetFire()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool GetExit()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 #endif
+
+    public class GamepadInput : Input
+    {
+        public GamepadInput()
+        {
+
+        }
+
+        public override float GetY()
+        {
+            GamePadState _gamePadState = GamePad.GetState(PlayerIndex.One);
+            return _gamePadState.ThumbSticks.Left.Y;
+        }
+
+        public override float GetX()
+        {
+            GamePadState _gamePadState = GamePad.GetState(PlayerIndex.One);
+            return _gamePadState.ThumbSticks.Left.X;
+        }
+
+        public override bool GetFire()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool GetExit()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 
