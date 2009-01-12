@@ -1,0 +1,2 @@
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\obj\Xbox 360\Release\ResolveAssemblyReference.cache
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\obj\Xbox 360\Release\Microsoft.Xna.Framework.RuntimeProfile.txt

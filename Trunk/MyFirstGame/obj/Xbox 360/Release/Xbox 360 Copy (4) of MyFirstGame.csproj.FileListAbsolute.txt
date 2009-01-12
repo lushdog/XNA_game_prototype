@@ -1,0 +1,12 @@
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\bin\Xbox 360\Release\Content\Sprites\crosshair.xnb
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\bin\Xbox 360\Release\Content\Sprites\background.xnb
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\bin\Xbox 360\Release\MyFirstGame.exe.manifest
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\bin\Xbox 360\Release\MyFirstGame.application
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\bin\Xbox 360\Release\MyFirstGame.exe
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\bin\Xbox 360\Release\MyFirstGame.pdb
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\obj\Xbox 360\Release\ResolveAssemblyReference.cache
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\obj\Xbox 360\Release\Microsoft.Xna.Framework.RuntimeProfile.txt
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\obj\Xbox 360\Release\MyFirstGame.exe.manifest
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\obj\Xbox 360\Release\MyFirstGame.application
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\obj\Xbox 360\Release\MyFirstGame.exe
+E:\Documents and Settings\Matt\My Documents\Visual Studio 2008\Projects\MyFirstGame\MyFirstGame\obj\Xbox 360\Release\MyFirstGame.pdb
