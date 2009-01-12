@@ -18,14 +18,15 @@ namespace MyFirstGame
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        Rectangle viewportRectangle;
-        Texture2D backgroundTexture;
-        Texture2D crosshairTexture;
-        SpriteBatch spriteBatch;
-        GameObject crosshair;
-        Input activeInput;
-        float SCROLL_SPEED = 4.0f;
+        private GraphicsDeviceManager graphics;
+        private Rectangle viewportRectangle;
+        private Texture2D backgroundTexture;
+        private Texture2D crosshairTexture;
+        private SpriteBatch spriteBatch;
+        private GameObject crosshair;
+        private Input activeInput;
+        private float SCROLL_SPEED = 4.0f;
+        private bool useWiimote = false;
 
         public Game1()
         {
@@ -42,12 +43,11 @@ namespace MyFirstGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            if (true)
-            {
-                activeInput = new GamepadInput();
-            }
+#if XBOX    
+            activeInput = new GamepadInput();
+#endif
 #if !XBOX
-            else if (false)
+            if (!useWiimote)
             {
                 activeInput = new KeyboardInput();
             }

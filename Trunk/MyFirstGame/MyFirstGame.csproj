@@ -89,7 +89,7 @@
     </Reference>
     <Reference Include="WiimoteLib, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\WiimoteLib_1.6\WiimoteLib.dll</HintPath>
+      <HintPath>bin\WiimoteLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
