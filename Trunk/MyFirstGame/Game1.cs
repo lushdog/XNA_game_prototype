@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
+using System.Xml;
 
 namespace MyFirstGame
 {
@@ -25,9 +26,8 @@ namespace MyFirstGame
         private SpriteBatch spriteBatch;
         private GameObject crosshair;
         private Input activeInput;
-        private float SCROLL_SPEED = 4.0f;
-        private bool useWiimote = false;
-
+        private float scroll_speed = 4.0f;  //TODO: move to config file, move to property of Crosshair object
+       
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -43,24 +43,7 @@ namespace MyFirstGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-#if XBOX    
-            activeInput = new GamepadInput();
-#endif
-#if !XBOX
-            if (false)
-            {
-                activeInput = new KeyboardInput();
-            }
-            else if (false)
-            {
-                activeInput = new WiiInput();
-            }
-            else
-            {
-                activeInput = new MouseInput();
-            }
-#endif
-
+            LoadConfigFile();
             base.Initialize();
         }
 
@@ -74,14 +57,14 @@ namespace MyFirstGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            viewportRectangle = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
-            backgroundTexture = this.Content.Load<Texture2D>("sprites\\background");
+            LoadBackground();
 
+            //TODO: refactor to LoadCrosshair()
             crosshairTexture = this.Content.Load<Texture2D>("sprites\\crosshair");
             crosshair = new GameObject(crosshairTexture);
             crosshair.position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
-        }
+        }        
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -115,8 +98,8 @@ namespace MyFirstGame
 
             if (activeInput is GamepadInput)
             {
-                posX = crosshair.position.X + (moveX * SCROLL_SPEED);
-                posY = crosshair.position.Y - (moveY * SCROLL_SPEED);
+                posX = crosshair.position.X + (moveX * scroll_speed);
+                posY = crosshair.position.Y - (moveY * scroll_speed);
             }
 #if !XBOX
             else if (activeInput is MouseInput)
@@ -126,8 +109,8 @@ namespace MyFirstGame
             }
             else if (activeInput is KeyboardInput)
             {
-                posX = crosshair.position.X - (moveX * SCROLL_SPEED);
-                posY = crosshair.position.Y - (moveY * SCROLL_SPEED);
+                posX = crosshair.position.X - (moveX * scroll_speed);
+                posY = crosshair.position.Y - (moveY * scroll_speed);
             }
             else if (activeInput is WiiInput)
             {
@@ -165,5 +148,57 @@ namespace MyFirstGame
 
             base.Draw(gameTime);
         }
+
+        /// <summary>
+        /// Loads 'config.xml' file from executing assembly's directory
+        /// </summary>
+        private void LoadConfigFile()
+        {
+            XmlDocument configDocument = new XmlDocument();
+            configDocument.Load("config.xml");
+            XmlNode inputNode = configDocument.SelectSingleNode("/config/input");
+            try
+            {
+#if XBOX    
+                activeInput = new GamepadInput();
+#endif
+#if !XBOX
+                string activeInputAttribute = inputNode.Attributes["activeInput"].Value;
+                if (String.Compare(activeInputAttribute, "Keyboard", true) == 0)
+                {
+                    activeInput = new KeyboardInput();
+                }
+                else if (String.Compare(activeInputAttribute, "Wiimote", true) == 0)
+                {
+                    activeInput = new WiiInput();
+                }
+                else if (String.Compare(activeInputAttribute, "Mouse", true) == 0)
+                {
+                    activeInput = new MouseInput();
+                }
+                else
+                {
+                    activeInput = new GamepadInput();
+                }
+#endif
+                scroll_speed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("config.xml does not contain the 'input' attribute.");
+            }
+            finally
+            {
+                //TODO: do we have to dispose of XmlDocument?
+            }
+        }
+
+        //TODO: Extend this to load backgrounds for new levels or in response to actions
+        private void LoadBackground()
+        {
+            viewportRectangle = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            backgroundTexture = this.Content.Load<Texture2D>("sprites\\background");
+        }
+
     }
 }
