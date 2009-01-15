@@ -1,6 +1,6 @@
 using System;
 
-namespace MyFirstGame
+namespace MyFirstGame.GameInput
 {
     static class Program
     {

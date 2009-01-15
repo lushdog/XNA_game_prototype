@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 using System.Xml;
+using MyFirstGame.GameObject;
+using MyFirstGame.GameInput;
 
 namespace MyFirstGame
 {
@@ -22,12 +24,9 @@ namespace MyFirstGame
         private GraphicsDeviceManager graphics;
         private Rectangle viewportRectangle;
         private Texture2D backgroundTexture;
-        private Texture2D crosshairTexture;
         private SpriteBatch spriteBatch;
-        private GameObject crosshair;
-        private Input activeInput;
-        private float scroll_speed = 4.0f;  //TODO: move to config file, move to property of Crosshair object
-       
+        private List<PlayerActor> players; 
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -43,7 +42,7 @@ namespace MyFirstGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            LoadConfigFile();
+            players = new List<PlayerActor>();
             base.Initialize();
         }
 
@@ -57,14 +56,15 @@ namespace MyFirstGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-
             LoadBackground();
+            PlayerInput[] playerInputs = LoadPlayerInputs(); // move to Initialize?
 
-            //TODO: refactor to LoadCrosshair()
-            crosshairTexture = this.Content.Load<Texture2D>("sprites\\crosshair");
-            crosshair = new GameObject(crosshairTexture);
-            crosshair.position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
-        }        
+            //TODO: we shouldn't load player until they press start
+            foreach(PlayerInput playerInput in playerInputs)
+            {
+                players.Add(LoadPlayer(playerInput));
+            }
+        }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -87,48 +87,14 @@ namespace MyFirstGame
                 this.Exit();
 
             // TODO: Add your update logic here
+
+            foreach (PlayerActor player in players)
+            {
+                player.UpdateInput(viewportRectangle.Width, viewportRectangle.Height);
+            }
             
             //TODO: refactor this to GetInputState()
-            float moveX = activeInput.GetX(); 
-            float moveY = activeInput.GetY();
-
-            //TODO: movement is handled by GameObject class
-            float posX = 0.0f;
-            float posY = 0.0f;
-
-            if (activeInput is GamepadInput)
-            {
-                posX = crosshair.position.X + (moveX * scroll_speed);
-                posY = crosshair.position.Y - (moveY * scroll_speed);
-            }
-#if !XBOX
-            else if (activeInput is MouseInput)
-            {
-                posX = moveX;
-                posY = moveY;
-            }
-            else if (activeInput is KeyboardInput)
-            {
-                posX = crosshair.position.X - (moveX * scroll_speed);
-                posY = crosshair.position.Y - (moveY * scroll_speed);
-            }
-            else if (activeInput is WiiInput)
-            {
-                posX = moveX * (float)viewportRectangle.Width;
-                posY = moveY * (float)viewportRectangle.Height;
-            }
-#endif
-            crosshair.position.X = MathHelper.Clamp(posX, 0.0f, viewportRectangle.Width);
-            crosshair.position.Y = MathHelper.Clamp(posY, 0.0f, viewportRectangle.Height);
-
-#if DEBUG
-            Console.WriteLine("MoveX = " + moveX.ToString());
-            Console.WriteLine("MoveY = " + moveY.ToString());
-            //Console.WriteLine("PosX = " + posX.ToString());
-            //Console.WriteLine("PosY = " + posY.ToString());
-            //Console.WriteLine("CrosshairX = " + crosshair.position.X.ToString());
-            //Console.WriteLine("CrosshairY = " + crosshair.position.Y.ToString());
-#endif
+            
             base.Update(gameTime);
         }
 
@@ -143,7 +109,14 @@ namespace MyFirstGame
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
             spriteBatch.Draw(backgroundTexture, viewportRectangle, Color.White);
-            spriteBatch.Draw(crosshair.sprite, crosshair.position, null, Color.White, crosshair.rotation, crosshair.center, 2.0f, SpriteEffects.None, 0);
+
+            //Draw players
+            //TODO: Only draw active players
+            foreach (PlayerActor player in players)
+            {
+                spriteBatch.Draw(player.Sprite, player.Position, null, Color.White, player.Rotation, player.Origin, 2.0f, SpriteEffects.None, 0);
+            }
+                
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -152,52 +125,79 @@ namespace MyFirstGame
         /// <summary>
         /// Loads 'config.xml' file from executing assembly's directory
         /// </summary>
-        private void LoadConfigFile()
+        private PlayerInput[] LoadPlayerInputs()
         {
+            PlayerInput[] playerInputs = new PlayerInput[4];
+
+#if XBOX    
+            playerInputs[0] = new GamepadInput(PlayerIndex.One);
+            playerInputs[1] = new GamepadInput(PlayerIndex.Two);
+            playerInputs[2] = new GamepadInput(PlayerIndex.Three);
+            playerInputs[3] = new GamepadInput(PlayerIndex.Four);
+            return playerInputs;
+#endif
+
+#if !XBOX
             XmlDocument configDocument = new XmlDocument();
-            configDocument.Load("config.xml");
-            XmlNode inputNode = configDocument.SelectSingleNode("/config/input");
+            configDocument.Load(".//Config//config.xml");
+            XmlNodeList inputNodes = configDocument.SelectNodes("/config/input");
             try
             {
-#if XBOX    
-                activeInput = new GamepadInput();
-#endif
-#if !XBOX
-                string activeInputAttribute = inputNode.Attributes["activeInput"].Value;
-                if (String.Compare(activeInputAttribute, "Keyboard", true) == 0)
+                for (int i = 0; i < playerInputs.Length; i++)
                 {
-                    activeInput = new KeyboardInput();
+                    XmlNode inputNode = inputNodes[i];
+                    string activeInputAttribute = inputNode.Attributes["activeInput"].Value;
+                    float scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
+
+                    if (String.Compare(activeInputAttribute, "Keyboard", true) == 0)
+                    {
+                        playerInputs[i] = new KeyboardInput(NumToEnum<PlayerIndex>(i), scrollSpeed);
+                    }
+                    else if (String.Compare(activeInputAttribute, "Wiimote", true) == 0)
+                    {
+                        playerInputs[i] = new WiiInput(NumToEnum<PlayerIndex>(i), scrollSpeed);
+                    }
+                    else if (String.Compare(activeInputAttribute, "Mouse", true) == 0)
+                    {
+                        playerInputs[i] = new MouseInput(NumToEnum<PlayerIndex>(i), scrollSpeed);
+                    }
+                    else
+                    {
+                        playerInputs[i] = new GamepadInput(NumToEnum<PlayerIndex>(i), scrollSpeed);
+                    }
                 }
-                else if (String.Compare(activeInputAttribute, "Wiimote", true) == 0)
-                {
-                    activeInput = new WiiInput();
-                }
-                else if (String.Compare(activeInputAttribute, "Mouse", true) == 0)
-                {
-                    activeInput = new MouseInput();
-                }
-                else
-                {
-                    activeInput = new GamepadInput();
-                }
-#endif
-                scroll_speed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
+                return playerInputs;
+#endif                
             }
             catch (Exception ex)
             {
-                throw new Exception("config.xml does not contain the 'input' attribute.");
+                throw;
             }
             finally
             {
                 //TODO: do we have to dispose of XmlDocument?
+
             }
         }
+
+        private PlayerActor LoadPlayer(PlayerInput playerInput)
+        {
+            Texture2D playerTexture = this.Content.Load<Texture2D>("sprites\\crosshair");
+            PlayerActor playerActor = new PlayerActor(playerInput, playerTexture);
+            playerActor.Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
+            return playerActor;
+        }               
 
         //TODO: Extend this to load backgrounds for new levels or in response to actions
         private void LoadBackground()
         {
             viewportRectangle = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             backgroundTexture = this.Content.Load<Texture2D>("sprites\\background");
+        }
+
+        public T NumToEnum<T>(int number)
+        {
+            return (T)Enum.ToObject(typeof(T), number);
         }
 
     }
