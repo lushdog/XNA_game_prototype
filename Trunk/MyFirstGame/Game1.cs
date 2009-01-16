@@ -57,8 +57,12 @@ namespace MyFirstGame
 
             // TODO: use this.Content to load your game content here
             LoadBackground();
-            PlayerInput[] playerInputs = LoadPlayerInputs(); // move to Initialize?
-
+#if !XBOX
+            PlayerInput[] playerInputs = LoadPCPlayerInputs(); // move to Initialize?
+#endif
+#if XBOX
+            PlayerInput[] playerInputs = LoadXBOXPlayerInputs(); // move to Initialize?
+#endif
             //TODO: we shouldn't load player until they press start
             foreach(PlayerInput playerInput in playerInputs)
             {
@@ -122,24 +126,12 @@ namespace MyFirstGame
             base.Draw(gameTime);
         }
 
-        /// <summary>
-        /// Loads 'config.xml' file from executing assembly's directory
-        /// </summary>
-        private PlayerInput[] LoadPlayerInputs()
+#if !XBOX
+        private PlayerInput[] LoadPCPlayerInputs()
         {
             PlayerInput[] playerInputs = new PlayerInput[4];
-
-#if XBOX    
-            playerInputs[0] = new GamepadInput(PlayerIndex.One);
-            playerInputs[1] = new GamepadInput(PlayerIndex.Two);
-            playerInputs[2] = new GamepadInput(PlayerIndex.Three);
-            playerInputs[3] = new GamepadInput(PlayerIndex.Four);
-            return playerInputs;
-#endif
-
-#if !XBOX
             XmlDocument configDocument = new XmlDocument();
-            configDocument.Load(".//Config//config.xml");
+            configDocument.Load(".//Config//PCconfig.xml");
             XmlNodeList inputNodes = configDocument.SelectNodes("/config/input");
             try
             {
@@ -147,27 +139,48 @@ namespace MyFirstGame
                 {
                     XmlNode inputNode = inputNodes[i];
                     string activeInputAttribute = inputNode.Attributes["activeInput"].Value;
-                    float scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
+                    float scrollSpeed; 
 
                     if (String.Compare(activeInputAttribute, "Keyboard", true) == 0)
                     {
-                        playerInputs[i] = new KeyboardInput(NumToEnum<PlayerIndex>(i), scrollSpeed);
+                        scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
+                        playerInputs[i] = new KeyboardInput(i + 1, scrollSpeed);
                     }
                     else if (String.Compare(activeInputAttribute, "Wiimote", true) == 0)
                     {
-                        playerInputs[i] = new WiiInput(NumToEnum<PlayerIndex>(i), scrollSpeed);
+                        //if we have Wiimote, Mouse, Wiimote, 
+                        //the last Wiimote is player 3 but Wiimote index 1.
+                        int numWiimotePlayers = 0;
+                        foreach(PlayerInput input in playerInputs)
+                        {
+                            if (input is WiiInput)
+                            {
+                                numWiimotePlayers += 1;
+                            }
+                        }
+                        playerInputs[i] = new WiiInput(i + 1, numWiimotePlayers);
                     }
                     else if (String.Compare(activeInputAttribute, "Mouse", true) == 0)
                     {
-                        playerInputs[i] = new MouseInput(NumToEnum<PlayerIndex>(i), scrollSpeed);
+                        playerInputs[i] = new MouseInput(i + 1);
                     }
                     else
                     {
-                        playerInputs[i] = new GamepadInput(NumToEnum<PlayerIndex>(i), scrollSpeed);
+                        //if we have Gamepad, Mouse, Gamepad
+                        //the last Gamepad is player 3 but Gamepad PlayerIndex.Two.
+                        int numGamepadPlayers = 0;
+                        foreach (PlayerInput input in playerInputs)
+                        {
+                            if (input is GamepadInput)
+                            {
+                                numGamepadPlayers += 1;
+                            }
+                        }
+                        scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
+                        playerInputs[i] = new GamepadInput(i + 1, NumToEnum<PlayerIndex>(numGamepadPlayers), scrollSpeed);
                     }
                 }
-                return playerInputs;
-#endif                
+                return playerInputs;                
             }
             catch (Exception ex)
             {
@@ -176,9 +189,38 @@ namespace MyFirstGame
             finally
             {
                 //TODO: do we have to dispose of XmlDocument?
-
             }
         }
+#endif
+
+#if XBOX
+        private PlayerInput[] LoadXBOXPlayerInputs()
+        {
+            PlayerInput[] playerInputs = new PlayerInput[4];
+            XmlDocument configDocument = new XmlDocument();
+            configDocument.Load(".//Config//XBOXconfig.xml");
+            XmlNodeList inputNodes = configDocument.SelectNodes("/config/input");
+            try
+            {
+                for (int i = 0; i < playerInputs.Length; i++)
+                {
+                    XmlNode inputNode = inputNodes[i];
+                    float scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
+                    playerInputs[i] = new GamepadInput(i + 1, NumToEnum<PlayerIndex>(i), scrollSpeed);
+                }
+                return playerInputs;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                //TODO: do we have to dispose of XmlDocument?
+            }
+        }
+
+#endif
 
         private PlayerActor LoadPlayer(PlayerInput playerInput)
         {
@@ -199,6 +241,5 @@ namespace MyFirstGame
         {
             return (T)Enum.ToObject(typeof(T), number);
         }
-
     }
 }

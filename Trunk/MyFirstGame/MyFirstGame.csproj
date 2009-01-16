@@ -101,7 +101,10 @@
     <Compile Include="Game1.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\config.xml">
+    <Content Include="Config\XBOXconfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\PCconfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Game.ico" />

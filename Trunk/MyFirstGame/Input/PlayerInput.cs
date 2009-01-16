@@ -13,10 +13,9 @@ namespace MyFirstGame.GameInput
 {
     public abstract class PlayerInput
     {
-        private PlayerIndex _playerNumber;
-        private float _scrollSpeed;
-
-        public PlayerIndex PlayerNumber
+        private int _playerNumber;
+        
+        public int PlayerNumber
         { 
             get
             {
@@ -27,23 +26,10 @@ namespace MyFirstGame.GameInput
                 _playerNumber = value;
             }
         }
-
-        public float ScrollSpeed 
+               
+        public PlayerInput(int playerNumber)
         {
-            get
-            {
-                return _scrollSpeed;
-            }
-            set
-            {
-                _scrollSpeed = value;
-            }
-        }
-
-        public PlayerInput(PlayerIndex playerIndex, float scrollSpeed)
-        {
-            _playerNumber = playerIndex;
-            _scrollSpeed = scrollSpeed;
+            _playerNumber = playerNumber; 
         }
 
         public abstract float GetX(); 
@@ -56,14 +42,28 @@ namespace MyFirstGame.GameInput
 
     public class KeyboardInput : PlayerInput
     {
-        public KeyboardInput(PlayerIndex playerIndex, float scrollSpeed) : base(playerIndex, scrollSpeed)
+        private float _scrollSpeed;
+        
+        public float ScrollSpeed
         {
-            
+            get
+            {
+                return _scrollSpeed;
+            }
+            set
+            {
+                _scrollSpeed = value;
+            }
+        }
+        
+        public KeyboardInput(int playerNumber, float scrollSpeed) : base(playerNumber)
+        {
+            _scrollSpeed = scrollSpeed;
         }
 
         public override float GetY()
         {
-            KeyboardState _keyboardState = Keyboard.GetState(PlayerIndex.One);
+            KeyboardState _keyboardState = Keyboard.GetState();
             if (_keyboardState.IsKeyDown(Keys.Up))
             {
                 return 1.0f;
@@ -80,7 +80,7 @@ namespace MyFirstGame.GameInput
 
         public override float GetX()
         {
-            KeyboardState _keyboardState = Keyboard.GetState(PlayerIndex.One);
+            KeyboardState _keyboardState = Keyboard.GetState();
             if (_keyboardState.IsKeyDown(Keys.Left))
             {
                 return 1.0f;
@@ -97,7 +97,7 @@ namespace MyFirstGame.GameInput
 
         public override bool GetFire()
         {
-            throw new NotImplementedException();
+            return Keyboard.GetState().IsKeyDown(Keys.Space);            
         }
 
         public override bool GetExit()
@@ -110,9 +110,9 @@ namespace MyFirstGame.GameInput
     {
         Wiimote _wiimote;
 
-        public WiiInput(PlayerIndex playerIndex, float scrollSpeed) : base(playerIndex, scrollSpeed)
+        public WiiInput(int playerNumber, int wiimoteNumber) : base(playerNumber)
         {
-            _wiimote = InitWiimote();
+            _wiimote = InitWiimote(wiimoteNumber);
         }
 
         //resolve IR pointer co-ords and screen co-ords
@@ -138,7 +138,7 @@ namespace MyFirstGame.GameInput
 
         public override bool GetFire()
         {
-            throw new NotImplementedException();
+            return _wiimote.WiimoteState.ButtonState.B;
         }
 
         public override bool GetExit()
@@ -146,17 +146,15 @@ namespace MyFirstGame.GameInput
             throw new NotImplementedException();
         }
 
-        private Wiimote InitWiimote()
+        private Wiimote InitWiimote(int wiimoteIndex)
         {
             WiimoteCollection wiimoteCollection = new WiimoteCollection();
             Wiimote wiimote;
-            int index = 1;
-
-            //safe to say that only one Wiimote connected to PC
+            
             try
             {
                 wiimoteCollection.FindAllWiimotes();
-                wiimote = wiimoteCollection.ElementAt<Wiimote>(0);
+                wiimote = wiimoteCollection.ElementAt<Wiimote>(wiimoteIndex);
             }
             catch
             {
@@ -169,7 +167,7 @@ namespace MyFirstGame.GameInput
                 {
                     wiimote.Connect();
                     wiimote.SetReportType(InputReport.IRExtensionAccel, IRSensitivity.Maximum, true);
-                    wiimote.SetLEDs(index++);
+                    wiimote.SetLEDs(wiimoteIndex + 1);
                 }
                 catch
                 {
@@ -183,26 +181,27 @@ namespace MyFirstGame.GameInput
 
     public class MouseInput : PlayerInput
     {
-        public MouseInput(PlayerIndex playerIndex, float scrollSpeed): base(playerIndex, scrollSpeed)
+        public MouseInput(int playerNumber): base(playerNumber)
         {
 
         }
 
         public override float GetY()
         {
-            MouseState _mouseState = Mouse.GetState();
-            return _mouseState.Y;
+            return Mouse.GetState().Y;
         }
 
         public override float GetX()
         {
-            MouseState _mouseState = Mouse.GetState();
-            return _mouseState.X;
+            return Mouse.GetState().X;
         }
 
         public override bool GetFire()
         {
-            throw new NotImplementedException();
+            if (Mouse.GetState().LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+                return true;
+            else
+                return false;
         }
 
         public override bool GetExit()
@@ -215,26 +214,52 @@ namespace MyFirstGame.GameInput
 
     public class GamepadInput : PlayerInput
     {
-        public GamepadInput(PlayerIndex playerIndex, float scrollSpeed): base(playerIndex, scrollSpeed)
-        {
+        private float _scrollSpeed;
+        private PlayerIndex _gamepadNumber;
 
+        public float ScrollSpeed
+        {
+            get
+            {
+                return _scrollSpeed;
+            }
+            set
+            {
+                _scrollSpeed = value;
+            }
+        }
+
+        public PlayerIndex GamepadNumber
+        {
+            get
+            {
+                return _gamepadNumber;
+            }
+            set
+            {
+                _gamepadNumber = value;
+            }
+        }
+        
+        public GamepadInput(int playerNumber, PlayerIndex gamepadNumber, float scrollSpeed) : base(playerNumber)
+        {
+            _scrollSpeed = scrollSpeed;
+            _gamepadNumber = gamepadNumber;
         }
 
         public override float GetY()
         {
-            GamePadState _gamePadState = GamePad.GetState(PlayerIndex.One);
-            return _gamePadState.ThumbSticks.Left.Y;
+            return GamePad.GetState(GamepadNumber).ThumbSticks.Left.Y;
         }
 
         public override float GetX()
         {
-            GamePadState _gamePadState = GamePad.GetState(PlayerIndex.One);
-            return _gamePadState.ThumbSticks.Left.X;
+            return GamePad.GetState(GamepadNumber).ThumbSticks.Left.X;
         }
 
         public override bool GetFire()
         {
-            throw new NotImplementedException();
+            return (GamePad.GetState(GamepadNumber).Triggers.Right > 0.9f);
         }
 
         public override bool GetExit()

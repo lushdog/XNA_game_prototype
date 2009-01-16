@@ -1,0 +1,21 @@
+760055d97f51475d86cc35598741b656
+0
+Matts XBOX
+C:\Source\Trunk\MyFirstGame\bin\Xbox 360\Release\
+128765447920000000
+C:\Source\Trunk\MyFirstGame\GameThumbnail.png
+2009-01-10T23:41:55.4843750Z
+C:\Source\Trunk\MyFirstGame\bin\Xbox 360\Release\MyFirstGame.application
+2009-01-16T02:13:03.0000000Z
+C:\Source\Trunk\MyFirstGame\bin\Xbox 360\Release\MyFirstGame.exe
+2009-01-16T02:13:02.7968750Z
+C:\Source\Trunk\MyFirstGame\bin\Xbox 360\Release\MyFirstGame.exe.manifest
+2009-01-16T02:13:02.9843750Z
+C:\Source\Trunk\MyFirstGame\bin\Xbox 360\Release\Content\Sprites\background.xnb
+2009-01-16T01:53:54.9531250Z
+C:\Source\Trunk\MyFirstGame\bin\Xbox 360\Release\Content\Sprites\crosshair.xnb
+2009-01-16T01:53:49.2343750Z
+C:\Source\Trunk\MyFirstGame\bin\Xbox 360\Release\Config\PCconfig.xml
+2009-01-16T02:10:41.1562500Z
+C:\Source\Trunk\MyFirstGame\bin\Xbox 360\Release\Config\XBOXconfig.xml
+2009-01-16T02:01:04.6718750Z

@@ -62,19 +62,19 @@ namespace MyFirstGame.GameObject
 
             if (ActiveInput is GamepadInput)
             {
-                newPosX = this.Position.X + (inputX * ActiveInput.ScrollSpeed);
-                newPosY = this.Position.Y - (inputY * ActiveInput.ScrollSpeed);
+                newPosX = this.Position.X + (inputX * ((GamepadInput)ActiveInput).ScrollSpeed);
+                newPosY = this.Position.Y - (inputY * ((GamepadInput)ActiveInput).ScrollSpeed);
             }
-#if !XBOX
+#if !XBOX            
+            else if (ActiveInput is KeyboardInput)
+            {
+                newPosX = this.Position.X - (inputX * ((KeyboardInput)ActiveInput).ScrollSpeed);
+                newPosY = this.Position.Y - (inputY * ((KeyboardInput)ActiveInput).ScrollSpeed);
+            }
             else if (ActiveInput is MouseInput)
             {
                 newPosX = inputX;
                 newPosY = inputY;
-            }
-            else if (ActiveInput is KeyboardInput)
-            {
-                newPosX = this.Position.X - (inputX * ActiveInput.ScrollSpeed);
-                newPosY = this.Position.Y - (inputY * ActiveInput.ScrollSpeed);
             }
             else if (ActiveInput is WiiInput)
             {
