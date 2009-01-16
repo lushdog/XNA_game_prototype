@@ -1,3 +1,4 @@
 Content\Sprites\crosshair.xnb
 Content\Sprites\background.xnb
-config.xml
+Config\PCconfig.xml
+Config\XBOXconfig.xml

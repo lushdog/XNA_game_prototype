@@ -19,6 +19,20 @@ namespace MyFirstGame.GameObject
     {
         private Texture2D _sprite;
         private PlayerInput _activeInput;
+        private bool _isActive;
+        private int _playerNumber;
+
+        public int PlayerNumber
+        {
+            get
+            {
+                return _playerNumber;
+            }
+            set
+            {
+                _playerNumber = value;
+            }
+        }        
         
         public Texture2D Sprite
         {
@@ -29,6 +43,18 @@ namespace MyFirstGame.GameObject
             set
             {
                 _sprite = value;
+            }
+        }
+
+        public bool IsActive
+        {
+            get
+            {
+                return _isActive;
+            }
+            set
+            {
+                _isActive = value;
             }
         }
 
@@ -44,27 +70,39 @@ namespace MyFirstGame.GameObject
             }
         }
 
-        public PlayerActor(PlayerInput activeInput, Texture2D sprite)
+        public PlayerActor(PlayerInput activeInput, Texture2D sprite, int playerNumber)
         {
             _activeInput = activeInput;
             _sprite = sprite;
+            _isActive = false;
+            _playerNumber = playerNumber;
             base.Visible = true;
             base.Rotation = 0.0f;
         }
 
         public void UpdateInput(int viewportWidth, int viewportHeight)
         {
-            float inputX = ActiveInput.GetX(); 
-            float inputY = ActiveInput.GetY();
-
-            float newPosX = 0.0f;
-            float newPosY = 0.0f;
-
-            if (ActiveInput is GamepadInput)
+            if (!IsActive)
             {
-                newPosX = this.Position.X + (inputX * ((GamepadInput)ActiveInput).ScrollSpeed);
-                newPosY = this.Position.Y - (inputY * ((GamepadInput)ActiveInput).ScrollSpeed);
+                if (ActiveInput.GetFire())
+                {
+                    IsActive = true;
+                }
             }
+
+            if (IsActive)
+            {
+                float inputX = ActiveInput.GetX();
+                float inputY = ActiveInput.GetY();
+
+                float newPosX = 0.0f;
+                float newPosY = 0.0f;
+
+                if (ActiveInput is GamepadInput)
+                {
+                    newPosX = this.Position.X + (inputX * ((GamepadInput)ActiveInput).ScrollSpeed);
+                    newPosY = this.Position.Y - (inputY * ((GamepadInput)ActiveInput).ScrollSpeed);
+                }
 #if !XBOX            
             else if (ActiveInput is KeyboardInput)
             {
@@ -82,19 +120,20 @@ namespace MyFirstGame.GameObject
                 newPosY = inputY * (float)viewportHeight;
             }
 #endif
-            newPosX = MathHelper.Clamp(newPosX, 0.0f, viewportWidth);
-            newPosY = MathHelper.Clamp(newPosY, 0.0f, viewportHeight);
-            this.MoveTo((int)newPosX, (int)newPosY);
+                newPosX = MathHelper.Clamp(newPosX, 0.0f, viewportWidth);
+                newPosY = MathHelper.Clamp(newPosY, 0.0f, viewportHeight);
+                this.MoveTo((int)newPosX, (int)newPosY);
 
 #if DEBUG
-            string playerNumber = "Player " + ActiveInput.PlayerNumber.ToString();
-            Console.WriteLine(playerNumber + " MoveX = " + inputX.ToString());
-            Console.WriteLine(playerNumber + " MoveY = " + inputY.ToString());
-            //Console.WriteLine(playerNumber + " PosX = " + posX.ToString());
-            //Console.WriteLine(playerNumber + " PosY = " + posY.ToString());
-            //Console.WriteLine(playerNumber + " CrosshairX = " + crosshair.position.X.ToString());
-            //Console.WriteLine(playerNumber + " CrosshairY = " + crosshair.position.Y.ToString());
+                //string playerNumber = "Player " + ActiveInput.PlayerNumber.ToString();
+                //Console.WriteLine(playerNumber + " MoveX = " + inputX.ToString());
+                //Console.WriteLine(playerNumber + " MoveY = " + inputY.ToString());
+                //Console.WriteLine(playerNumber + " PosX = " + posX.ToString());
+                //Console.WriteLine(playerNumber + " PosY = " + posY.ToString());
+                //Console.WriteLine(playerNumber + " CrosshairX = " + crosshair.position.X.ToString());
+                //Console.WriteLine(playerNumber + " CrosshairY = " + crosshair.position.Y.ToString());
 #endif
+            }
         }
 
     }

@@ -63,10 +63,11 @@ namespace MyFirstGame
 #if XBOX
             PlayerInput[] playerInputs = LoadXBOXPlayerInputs(); // move to Initialize?
 #endif
-            //TODO: we shouldn't load player until they press start
+            int playerNumber = 1;
             foreach(PlayerInput playerInput in playerInputs)
             {
-                players.Add(LoadPlayer(playerInput));
+                players.Add(LoadPlayer(playerInput, playerNumber));
+                playerNumber += 1;
             }
         }
 
@@ -94,10 +95,9 @@ namespace MyFirstGame
 
             foreach (PlayerActor player in players)
             {
+                //TODO: we shouldn't be passing the screen size every update as it never changes
                 player.UpdateInput(viewportRectangle.Width, viewportRectangle.Height);
             }
-            
-            //TODO: refactor this to GetInputState()
             
             base.Update(gameTime);
         }
@@ -115,10 +115,12 @@ namespace MyFirstGame
             spriteBatch.Draw(backgroundTexture, viewportRectangle, Color.White);
 
             //Draw players
-            //TODO: Only draw active players
             foreach (PlayerActor player in players)
             {
-                spriteBatch.Draw(player.Sprite, player.Position, null, Color.White, player.Rotation, player.Origin, 2.0f, SpriteEffects.None, 0);
+                if (player.IsActive)
+                {
+                    spriteBatch.Draw(player.Sprite, player.Position, null, Color.White, player.Rotation, player.Origin, 2.0f, SpriteEffects.None, 0);
+                }
             }
                 
             spriteBatch.End();
@@ -144,7 +146,7 @@ namespace MyFirstGame
                     if (String.Compare(activeInputAttribute, "Keyboard", true) == 0)
                     {
                         scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
-                        playerInputs[i] = new KeyboardInput(i + 1, scrollSpeed);
+                        playerInputs[i] = new KeyboardInput(scrollSpeed);
                     }
                     else if (String.Compare(activeInputAttribute, "Wiimote", true) == 0)
                     {
@@ -158,11 +160,11 @@ namespace MyFirstGame
                                 numWiimotePlayers += 1;
                             }
                         }
-                        playerInputs[i] = new WiiInput(i + 1, numWiimotePlayers);
+                        playerInputs[i] = new WiiInput(numWiimotePlayers);
                     }
                     else if (String.Compare(activeInputAttribute, "Mouse", true) == 0)
                     {
-                        playerInputs[i] = new MouseInput(i + 1);
+                        playerInputs[i] = new MouseInput();
                     }
                     else
                     {
@@ -177,7 +179,7 @@ namespace MyFirstGame
                             }
                         }
                         scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
-                        playerInputs[i] = new GamepadInput(i + 1, NumToEnum<PlayerIndex>(numGamepadPlayers), scrollSpeed);
+                        playerInputs[i] = new GamepadInput(NumToEnum<PlayerIndex>(numGamepadPlayers), scrollSpeed);
                     }
                 }
                 return playerInputs;                
@@ -206,7 +208,7 @@ namespace MyFirstGame
                 {
                     XmlNode inputNode = inputNodes[i];
                     float scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
-                    playerInputs[i] = new GamepadInput(i + 1, NumToEnum<PlayerIndex>(i), scrollSpeed);
+                    playerInputs[i] = new GamepadInput(NumToEnum<PlayerIndex>(i), scrollSpeed);
                 }
                 return playerInputs;
             }
@@ -222,10 +224,10 @@ namespace MyFirstGame
 
 #endif
 
-        private PlayerActor LoadPlayer(PlayerInput playerInput)
+        private PlayerActor LoadPlayer(PlayerInput playerInput, int playerNumber)
         {
             Texture2D playerTexture = this.Content.Load<Texture2D>("sprites\\crosshair");
-            PlayerActor playerActor = new PlayerActor(playerInput, playerTexture);
+            PlayerActor playerActor = new PlayerActor(playerInput, playerTexture, playerNumber);
             playerActor.Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
             return playerActor;
         }               

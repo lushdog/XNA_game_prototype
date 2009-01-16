@@ -2,8 +2,8 @@
 <config>
   <!-- "Keyboard" "Wiimote" "Mouse" "Gamepad" -->
   <input activeInput="Keyboard" scrollSpeed="4.0" />
-  <input activeInput="Wiimote" />
+  <input activeInput="Mouse" />
   <input activeInput="Gamepad" scrollSpeed="4.0" />
-  <input activeInput="Wiimote" />
+  <input activeInput="Gamepad" scrollSpeed="4.0"/>
 </config>
 

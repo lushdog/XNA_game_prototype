@@ -13,23 +13,9 @@ namespace MyFirstGame.GameInput
 {
     public abstract class PlayerInput
     {
-        private int _playerNumber;
-        
-        public int PlayerNumber
-        { 
-            get
-            {
-                return _playerNumber;
-            }
-            set
-            {
-                _playerNumber = value;
-            }
-        }
-               
-        public PlayerInput(int playerNumber)
+        public PlayerInput()
         {
-            _playerNumber = playerNumber; 
+
         }
 
         public abstract float GetX(); 
@@ -56,7 +42,7 @@ namespace MyFirstGame.GameInput
             }
         }
         
-        public KeyboardInput(int playerNumber, float scrollSpeed) : base(playerNumber)
+        public KeyboardInput(float scrollSpeed)
         {
             _scrollSpeed = scrollSpeed;
         }
@@ -110,7 +96,7 @@ namespace MyFirstGame.GameInput
     {
         Wiimote _wiimote;
 
-        public WiiInput(int playerNumber, int wiimoteNumber) : base(playerNumber)
+        public WiiInput(int wiimoteNumber)
         {
             _wiimote = InitWiimote(wiimoteNumber);
         }
@@ -181,7 +167,7 @@ namespace MyFirstGame.GameInput
 
     public class MouseInput : PlayerInput
     {
-        public MouseInput(int playerNumber): base(playerNumber)
+        public MouseInput()
         {
 
         }
@@ -241,7 +227,7 @@ namespace MyFirstGame.GameInput
             }
         }
         
-        public GamepadInput(int playerNumber, PlayerIndex gamepadNumber, float scrollSpeed) : base(playerNumber)
+        public GamepadInput(PlayerIndex gamepadNumber, float scrollSpeed)
         {
             _scrollSpeed = scrollSpeed;
             _gamepadNumber = gamepadNumber;
