@@ -24,6 +24,32 @@ namespace MyFirstGame.GameObject
         private int _playerNumber;
         private List<PlayerActorState> _playerActorStates;
         private Vector2 _origin;
+        private Color _spriteColor;
+        private string _spritePath;
+
+        public string SpritePath 
+        {
+            get
+            {
+                return _spritePath;
+            }
+            set
+            {
+                _spritePath = value;
+            }
+        }
+
+        public Color SpriteColor 
+        {
+            get
+            {
+                return _spriteColor;
+            }
+            set
+            {
+                _spriteColor = value;
+            }
+        }
 
         public override Vector2 Origin
         {
@@ -86,10 +112,11 @@ namespace MyFirstGame.GameObject
             }
         }
 
-        public Player(PlayerInput activeInput, Texture2D sprite, int playerNumber, Vector2 maxPosition) : base (maxPosition)
+        public Player(PlayerInput activeInput, Color spriteColor, int playerNumber, Vector2 maxPosition) : base (maxPosition)
         {
+            _spritePath = "sprites//crosshair";
+            _spriteColor = spriteColor;
             _activeInput = activeInput;
-            _sprite = sprite;
             _playerNumber = playerNumber;
             _playerActorStates = new List<PlayerActorState>();
 

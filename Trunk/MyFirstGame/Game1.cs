@@ -128,7 +128,7 @@ namespace MyFirstGame
             {
                 if (player.PlayerActorStates.Contains(PlayerActorState.Active))
                 {
-                    Color playerColor = Color.White;
+                    Color playerColor = player.SpriteColor;
                     if (player.PlayerActorStates.Contains(PlayerActorState.Firing))
                     {
                         playerColor = Color.Red;
@@ -169,10 +169,27 @@ namespace MyFirstGame
 
         private Player LoadPlayer(PlayerInput playerInput, int playerNumber)
         {
-            Texture2D playerTexture = this.Content.Load<Texture2D>("sprites\\crosshair");
-            Player playerActor = new Player(playerInput, playerTexture, playerNumber, new Vector2(viewportRectangle.Width, viewportRectangle.Height));
-            playerActor.Position = new Vector2(playerActor.MaxPosition.X / 2, playerActor.MaxPosition.Y / 2);
-            return playerActor;
+            //TODO: this should be done via different sprites
+            Color playerColor = Color.White;
+            switch (playerNumber)
+            {
+                case 1:
+                    playerColor = Color.Brown;
+                    break;
+                case 2:
+                    playerColor = Color.Blue;
+                    break;
+                case 3:
+                    playerColor = Color.DimGray;
+                    break;
+                case 4:
+                    playerColor = Color.Green;
+                    break;
+            }
+            Player player = new Player(playerInput, playerColor, playerNumber, new Vector2(viewportRectangle.Width, viewportRectangle.Height));
+            player.Sprite = this.Content.Load<Texture2D>(player.SpritePath);
+            player.Position = new Vector2(player.MaxPosition.X / 2, player.MaxPosition.Y / 2);
+            return player;
         }
 
 #if !XBOX
