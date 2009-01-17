@@ -25,7 +25,8 @@ namespace MyFirstGame
         private Rectangle viewportRectangle;
         private Texture2D backgroundTexture;
         private SpriteBatch spriteBatch;
-        private List<PlayerActor> players; 
+        private List<Player> players;
+        private List<Target> targets;
         
         public Game1()
         {
@@ -42,7 +43,8 @@ namespace MyFirstGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            players = new List<PlayerActor>();
+            players = new List<Player>();
+            targets = new List<Target>();
             base.Initialize();
         }
 
@@ -57,19 +59,9 @@ namespace MyFirstGame
 
             // TODO: use this.Content to load your game content here
             LoadBackground();
-#if !XBOX
-            PlayerInput[] playerInputs = LoadPCPlayerInputs(); // move to Initialize?
-#endif
-#if XBOX
-            PlayerInput[] playerInputs = LoadXBOXPlayerInputs(); // move to Initialize?
-#endif
-            int playerNumber = 1;
-            foreach(PlayerInput playerInput in playerInputs)
-            {
-                players.Add(LoadPlayer(playerInput, playerNumber));
-                playerNumber += 1;
-            }
-        }
+            LoadPlayers();
+            LoadTargets();
+        }       
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -88,17 +80,28 @@ namespace MyFirstGame
         protected override void Update(GameTime gameTime)
         {
             // TODO: Add your update logic here
-            foreach (PlayerActor player in players)
-            {
-                player.UpdatePauseState();
-                if (player.PlayerActorStates.Contains(PlayerActorState.Paused))
-                {
-                    this.Exit();
-                }
+            foreach (Player player in players)
+            {                
                 player.UpdatePlayerIsActive();
                 if (player.PlayerActorStates.Contains(PlayerActorState.Active))
                 {
+                    player.UpdatePauseState();
+                    if (player.PlayerActorStates.Contains(PlayerActorState.Paused))
+                        this.Exit();
+
                     player.UpdateFiringState();
+                    if (player.PlayerActorStates.Contains(PlayerActorState.Firing))
+                    {
+                        foreach (Target target in targets)
+                        {
+                            //TODO: upgrade this from ghetto hit detection to alpha sprite based hit detection
+                            if (target.BoundingBox.Contains(new Rectangle((int)player.Position.X, (int)player.Position.Y, 1, 1)))
+                            {                                
+                                target.AIActorStates.Remove(AIActorState.Active);
+                            }
+                        }
+                    }
+
                     player.UpdatePlayerPosition();
                     //TODO: here is where we'd check for collisions or something and reupdate player pos
                     player.MoveTo((int)player.Position.X, (int)player.Position.Y);
@@ -117,11 +120,11 @@ namespace MyFirstGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
-            spriteBatch.Draw(backgroundTexture, viewportRectangle, Color.White);
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
+            spriteBatch.Draw(backgroundTexture, viewportRectangle, null, Color.White, 0.0f, new Vector2(0,0), SpriteEffects.None, 1.0f );
 
             //Draw players
-            foreach (PlayerActor player in players)
+            foreach (Player player in players)
             {
                 if (player.PlayerActorStates.Contains(PlayerActorState.Active))
                 {
@@ -130,15 +133,46 @@ namespace MyFirstGame
                     {
                         playerColor = Color.Red;
                     }
-                    Console.WriteLine(player.PlayerActorStates.Contains(PlayerActorState.Firing).ToString());
-                    spriteBatch.Draw(player.Sprite, player.Position, null, playerColor, player.Rotation, player.Origin, 1.0f, SpriteEffects.None, 0);
-                    Console.WriteLine(player.Position.X + "," + player.Position.Y + "," + player.Origin.X + "," + player.Origin.Y);
-                 }
+                    spriteBatch.Draw(player.Sprite, player.Position, null, playerColor, player.Rotation, player.Origin, 1.0f, SpriteEffects.None, 0.0f);
+                }
+            }
+
+            //update targets
+            foreach (AIActor target in targets)
+            {
+                if (target.AIActorStates.Contains(AIActorState.Active))
+                {   
+                    spriteBatch.Draw(target.Sprite, target.Position, null, Color.White, target.Rotation, target.Origin, 1.0f, SpriteEffects.None, 0.5f);
+                }
             }
                 
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void LoadPlayers()
+        {
+#if !XBOX
+            PlayerInput[] playerInputs = LoadPCPlayerInputs(); // move to Initialize?
+#endif
+#if XBOX
+            PlayerInput[] playerInputs = LoadXBOXPlayerInputs(); // move to Initialize?
+#endif
+            int playerNumber = 1;
+            foreach (PlayerInput playerInput in playerInputs)
+            {
+                players.Add(LoadPlayer(playerInput, playerNumber));
+                playerNumber += 1;
+            }
+        }
+
+        private Player LoadPlayer(PlayerInput playerInput, int playerNumber)
+        {
+            Texture2D playerTexture = this.Content.Load<Texture2D>("sprites\\crosshair");
+            Player playerActor = new Player(playerInput, playerTexture, playerNumber, new Vector2(viewportRectangle.Width, viewportRectangle.Height));
+            playerActor.Position = new Vector2(playerActor.MaxPosition.X / 2, playerActor.MaxPosition.Y / 2);
+            return playerActor;
         }
 
 #if !XBOX
@@ -154,7 +188,7 @@ namespace MyFirstGame
                 {
                     XmlNode inputNode = inputNodes[i];
                     string activeInputAttribute = inputNode.Attributes["activeInput"].Value;
-                    float scrollSpeed; 
+                    float scrollSpeed;
 
                     if (String.Compare(activeInputAttribute, "Keyboard", true) == 0)
                     {
@@ -166,7 +200,7 @@ namespace MyFirstGame
                         //if we have Wiimote, Mouse, Wiimote, 
                         //the last Wiimote is player 3 but Wiimote index 1.
                         int numWiimotePlayers = 0;
-                        foreach(PlayerInput input in playerInputs)
+                        foreach (PlayerInput input in playerInputs)
                         {
                             if (input is WiiInput)
                             {
@@ -195,7 +229,7 @@ namespace MyFirstGame
                         playerInputs[i] = new GamepadInput(NumToEnum<PlayerIndex>(numGamepadPlayers), scrollSpeed);
                     }
                 }
-                return playerInputs;                
+                return playerInputs;
             }
             catch (Exception ex)
             {
@@ -237,13 +271,20 @@ namespace MyFirstGame
 
 #endif
 
-        private PlayerActor LoadPlayer(PlayerInput playerInput, int playerNumber)
+        //TODO: Different Targets will inherit from AIActor and Levels will contain multiple Waves which are made up of targets
+        private void LoadTargets()
         {
-            Texture2D playerTexture = this.Content.Load<Texture2D>("sprites\\crosshair");
-            PlayerActor playerActor = new PlayerActor(playerInput, playerTexture, playerNumber, new Vector2(viewportRectangle.Width, viewportRectangle.Height));
-            playerActor.Position = new Vector2(playerActor.MaxPosition.X / 2, playerActor.MaxPosition.Y / 2);
-            return playerActor;
-        }               
+            targets.Add(LoadTarget());
+        }
+
+        private Target LoadTarget()
+        {
+            AlienTarget target = new AlienTarget(new Vector2(viewportRectangle.Width, viewportRectangle.Height));
+            target.Sprite = this.Content.Load<Texture2D>(target.SpritePath);
+            target.Position = new Vector2(200, 400);
+            target.AIActorStates.Add(AIActorState.Active);
+            return target;
+        }
 
         //TODO: Extend this to load backgrounds for new levels or in response to actions
         private void LoadBackground()

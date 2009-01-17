@@ -62,7 +62,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Actor\Actor.cs" />
-    <Compile Include="Actor\PlayerActor.cs" />
+    <Compile Include="Actor\AIActor.cs" />
+    <Compile Include="Actor\AlienTarget.cs" />
+    <Compile Include="Actor\Player.cs" />
+    <Compile Include="Actor\Target.cs" />
     <Compile Include="Input\PlayerInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

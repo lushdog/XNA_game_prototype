@@ -19,10 +19,8 @@ namespace MyFirstGame.GameObject
         private string _tag;
         private Vector2 _position;
         private Vector2 _maxPosition;
-        private Vector2 _origin;
         private float _rotation;
-        private bool _visible;
-
+        
         public string Tag
         {
             get
@@ -61,18 +59,8 @@ namespace MyFirstGame.GameObject
             }
         }
 
-        public Vector2 Origin
-        {
-            get
-            {
-                return _origin;
-            }
-            set
-            {
-                _origin = value;
-            }
-        }
-
+        public abstract Vector2 Origin { get; set; }
+        
         public float Rotation
         {
             get
@@ -83,19 +71,6 @@ namespace MyFirstGame.GameObject
             set
             {
                 _rotation = value;
-            }
-
-        }
-
-        public bool Visible
-        {
-            get
-            {
-                return _visible;
-            }
-            set
-            {
-                _visible = value;
             }
 
         }

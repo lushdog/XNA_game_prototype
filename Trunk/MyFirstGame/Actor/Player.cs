@@ -17,12 +17,26 @@ namespace MyFirstGame.GameObject
 {
     public enum PlayerActorState { Firing, Active, Paused, Reloading, Foo }
     
-    class PlayerActor : Actor
+    class Player : Actor
     {
         private Texture2D _sprite;
         private PlayerInput _activeInput;
         private int _playerNumber;
         private List<PlayerActorState> _playerActorStates;
+        private Vector2 _origin;
+
+        public override Vector2 Origin
+        {
+            get
+            {
+                return new Vector2(_sprite.Width / 2, _sprite.Height / 2);
+            }
+            set
+            {
+                _origin = value;
+            }
+
+        }
 
         public int PlayerNumber
         {
@@ -72,16 +86,14 @@ namespace MyFirstGame.GameObject
             }
         }
 
-        public PlayerActor(PlayerInput activeInput, Texture2D sprite, int playerNumber, Vector2 maxPosition) : base (maxPosition)
+        public Player(PlayerInput activeInput, Texture2D sprite, int playerNumber, Vector2 maxPosition) : base (maxPosition)
         {
             _activeInput = activeInput;
             _sprite = sprite;
             _playerNumber = playerNumber;
             _playerActorStates = new List<PlayerActorState>();
 
-            base.Visible = true;
-            base.Rotation = 0.0f;
-            base.Origin = new Vector2(_sprite.Width / 2, _sprite.Height / 2);            
+            base.Rotation = 0.0f;            
         }
 
         public void UpdatePlayerIsActive()
