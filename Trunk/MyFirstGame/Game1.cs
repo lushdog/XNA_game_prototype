@@ -87,13 +87,14 @@ namespace MyFirstGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit (Don't remove or you are stuck in XBOX360)
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
-                this.Exit();
-
             // TODO: Add your update logic here
             foreach (PlayerActor player in players)
             {
+                player.UpdatePauseState();
+                if (player.PlayerActorStates.Contains(PlayerActorState.Paused))
+                {
+                    this.Exit();
+                }
                 player.UpdatePlayerIsActive();
                 if (player.PlayerActorStates.Contains(PlayerActorState.Active))
                 {

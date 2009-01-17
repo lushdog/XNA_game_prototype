@@ -21,7 +21,7 @@ namespace MyFirstGame.GameInput
         public abstract float GetX(); 
         public abstract float GetY();
         public abstract bool GetFire();
-        public abstract bool GetExit();
+        public abstract bool GetPause();
     }
 
 #if !XBOX
@@ -86,9 +86,9 @@ namespace MyFirstGame.GameInput
             return Keyboard.GetState().IsKeyDown(Keys.Space);            
         }
 
-        public override bool GetExit()
+        public override bool GetPause()
         {
-            throw new NotImplementedException();
+            return Keyboard.GetState().IsKeyDown(Keys.Escape);  
         }
     }
 
@@ -127,9 +127,9 @@ namespace MyFirstGame.GameInput
             return _wiimote.WiimoteState.ButtonState.B;
         }
 
-        public override bool GetExit()
+        public override bool GetPause()
         {
-            throw new NotImplementedException();
+            return _wiimote.WiimoteState.ButtonState.Home;
         }
 
         private Wiimote InitWiimote(int wiimoteIndex)
@@ -190,9 +190,9 @@ namespace MyFirstGame.GameInput
                 return false;
         }
 
-        public override bool GetExit()
+        public override bool GetPause()
         {
-            throw new NotImplementedException();
+            return Keyboard.GetState().IsKeyDown(Keys.Escape);
         }
     }
 
@@ -248,9 +248,9 @@ namespace MyFirstGame.GameInput
             return (GamePad.GetState(GamepadNumber).Triggers.Right > 0.9f);
         }
 
-        public override bool GetExit()
+        public override bool GetPause()
         {
-            throw new NotImplementedException();
+            return (GamePad.GetState(GamepadNumber).Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed);
         }
     }
 }

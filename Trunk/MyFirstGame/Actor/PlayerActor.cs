@@ -145,5 +145,20 @@ namespace MyFirstGame.GameObject
             }
         }
 
+        public void UpdatePauseState()
+        {
+            if (ActiveInput.GetPause())
+            {
+                if (!PlayerActorStates.Contains(PlayerActorState.Paused))
+                {
+                    PlayerActorStates.Add(PlayerActorState.Paused);
+                }
+            }
+            else
+            {
+                PlayerActorStates.Remove(PlayerActorState.Paused);
+            }
+        }
+
     }
 }
