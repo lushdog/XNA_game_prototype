@@ -18,8 +18,9 @@ namespace MyFirstGame.GameObject
     {
         private string _tag;
         private Vector2 _position;
+        private Vector2 _maxPosition;
+        private Vector2 _origin;
         private float _rotation;
-        private Rectangle _boundingBox;
         private bool _visible;
 
         public string Tag
@@ -48,11 +49,27 @@ namespace MyFirstGame.GameObject
 
         }
 
+        public Vector2 MaxPosition 
+        {
+            get
+            {
+                return _maxPosition;
+            }
+            set
+            {
+                _maxPosition = value;
+            }
+        }
+
         public Vector2 Origin
         {
             get
             {
-                return new Vector2(BoundingBox.Width / 2, BoundingBox.Height / 2); ;
+                return _origin;
+            }
+            set
+            {
+                _origin = value;
             }
         }
 
@@ -70,19 +87,6 @@ namespace MyFirstGame.GameObject
 
         }
 
-        public Rectangle BoundingBox
-        {
-            get
-            {
-                return _boundingBox;
-            }
-            set
-            {
-                _boundingBox = value;
-            }
-
-        }
-
         public bool Visible
         {
             get
@@ -96,6 +100,10 @@ namespace MyFirstGame.GameObject
 
         }
 
+        public Actor(Vector2 maxPosition)
+        {
+            _maxPosition = maxPosition;
+        }
 
         public void MoveTo(int x, int y)
         {
@@ -106,6 +114,5 @@ namespace MyFirstGame.GameObject
         {
             this.Position += new Vector2(x, y);
         }
-
     }
 }

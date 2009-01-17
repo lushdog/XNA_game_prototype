@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <config>
   <!-- "Keyboard" "Wiimote" "Mouse" "Gamepad" -->
-  <input activeInput="Keyboard" scrollSpeed="4.0" />
+  <input activeInput="Keyboard" scrollSpeed="10.0" />
   <input activeInput="Mouse" />
-  <input activeInput="Gamepad" scrollSpeed="4.0" />
-  <input activeInput="Gamepad" scrollSpeed="4.0"/>
+  <input activeInput="Gamepad" scrollSpeed="10.0" />
+  <input activeInput="Gamepad" scrollSpeed="10.0"/>
 </config>
 

@@ -15,12 +15,14 @@ using MyFirstGame.GameInput;
 
 namespace MyFirstGame.GameObject
 {
+    public enum PlayerActorState { Firing, Active, Paused, Reloading, Foo }
+    
     class PlayerActor : Actor
     {
         private Texture2D _sprite;
         private PlayerInput _activeInput;
-        private bool _isActive;
         private int _playerNumber;
+        private List<PlayerActorState> _playerActorStates;
 
         public int PlayerNumber
         {
@@ -46,18 +48,6 @@ namespace MyFirstGame.GameObject
             }
         }
 
-        public bool IsActive
-        {
-            get
-            {
-                return _isActive;
-            }
-            set
-            {
-                _isActive = value;
-            }
-        }
-
         public PlayerInput ActiveInput
         {
             get
@@ -70,39 +60,54 @@ namespace MyFirstGame.GameObject
             }
         }
 
-        public PlayerActor(PlayerInput activeInput, Texture2D sprite, int playerNumber)
+        public List<PlayerActorState> PlayerActorStates
+        {
+            get
+            {
+                return _playerActorStates;
+            }
+            set
+            {
+                _playerActorStates = value;
+            }
+        }
+
+        public PlayerActor(PlayerInput activeInput, Texture2D sprite, int playerNumber, Vector2 maxPosition) : base (maxPosition)
         {
             _activeInput = activeInput;
             _sprite = sprite;
-            _isActive = false;
             _playerNumber = playerNumber;
+            _playerActorStates = new List<PlayerActorState>();
+
             base.Visible = true;
             base.Rotation = 0.0f;
+            base.Origin = new Vector2(_sprite.Width / 2, _sprite.Height / 2);            
         }
 
-        public void UpdateInput(int viewportWidth, int viewportHeight)
+        public void UpdatePlayerIsActive()
         {
-            if (!IsActive)
+            if (!PlayerActorStates.Contains(PlayerActorState.Active))
             {
                 if (ActiveInput.GetFire())
                 {
-                    IsActive = true;
+                    PlayerActorStates.Add(PlayerActorState.Active);
                 }
             }
+        }
 
-            if (IsActive)
+        public void UpdatePlayerPosition()
+        {
+            float inputX = ActiveInput.GetX();
+            float inputY = ActiveInput.GetY();
+            
+            float newPosX = 0.0f;
+            float newPosY = 0.0f;
+
+            if (ActiveInput is GamepadInput)
             {
-                float inputX = ActiveInput.GetX();
-                float inputY = ActiveInput.GetY();
-
-                float newPosX = 0.0f;
-                float newPosY = 0.0f;
-
-                if (ActiveInput is GamepadInput)
-                {
-                    newPosX = this.Position.X + (inputX * ((GamepadInput)ActiveInput).ScrollSpeed);
-                    newPosY = this.Position.Y - (inputY * ((GamepadInput)ActiveInput).ScrollSpeed);
-                }
+                newPosX = this.Position.X + (inputX * ((GamepadInput)ActiveInput).ScrollSpeed);
+                newPosY = this.Position.Y - (inputY * ((GamepadInput)ActiveInput).ScrollSpeed);
+            }
 #if !XBOX            
             else if (ActiveInput is KeyboardInput)
             {
@@ -116,23 +121,27 @@ namespace MyFirstGame.GameObject
             }
             else if (ActiveInput is WiiInput)
             {
-                newPosX = inputX * (float)viewportWidth;
-                newPosY = inputY * (float)viewportHeight;
+                newPosX = inputX * (float)MaxPosition.X;
+                newPosY = inputY * (float)MaxPosition.Y;
             }
 #endif
-                newPosX = MathHelper.Clamp(newPosX, 0.0f, viewportWidth);
-                newPosY = MathHelper.Clamp(newPosY, 0.0f, viewportHeight);
-                this.MoveTo((int)newPosX, (int)newPosY);
+            newPosX = MathHelper.Clamp(newPosX, 0.0f, MaxPosition.X);
+            newPosY = MathHelper.Clamp(newPosY, 0.0f, MaxPosition.Y);
+            this.Position = new Vector2(newPosX, newPosY);
+        }
 
-#if DEBUG
-                //string playerNumber = "Player " + ActiveInput.PlayerNumber.ToString();
-                //Console.WriteLine(playerNumber + " MoveX = " + inputX.ToString());
-                //Console.WriteLine(playerNumber + " MoveY = " + inputY.ToString());
-                //Console.WriteLine(playerNumber + " PosX = " + posX.ToString());
-                //Console.WriteLine(playerNumber + " PosY = " + posY.ToString());
-                //Console.WriteLine(playerNumber + " CrosshairX = " + crosshair.position.X.ToString());
-                //Console.WriteLine(playerNumber + " CrosshairY = " + crosshair.position.Y.ToString());
-#endif
+        public void UpdateFiringState()
+        {
+            if (ActiveInput.GetFire())
+            {
+                if (!PlayerActorStates.Contains(PlayerActorState.Firing))
+                {
+                    PlayerActorStates.Add(PlayerActorState.Firing);
+                }                
+            }
+            else
+            {
+                PlayerActorStates.Remove(PlayerActorState.Firing);
             }
         }
 
