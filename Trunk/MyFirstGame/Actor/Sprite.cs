@@ -9,7 +9,10 @@ namespace MyFirstGame.GameObject
 {
 	class Sprite
 	{
-		private string _imagePath;
+		
+        //MATT: if this guy inherits from Actor you get tag, position, rotation etc. etc.
+        //Are AIActor and Player going to inherit from this guy?         
+        private string _imagePath;
 		private Texture2D _image;
 		private float _rotation;
 		private Vector2 _origin;
