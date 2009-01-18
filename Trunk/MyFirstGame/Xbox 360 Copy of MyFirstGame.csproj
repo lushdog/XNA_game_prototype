@@ -65,6 +65,9 @@
     <Compile Include="Actor\AIActor.cs" />
     <Compile Include="Actor\AlienTarget.cs" />
     <Compile Include="Actor\Player.cs" />
+    <Compile Include="Actor\Sprite.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Actor\Target.cs" />
     <Compile Include="Input\PlayerInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

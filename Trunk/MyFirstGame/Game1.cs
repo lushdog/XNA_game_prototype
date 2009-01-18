@@ -27,6 +27,7 @@ namespace MyFirstGame
         private SpriteBatch spriteBatch;
         private List<Player> players;
         private List<Target> targets;
+		private List<Sprite> sprites;
         
         public Game1()
         {
@@ -45,6 +46,7 @@ namespace MyFirstGame
             // TODO: Add your initialization logic here
             players = new List<Player>();
             targets = new List<Target>();
+			sprites = new List<Sprite>();
             base.Initialize();
         }
 
@@ -61,6 +63,7 @@ namespace MyFirstGame
             LoadBackground();
             LoadPlayers();
             LoadTargets();
+			LoadSprites();
         }       
 
         /// <summary>
@@ -145,7 +148,13 @@ namespace MyFirstGame
                     spriteBatch.Draw(target.Sprite, target.Position, null, Color.White, target.Rotation, target.Origin, 1.0f, SpriteEffects.None, 0.5f);
                 }
             }
-                
+            
+			//draw static sprites
+			foreach (Sprite sprite in sprites)
+			{
+				spriteBatch.Draw(sprite.Image, sprite.Location, Color.White);
+			}
+
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -302,6 +311,21 @@ namespace MyFirstGame
             target.AIActorStates.Add(AIActorState.Active);
             return target;
         }
+
+		private void LoadSprites()
+		{
+			sprites.Add(LoadSprite());
+		}
+
+		private Sprite LoadSprite()
+		{
+			Sprite sprite = new Sprite();
+			sprite.ImagePath = "sprites\\testimage";
+			sprite.Image = this.Content.Load<Texture2D>(sprite.ImagePath);
+			sprite.X = 300;
+			sprite.Y = 20;
+			return sprite;
+		}
 
         //TODO: Extend this to load backgrounds for new levels or in response to actions
         private void LoadBackground()
