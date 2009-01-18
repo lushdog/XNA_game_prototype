@@ -11,7 +11,15 @@ namespace MyFirstGame.GameObject
 	{
 		
         //MATT: if this guy inherits from Actor you get tag, position, rotation etc. etc.
-        //Are AIActor and Player going to inherit from this guy?         
+        //Are AIActor and Player going to inherit from this guy?
+
+		//JOE: 
+		// I think Sprite might just be a reimagining of Actor.
+		// What do you think about changing Actor to assume it's got a Texture2D?
+		// If Actor doesn't assume a visible element, then why even have position and rotation and so on?
+		// Otherwise, I don't think Sprite really fits in the hierarchy.  It could *belong* to
+		// AIActor and Player and AlienTarget, etc, without inheriting to them, I suppose.
+
         private string _imagePath;
 		private Texture2D _image;
 		private float _rotation;
