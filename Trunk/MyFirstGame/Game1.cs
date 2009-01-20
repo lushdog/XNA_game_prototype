@@ -12,7 +12,9 @@ using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 using System.Xml;
 using MyFirstGame.GameObject;
-using MyFirstGame.GameInput;
+using MyFirstGame.InputObject;
+using MyFirstGame.LevelObject;
+using MyFirstGame.References;
 
 namespace MyFirstGame
 {
@@ -26,9 +28,11 @@ namespace MyFirstGame
         private Texture2D backgroundTexture;
         private SpriteBatch spriteBatch;
         private List<Player> players;
-        private List<Target> targets;
+        //private List<Target> targets;
 		private List<Sprite> sprites;
-        
+        private List<Level> levels;
+        private int currentLevel;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -45,8 +49,9 @@ namespace MyFirstGame
         {
             // TODO: Add your initialization logic here
             players = new List<Player>();
-            targets = new List<Target>();
-			sprites = new List<Sprite>();
+            sprites = new List<Sprite>();
+            levels = new List<Level>();
+
             base.Initialize();
         }
 
@@ -60,11 +65,19 @@ namespace MyFirstGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            //TODO: this is good as we only load up the references to the textures once, but could be better
+            //maybe we could do this via reflection and custom class atrributes so sprite path is not hard coded
+            //in logic
+            //TODO:refactor to LoadTextures()
+            Textures.Instance.AlienTexture = this.Content.Load<Texture2D>("sprites//alien");
+
             LoadBackground();
             LoadPlayers();
-            LoadTargets();
-			LoadSprites();
-        }       
+            LoadSprites();
+            LoadLevels();            
+			
+        }           
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -82,35 +95,46 @@ namespace MyFirstGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // TODO: Add your update logic here
-            foreach (Player player in players)
-            {                
-                player.UpdatePlayerIsActive();
-                if (player.PlayerActorStates.Contains(PlayerActorState.Active))
-                {
-                    player.UpdatePauseState();
-                    if (player.PlayerActorStates.Contains(PlayerActorState.Paused))
-                        this.Exit();
-
-                    player.UpdateFiringState();
-                    if (player.PlayerActorStates.Contains(PlayerActorState.Firing))
-                    {
-                        foreach (Target target in targets)
-                        {
-                            //TODO: upgrade this from ghetto hit detection to alpha sprite based hit detection
-                            if (target.BoundingBox.Contains(new Rectangle((int)player.Position.X, (int)player.Position.Y, 1, 1)))
-                            {                                
-                                target.AIActorStates.Remove(AIActorState.Active);
-                            }
-                        }
-                    }
-
-                    player.UpdatePlayerPosition();
-                    //TODO: here is where we'd check for collisions or something and reupdate player pos
-                    player.MoveTo((int)player.Position.X, (int)player.Position.Y);
-                }
+            //TODO: this will not be hardcoded
+            if (!levels[0].IsStarted)
+            {
+                levels[0].StartLevel(ref gameTime);
             }
 
+            //TODO: JOE: If the game stops updating then its because of this, you are not crazy...
+            if (!levels[0].IsEnded)
+            {
+                //TOREMOVE: splooge ah inheritance and polymorphism jizz all over the screen
+                levels[0].UpdateLevel();
+
+                foreach (Player player in players)
+                {
+                    player.UpdatePlayerIsActive();
+                    if (player.PlayerActorStates.Contains(PlayerActorState.Active))
+                    {
+                        player.UpdatePauseState();
+                        if (player.PlayerActorStates.Contains(PlayerActorState.Paused))
+                            this.Exit();
+
+                        player.UpdateFiringState();
+                        if (player.PlayerActorStates.Contains(PlayerActorState.Firing))
+                        {
+                            foreach (Target target in levels[0].Waves[levels[0].CurrentWave].Targets)
+                            {
+                                //TODO: upgrade this from ghetto hit detection to alpha sprite based hit detection
+                                if (target.BoundingBox.Contains(new Rectangle((int)player.Position.X, (int)player.Position.Y, 1, 1)))
+                                {
+                                    target.AIActorStates.Remove(AIActorState.Active);
+                                }
+                            }
+                        }
+
+                        player.UpdatePlayerPosition();
+                        //TODO: here is where we'd check for collisions or something and reupdate player pos
+                        player.MoveTo((int)player.Position.X, (int)player.Position.Y);
+                    }
+                }
+            }
             base.Update(gameTime);
         }
 
@@ -141,7 +165,9 @@ namespace MyFirstGame
             }
 
             //update targets
-            foreach (AIActor target in targets)
+            //TOREMOVE: This fucking line is where all the hierarchy and polymorphism makes me jizz
+            //TODO: of course this has to be the current level blah blah
+            foreach (Target target in levels[0].Waves[levels[0].CurrentWave].Targets)
             {
                 if (target.AIActorStates.Contains(AIActorState.Active))
                 {   
@@ -297,22 +323,7 @@ namespace MyFirstGame
 
 #endif
 
-        //TODO: Different Targets will inherit from AIActor and Levels will contain multiple Waves which are made up of targets
-        private void LoadTargets()
-        {
-            targets.Add(LoadTarget());
-        }
-
-        private Target LoadTarget()
-        {
-            AlienTarget target = new AlienTarget(new Vector2(viewportRectangle.Width, viewportRectangle.Height));
-            target.Sprite = this.Content.Load<Texture2D>(target.SpritePath);
-            target.Position = new Vector2(200, 400);
-            target.AIActorStates.Add(AIActorState.Active);
-            return target;
-        }
-
-		private void LoadSprites()
+       	private void LoadSprites()
 		{
 			sprites.Add(LoadSprite());
 		}
@@ -326,6 +337,16 @@ namespace MyFirstGame
 			sprite.Y = 20;
 			return sprite;
 		}
+
+        private void LoadLevels()
+        {
+            levels.Add(new FirstLevel());
+        }
+
+        //private void LoadTextures()
+        //{
+        //    alienTexture = backgroundTexture = this.Content.Load<Texture2D>("sprites\\alien");
+        //}
 
         //TODO: Extend this to load backgrounds for new levels or in response to actions
         private void LoadBackground()

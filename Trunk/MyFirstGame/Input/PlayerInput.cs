@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
     using WiimoteLib;
 #endif
 
-namespace MyFirstGame.GameInput
+namespace MyFirstGame.InputObject
 {
     public abstract class PlayerInput
     {

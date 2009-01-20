@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using MyFirstGame.References;
 
 namespace MyFirstGame.GameObject
 {
@@ -12,6 +13,8 @@ namespace MyFirstGame.GameObject
         public AlienTarget(Vector2 maxPosition) : base(maxPosition)
         {
             base.SpritePath = "sprites\\alien";
+            base.Sprite = Textures.Instance.AlienTexture;
+            base.PointValue = 500;
         }
     }
 }

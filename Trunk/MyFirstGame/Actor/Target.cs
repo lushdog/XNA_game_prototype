@@ -7,8 +7,10 @@ using Microsoft.Xna.Framework;
 
 namespace MyFirstGame.GameObject
 {
-    class Target : AIActor
-    {        
+    abstract class Target : AIActor
+    {
+        public int PointValue { get; set; }
+        
         public Target(Vector2 maxPosition) : base(maxPosition)
         {
             
