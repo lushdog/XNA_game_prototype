@@ -9,12 +9,12 @@ namespace MyFirstGame.References
 {
     public sealed class Textures
     {
-       private static Textures _instance = null;
-       private static ContentManager _contentManager = null;
- 
-       public Texture2D AlienTexture { get; set; }
+        private static Textures _instance = null;
+       
+        public Texture2D AlienTexture { get; set; }
+        public Texture2D FirstLevelBackground { get; set; }
 
-       public static Textures Instance 
+        public static Textures Instance 
         {
             get
             {

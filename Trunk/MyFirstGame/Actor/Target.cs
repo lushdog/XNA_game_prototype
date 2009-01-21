@@ -11,7 +11,7 @@ namespace MyFirstGame.GameObject
     {
         public int PointValue { get; set; }
         
-        public Target(Vector2 maxPosition) : base(maxPosition)
+        public Target()
         {
             
         }

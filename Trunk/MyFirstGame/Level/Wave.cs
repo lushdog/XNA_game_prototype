@@ -4,57 +4,43 @@ using System.Linq;
 using System.Text;
 using MyFirstGame.GameObject;
 using Microsoft.Xna.Framework;
+using MyFirstGame.References;
 
 namespace MyFirstGame.LevelObject
 {
     abstract class Wave
     {
-        private GameTime _gameTime; 
-        
         public string Tag { get; set; }
         public List<Target> Targets { get; set; }
-        public GameTime GameTime 
-        {
-            get
-            {
-                return _gameTime;
-            }
-            set
-            {
-                _gameTime = value;
-            }
-        }
         public double StartTimeInSeconds { get; set; }
         public double WaveLengthInSeconds { get; set; }
-        public double ElapsedTimeInSeconds
+        public double WaveElapsedTimeInSeconds
         {
             get
             {
-                return GameTime.TotalRealTime.TotalSeconds - StartTimeInSeconds;
+                return Settings.Instance.GameTime.TotalRealTime.TotalSeconds - StartTimeInSeconds;
             }
         }
         public int CurrentWave { get; set; }
         public bool IsStarted { get; private set; }
         public bool IsEnded { get; private set; }
 
-        public Wave(double waveLengthInSeconds)
+        public Wave()
         {
             IsStarted = false;
             IsEnded = false;
-            WaveLengthInSeconds = waveLengthInSeconds;
         }
 
-        public void StartWave(ref GameTime gameTime)
+        public void StartWave()
         {
-            GameTime = gameTime;
-            StartTimeInSeconds = GameTime.TotalRealTime.TotalSeconds;
+            StartTimeInSeconds = Settings.Instance.GameTime.TotalRealTime.TotalSeconds;
             CurrentWave = 0;
             IsStarted = true;
         }
 
         public virtual void UpdateWave()
         {
-            if (ElapsedTimeInSeconds > WaveLengthInSeconds)
+            if (WaveElapsedTimeInSeconds > WaveLengthInSeconds)
             {
                 EndWave();
             }
@@ -65,7 +51,8 @@ namespace MyFirstGame.LevelObject
             IsEnded = true;
             foreach (Target target in Targets)
             {
-                //TODO:move target offscreen and make inactive
+                target.MoveTo(-100, -100);
+                target.AIActorStates.Remove(AIActorState.Active);
             }
         }
 

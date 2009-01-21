@@ -87,7 +87,7 @@ namespace MyFirstGame.GameObject
             }
         }
         
-        public AIActor(Vector2 maxPosition) : base (maxPosition)
+        public AIActor()
         {
             _aiActorStates = new List<AIActorState>();
             base.Rotation = 0.0f;                      

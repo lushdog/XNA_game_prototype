@@ -18,7 +18,6 @@ namespace MyFirstGame.GameObject
     {
         private string _tag;
         private Vector2 _position;
-        private Vector2 _maxPosition;
         private float _rotation;
         
         public string Tag
@@ -47,18 +46,6 @@ namespace MyFirstGame.GameObject
 
         }
 
-        public Vector2 MaxPosition 
-        {
-            get
-            {
-                return _maxPosition;
-            }
-            set
-            {
-                _maxPosition = value;
-            }
-        }
-
         public abstract Vector2 Origin { get; set; }
         
         public float Rotation
@@ -75,9 +62,9 @@ namespace MyFirstGame.GameObject
 
         }
 
-        public Actor(Vector2 maxPosition)
+        public Actor()
         {
-            _maxPosition = maxPosition;
+            
         }
 
         public void MoveTo(int x, int y)

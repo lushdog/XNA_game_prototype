@@ -6,90 +6,80 @@ using MyFirstGame.GameObject;
 using Microsoft.Xna.Framework;
 using MyFirstGame.LevelObject;
 using Microsoft.Xna.Framework.Graphics;
+using MyFirstGame.References;
 
 namespace MyFirstGame.LevelObject
 {
     abstract class Level
     {
-        private GameTime _gameTime; 
-        
         public string Tag { get; set; }
         public int LevelNumber { get; set; }
         public List<Wave> Waves { get; set; }
-        public GameTime GameTime 
-        {
-            get
-            {
-                return _gameTime;
-            }
-            set
-            {
-                _gameTime = value;
-            }
-        }
         public double StartTimeInSeconds { get; set; }
-        public double LevelLengthInSeconds { get; set; }
-        public double ElapsedTimeInSeconds
+        public double LevelLengthInSeconds 
         {
             get
             {
-                return GameTime.TotalRealTime.TotalSeconds - StartTimeInSeconds;
+                double length = 0;
+                foreach (Wave wave in Waves)
+                {
+                    length += wave.WaveLengthInSeconds;
+                }
+                return length;
+            }
+        
+        }
+        public double LevelElapsedTimeInSeconds
+        {
+            get
+            {
+                return Settings.Instance.GameTime.TotalRealTime.TotalSeconds - StartTimeInSeconds;
             }
         }
-        public int CurrentWave { get; set; }
+        public int CurrentWaveIndex { get; set; }
         public Texture2D Background { get; set; }
         public bool IsStarted { get; private set; }
         public bool IsEnded { get; private set; }
 
-        public Level(double levelLengthInSeconds)
+        public Level()
         {
-            LevelLengthInSeconds = levelLengthInSeconds;
             IsStarted = false;
             IsEnded = false;
         }
 
-        public void StartLevel(ref GameTime gameTime)
+        public void StartLevel()
         {
-            GameTime = gameTime;
-            StartTimeInSeconds = GameTime.TotalRealTime.TotalSeconds;
-            CurrentWave = 0;
+            StartTimeInSeconds = Settings.Instance.GameTime.TotalRealTime.TotalSeconds;
+            CurrentWaveIndex = 0;
             IsStarted = true;
         }
 
+        //TODO: based on this code levels start waves automatically and
+        //end automatically after the end of the last wave,
+        //how will we handle score tallying or basically level intro/outro?
         public virtual void UpdateLevel()
-        {
-            if (CurrentWave < Waves.Count)
+        {            
+            if (!Waves[CurrentWaveIndex].IsEnded)
             {
-                //Wave.cs handles this now
-                //if (ElapsedTimeInSeconds > Waves[CurrentWave].WaveLengthInSeconds)
+                //if ((ElapsedTimeInSeconds >= Waves[CurrentWave].StartTimeInSeconds)
+                //    && (ElapsedTimeInSeconds <= Waves[CurrentWave].WaveLengthInSeconds))
                 //{
-                //    Waves[CurrentWave].EndWave();
-                //    CurrentWave += 1;                    
-                //} 
-
-                if (!Waves[CurrentWave].IsEnded)
-                {
-                    //TODO: when level ends this here throws exception 
-                    if ((ElapsedTimeInSeconds >= Waves[CurrentWave].StartTimeInSeconds)
-                        && (ElapsedTimeInSeconds <= Waves[CurrentWave].WaveLengthInSeconds))
-                    {
-                        if (Waves[CurrentWave].IsStarted)
-                            Waves[CurrentWave].UpdateWave();
-                        else
-                            Waves[CurrentWave].StartWave(ref _gameTime);
-                    }
-                }
-                else
-                {
-                    CurrentWave += 1;
-                }
+                    if (Waves[CurrentWaveIndex].IsStarted)
+                        Waves[CurrentWaveIndex].UpdateWave();
+                    else
+                        Waves[CurrentWaveIndex].StartWave();
+                //}                        
             }
-            if (ElapsedTimeInSeconds > LevelLengthInSeconds)
+            else
             {
-                EndLevel();
+                CurrentWaveIndex += 1;
+                if (CurrentWaveIndex == Waves.Count)
+                {
+                    EndLevel();
+                }
             }
         }
-
+        
         public void EndLevel()
         {
             IsEnded = true;

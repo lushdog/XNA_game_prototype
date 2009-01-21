@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 using MyFirstGame.InputObject;
+using MyFirstGame.References;
 
 namespace MyFirstGame.GameObject
 {
@@ -112,7 +113,7 @@ namespace MyFirstGame.GameObject
             }
         }
 
-        public Player(PlayerInput activeInput, Color spriteColor, int playerNumber, Vector2 maxPosition) : base (maxPosition)
+        public Player(PlayerInput activeInput, Color spriteColor, int playerNumber)
         {
             _spritePath = "sprites//crosshair";
             _spriteColor = spriteColor;
@@ -160,12 +161,12 @@ namespace MyFirstGame.GameObject
             }
             else if (ActiveInput is WiiInput)
             {
-                newPosX = inputX * (float)MaxPosition.X;
-                newPosY = inputY * (float)MaxPosition.Y;
+                newPosX = inputX * (float)Settings.Instance.ScreenSize.X;
+                newPosY = inputY * (float)Settings.Instance.ScreenSize.Y;
             }
 #endif
-            newPosX = MathHelper.Clamp(newPosX, 0.0f, MaxPosition.X);
-            newPosY = MathHelper.Clamp(newPosY, 0.0f, MaxPosition.Y);
+            newPosX = MathHelper.Clamp(newPosX, 0.0f, Settings.Instance.ScreenSize.X);
+            newPosY = MathHelper.Clamp(newPosY, 0.0f, Settings.Instance.ScreenSize.Y);
             this.Position = new Vector2(newPosX, newPosY);
         }
 

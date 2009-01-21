@@ -7,11 +7,13 @@ namespace MyFirstGame.LevelObject
 {
     class FirstLevel : Level
     {
-        public FirstLevel() : base(30)
+        public FirstLevel()
         {
             Tag = "This is the first level.";
+            Background = References.Textures.Instance.FirstLevelBackground;
             Waves = new List<Wave>();
-            Waves.Add(new FirstWave(20));
+            Waves.Add(new FirstWave());
+            Waves.Add(new FirstWave());
         }
 
         public override void UpdateLevel()

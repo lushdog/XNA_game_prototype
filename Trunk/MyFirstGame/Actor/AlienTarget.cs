@@ -10,7 +10,7 @@ namespace MyFirstGame.GameObject
 {
     class AlienTarget : Target
     {
-        public AlienTarget(Vector2 maxPosition) : base(maxPosition)
+        public AlienTarget()
         {
             base.SpritePath = "sprites\\alien";
             base.Sprite = Textures.Instance.AlienTexture;

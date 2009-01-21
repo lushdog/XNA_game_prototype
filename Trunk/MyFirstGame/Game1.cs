@@ -25,13 +25,14 @@ namespace MyFirstGame
     {
         private GraphicsDeviceManager graphics;
         private Rectangle viewportRectangle;
-        private Texture2D backgroundTexture;
         private SpriteBatch spriteBatch;
+
         private List<Player> players;
-        //private List<Target> targets;
-		private List<Sprite> sprites;
+        //TODO: JOE: Sprites should belong to levels
+        private List<Sprite> sprites;
         private List<Level> levels;
         private int currentLevel;
+        private Vector2 foo;
 
         public Game1()
         {
@@ -65,18 +66,12 @@ namespace MyFirstGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-
-            //TODO: this is good as we only load up the references to the textures once, but could be better
-            //maybe we could do this via reflection and custom class atrributes so sprite path is not hard coded
-            //in logic
-            //TODO:refactor to LoadTextures()
-            Textures.Instance.AlienTexture = this.Content.Load<Texture2D>("sprites//alien");
-
-            LoadBackground();
+            LoadSettings();
+            LoadTextures();            
+            LoadViewport();
             LoadPlayers();
             LoadSprites();
-            LoadLevels();            
-			
+            LoadLevels();
         }           
 
         /// <summary>
@@ -95,18 +90,21 @@ namespace MyFirstGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            //TODO: this will not be hardcoded
+            Settings.Instance.GameTime = gameTime;
+            
+            //TODO: this will not be hardcoded (this forces level start when game is loaded)
             if (!levels[0].IsStarted)
             {
-                levels[0].StartLevel(ref gameTime);
+                levels[0].StartLevel();
             }
 
             //TODO: JOE: If the game stops updating then its because of this, you are not crazy...
             if (!levels[0].IsEnded)
             {
-                //TOREMOVE: splooge ah inheritance and polymorphism jizz all over the screen
+                //TOREMOVE: splooge! ahhh inheritance and polymorphism jizz all over the screen
                 levels[0].UpdateLevel();
 
+                //TODO: Refactor this to UpdatePlayer();
                 foreach (Player player in players)
                 {
                     player.UpdatePlayerIsActive();
@@ -119,7 +117,7 @@ namespace MyFirstGame
                         player.UpdateFiringState();
                         if (player.PlayerActorStates.Contains(PlayerActorState.Firing))
                         {
-                            foreach (Target target in levels[0].Waves[levels[0].CurrentWave].Targets)
+                            foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
                             {
                                 //TODO: upgrade this from ghetto hit detection to alpha sprite based hit detection
                                 if (target.BoundingBox.Contains(new Rectangle((int)player.Position.X, (int)player.Position.Y, 1, 1)))
@@ -130,11 +128,12 @@ namespace MyFirstGame
                         }
 
                         player.UpdatePlayerPosition();
-                        //TODO: here is where we'd check for collisions or something and reupdate player pos
+                        //TODO: here is where we'd check for collisions with other objects, change target pos
                         player.MoveTo((int)player.Position.X, (int)player.Position.Y);
                     }
                 }
             }
+
             base.Update(gameTime);
         }
 
@@ -148,7 +147,7 @@ namespace MyFirstGame
 
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
-            spriteBatch.Draw(backgroundTexture, viewportRectangle, null, Color.White, 0.0f, new Vector2(0,0), SpriteEffects.None, 1.0f );
+            spriteBatch.Draw(levels[0].Background, viewportRectangle, null, Color.White, 0.0f, new Vector2(0,0), SpriteEffects.None, 1.0f );
 
             //Draw players
             foreach (Player player in players)
@@ -166,20 +165,23 @@ namespace MyFirstGame
 
             //update targets
             //TOREMOVE: This fucking line is where all the hierarchy and polymorphism makes me jizz
-            //TODO: of course this has to be the current level blah blah
-            foreach (Target target in levels[0].Waves[levels[0].CurrentWave].Targets)
+            //TODO: of course this has to be the current, i.e. remove all references to levels[0]
+            if (!levels[0].IsEnded)
             {
-                if (target.AIActorStates.Contains(AIActorState.Active))
-                {   
-                    spriteBatch.Draw(target.Sprite, target.Position, null, Color.White, target.Rotation, target.Origin, 1.0f, SpriteEffects.None, 0.5f);
+                foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
+                {                    
+                    if (target.AIActorStates.Contains(AIActorState.Active))
+                    {
+                        spriteBatch.Draw(target.Sprite, target.Position, null, Color.White, target.Rotation, target.Origin, 1.0f, SpriteEffects.None, 0.1f);
+                    }
                 }
             }
             
 			//draw static sprites
-			foreach (Sprite sprite in sprites)
-			{
-				spriteBatch.Draw(sprite.Image, sprite.Location, Color.White);
-			}
+            foreach (Sprite sprite in sprites)
+            {
+                spriteBatch.Draw(sprite.Image, sprite.Location, Color.White);
+            }
 
             spriteBatch.End();
 
@@ -221,9 +223,9 @@ namespace MyFirstGame
                     playerColor = Color.Green;
                     break;
             }
-            Player player = new Player(playerInput, playerColor, playerNumber, new Vector2(viewportRectangle.Width, viewportRectangle.Height));
+            Player player = new Player(playerInput, playerColor, playerNumber);
             player.Sprite = this.Content.Load<Texture2D>(player.SpritePath);
-            player.Position = new Vector2(player.MaxPosition.X / 2, player.MaxPosition.Y / 2);
+            player.Position = new Vector2(Settings.Instance.ScreenSize.X / 2, Settings.Instance.ScreenSize.X / 2);
             return player;
         }
 
@@ -323,6 +325,11 @@ namespace MyFirstGame
 
 #endif
 
+        private void LoadSettings()
+        {
+            References.Settings.Instance.ScreenSize = new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+        }
+
        	private void LoadSprites()
 		{
 			sprites.Add(LoadSprite());
@@ -343,16 +350,15 @@ namespace MyFirstGame
             levels.Add(new FirstLevel());
         }
 
-        //private void LoadTextures()
-        //{
-        //    alienTexture = backgroundTexture = this.Content.Load<Texture2D>("sprites\\alien");
-        //}
-
-        //TODO: Extend this to load backgrounds for new levels or in response to actions
-        private void LoadBackground()
+        private void LoadTextures()
         {
-            viewportRectangle = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-            backgroundTexture = this.Content.Load<Texture2D>("sprites\\background");
+            References.Textures.Instance.AlienTexture = this.Content.Load<Texture2D>("sprites\\alien");
+            References.Textures.Instance.FirstLevelBackground = this.Content.Load<Texture2D>("sprites\\background");
+        }
+
+        private void LoadViewport()
+        {
+            viewportRectangle = new Rectangle(0, 0, (int)Settings.Instance.ScreenSize.X, (int)Settings.Instance.ScreenSize.Y);         
         }
 
         public T NumToEnum<T>(int number)
