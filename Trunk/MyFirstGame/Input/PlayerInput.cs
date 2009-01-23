@@ -52,11 +52,11 @@ namespace MyFirstGame.InputObject
             KeyboardState _keyboardState = Keyboard.GetState();
             if (_keyboardState.IsKeyDown(Keys.Up))
             {
-                return 1.0f;
+                return -1.0f;
             }
             else if (_keyboardState.IsKeyDown(Keys.Down))
             {
-                return -1.0f;
+                return +1.0f;
             }
             else
             {
@@ -69,11 +69,11 @@ namespace MyFirstGame.InputObject
             KeyboardState _keyboardState = Keyboard.GetState();
             if (_keyboardState.IsKeyDown(Keys.Left))
             {
-                return 1.0f;
+                return -1.0f;
             }
             else if (_keyboardState.IsKeyDown(Keys.Right))
             {
-                return -1.0f;
+                return 1.0f;
             }
             else
             {

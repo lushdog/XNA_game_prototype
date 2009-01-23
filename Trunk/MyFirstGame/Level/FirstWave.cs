@@ -17,7 +17,7 @@ namespace MyFirstGame.LevelObject
             Targets = new List<Target>();
             AlienTarget t = new AlienTarget();
             t.Position = new Vector2(300, 300);
-            t.AIActorStates.Add(AIActorState.Active);
+            t.IsActive = true;
             Targets.Add(t);
         }
 
@@ -26,7 +26,6 @@ namespace MyFirstGame.LevelObject
             base.UpdateWave();
 
             //TODO: refactor this out as this is basis for movement everwhere
-            //TODO: use this method of movement for Player
             foreach (Target target in Targets)
             {
                 float time = (float)Settings.Instance.GameTime.ElapsedGameTime.TotalSeconds;

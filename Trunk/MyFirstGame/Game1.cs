@@ -108,28 +108,28 @@ namespace MyFirstGame
                 foreach (Player player in players)
                 {
                     player.UpdatePlayerIsActive();
-                    if (player.PlayerActorStates.Contains(PlayerActorState.Active))
+                    if (player.IsActive)
                     {
                         player.UpdatePauseState();
-                        if (player.PlayerActorStates.Contains(PlayerActorState.Paused))
+                        if (player.IsPaused)
                             this.Exit();
 
                         player.UpdateFiringState();
-                        if (player.PlayerActorStates.Contains(PlayerActorState.Firing))
+                        if (player.IsFiring)
                         {
                             foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
                             {
                                 //TODO: upgrade this from ghetto hit detection to alpha sprite based hit detection
                                 if (target.BoundingBox.Contains(new Rectangle((int)player.Position.X, (int)player.Position.Y, 1, 1)))
                                 {
-                                    target.AIActorStates.Remove(AIActorState.Active);
+                                    target.IsActive = false;
                                 }
                             }
                         }
 
                         player.UpdatePlayerPosition();
                         //TODO: here is where we'd check for collisions with other objects, change target pos
-                        player.MoveTo((int)player.Position.X, (int)player.Position.Y);
+                        player.MoveTo(player.Position.X, player.Position.Y);
                     }
                 }
             }
@@ -152,10 +152,10 @@ namespace MyFirstGame
             //Draw players
             foreach (Player player in players)
             {
-                if (player.PlayerActorStates.Contains(PlayerActorState.Active))
+                if (player.IsActive)
                 {
                     Color playerColor = player.SpriteColor;
-                    if (player.PlayerActorStates.Contains(PlayerActorState.Firing))
+                    if (player.IsFiring)
                     {
                         playerColor = Color.Red;
                     }
@@ -170,7 +170,7 @@ namespace MyFirstGame
             {
                 foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
                 {                    
-                    if (target.AIActorStates.Contains(AIActorState.Active))
+                    if (target.IsActive)
                     {
                         spriteBatch.Draw(target.Sprite, target.Position, null, Color.White, target.Rotation, target.Origin, 1.0f, SpriteEffects.None, 0.1f);
                     }

@@ -67,7 +67,7 @@ namespace MyFirstGame.GameObject
             
         }
 
-        public void MoveTo(int x, int y)
+        public void MoveTo(float x, float y)
         {
             this.Position = new Vector2(x, y);
         }

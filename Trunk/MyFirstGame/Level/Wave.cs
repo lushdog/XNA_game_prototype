@@ -52,7 +52,7 @@ namespace MyFirstGame.LevelObject
             foreach (Target target in Targets)
             {
                 target.MoveTo(-100, -100);
-                target.AIActorStates.Remove(AIActorState.Active);
+                target.IsActive = false;
             }
         }
 

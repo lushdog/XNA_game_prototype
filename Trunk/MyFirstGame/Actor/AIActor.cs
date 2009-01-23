@@ -7,15 +7,14 @@ using Microsoft.Xna.Framework;
 
 namespace MyFirstGame.GameObject
 {
-    public enum AIActorState { Active }
-    
     abstract class AIActor : Actor
     {
         private int _pointValue;
-        private List<AIActorState> _aiActorStates;
         private string _spritePath;
         private Texture2D _sprite;
         private Vector2 _origin;
+
+        public bool IsActive { get; set; }
 
         public override Vector2 Origin
         {
@@ -75,21 +74,8 @@ namespace MyFirstGame.GameObject
             }            
         }
 
-        public List<AIActorState> AIActorStates
-        {
-            get
-            {
-                return _aiActorStates;
-            }
-            set
-            {
-                _aiActorStates = value;
-            }
-        }
-        
         public AIActor()
         {
-            _aiActorStates = new List<AIActorState>();
             base.Rotation = 0.0f;                      
         }
     }

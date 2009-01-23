@@ -16,18 +16,21 @@ using MyFirstGame.References;
 
 namespace MyFirstGame.GameObject
 {
-    public enum PlayerActorState { Firing, Active, Paused, Reloading, Foo }
-    
     class Player : Actor
     {
         private Texture2D _sprite;
         private PlayerInput _activeInput;
         private int _playerNumber;
-        private List<PlayerActorState> _playerActorStates;
         private Vector2 _origin;
         private Color _spriteColor;
         private string _spritePath;
 
+        public bool IsFiring { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public bool IsPaused { get; set; }
+        
         public string SpritePath 
         {
             get
@@ -101,36 +104,23 @@ namespace MyFirstGame.GameObject
             }
         }
 
-        public List<PlayerActorState> PlayerActorStates
-        {
-            get
-            {
-                return _playerActorStates;
-            }
-            set
-            {
-                _playerActorStates = value;
-            }
-        }
-
         public Player(PlayerInput activeInput, Color spriteColor, int playerNumber)
         {
             _spritePath = "sprites//crosshair";
             _spriteColor = spriteColor;
             _activeInput = activeInput;
             _playerNumber = playerNumber;
-            _playerActorStates = new List<PlayerActorState>();
-
+            
             base.Rotation = 0.0f;            
         }
 
         public void UpdatePlayerIsActive()
         {
-            if (!PlayerActorStates.Contains(PlayerActorState.Active))
+            if (!this.IsActive)
             {
                 if (ActiveInput.GetFire())
                 {
-                    PlayerActorStates.Add(PlayerActorState.Active);
+                    this.IsActive = true;
                 }
             }
         }
@@ -143,16 +133,33 @@ namespace MyFirstGame.GameObject
             float newPosX = 0.0f;
             float newPosY = 0.0f;
 
+            float time = (float)Settings.Instance.GameTime.ElapsedGameTime.TotalSeconds;
+            float speed;
+            float distanceX;
+            float distanceY;
+
             if (ActiveInput is GamepadInput)
             {
-                newPosX = this.Position.X + (inputX * ((GamepadInput)ActiveInput).ScrollSpeed);
-                newPosY = this.Position.Y - (inputY * ((GamepadInput)ActiveInput).ScrollSpeed);
+                speed = ((GamepadInput)ActiveInput).ScrollSpeed;
+                distanceX = time * inputX * speed;
+                distanceY = time * inputY * speed;
+                newPosX = this.Position.X + (distanceX);
+                newPosY = this.Position.Y - (distanceY);
+                
             }
 #if !XBOX            
             else if (ActiveInput is KeyboardInput)
             {
-                newPosX = this.Position.X - (inputX * ((KeyboardInput)ActiveInput).ScrollSpeed);
-                newPosY = this.Position.Y - (inputY * ((KeyboardInput)ActiveInput).ScrollSpeed);
+                speed = ((KeyboardInput)ActiveInput).ScrollSpeed;
+                distanceX = time * inputX * speed;
+                distanceY = time * inputY * speed;
+                newPosX = this.Position.X + (distanceX);
+                newPosY = this.Position.Y + (distanceY);
+
+                Console.WriteLine(Settings.Instance.GameTime.ElapsedGameTime);
+                    
+
+                
             }
             else if (ActiveInput is MouseInput)
             {
@@ -174,14 +181,14 @@ namespace MyFirstGame.GameObject
         {
             if (ActiveInput.GetFire())
             {
-                if (!PlayerActorStates.Contains(PlayerActorState.Firing))
+                if (!this.IsFiring)
                 {
-                    PlayerActorStates.Add(PlayerActorState.Firing);
+                    this.IsFiring = true;
                 }                
             }
             else
             {
-                PlayerActorStates.Remove(PlayerActorState.Firing);
+                this.IsFiring = false;
             }
         }
 
@@ -189,14 +196,14 @@ namespace MyFirstGame.GameObject
         {
             if (ActiveInput.GetPause())
             {
-                if (!PlayerActorStates.Contains(PlayerActorState.Paused))
+                if (!this.IsPaused)
                 {
-                    PlayerActorStates.Add(PlayerActorState.Paused);
+                    this.IsPaused = true;
                 }
             }
             else
             {
-                PlayerActorStates.Remove(PlayerActorState.Paused);
+                this.IsPaused = false;
             }
         }
 
