@@ -9,18 +9,13 @@ namespace MyFirstGame.GameObject
 {
     abstract class AIActor : Actor
     {
-        private int _pointValue;
-        private string _spritePath;
-        private Texture2D _sprite;
         private Vector2 _origin;
-
-        public bool IsActive { get; set; }
-
+        
         public override Vector2 Origin
         {
             get
             {
-                return new Vector2(_sprite.Width / 2, _sprite.Height / 2);  
+                return new Vector2(Sprite.Width / 2, Sprite.Height / 2);  
             }
             set
             {
@@ -28,43 +23,10 @@ namespace MyFirstGame.GameObject
             }
 
         }
-
-        public string SpritePath 
-        {
-            get
-            {
-                return _spritePath;
-            }
-            set
-            {
-                _spritePath = value;
-            }
-        }
-        
-        public Texture2D Sprite
-        {
-            get
-            {
-                return _sprite;
-            }
-            set
-            {
-                _sprite = value;
-            }
-        }
-
-        public int PointValue 
-        {
-            get
-            {
-                return _pointValue;
-            }
-            set
-            {
-                _pointValue = value;
-            }
-        }
-
+        public bool IsActive { get; set; }
+        public string SpritePath { get; set; }
+        public Texture2D Sprite { get; set; }
+        public int PointValue { get; set; }       
         public Rectangle BoundingBox 
         {
             get

@@ -28,23 +28,11 @@ namespace MyFirstGame.InputObject
 
     public class KeyboardInput : PlayerInput
     {
-        private float _scrollSpeed;
-        
-        public float ScrollSpeed
-        {
-            get
-            {
-                return _scrollSpeed;
-            }
-            set
-            {
-                _scrollSpeed = value;
-            }
-        }
+        public float ScrollSpeed { get; set; }
         
         public KeyboardInput(float scrollSpeed)
         {
-            _scrollSpeed = scrollSpeed;
+            ScrollSpeed = scrollSpeed;
         }
 
         public override float GetY()
@@ -94,11 +82,11 @@ namespace MyFirstGame.InputObject
 
     public class WiiInput : PlayerInput
     {
-        Wiimote _wiimote;
+        Wiimote Wiimote {get; set;}
 
         public WiiInput(int wiimoteNumber)
         {
-            _wiimote = InitWiimote(wiimoteNumber);
+            Wiimote = InitWiimote(wiimoteNumber);
         }
 
         //resolve IR pointer co-ords and screen co-ords
@@ -112,24 +100,24 @@ namespace MyFirstGame.InputObject
 
         public override float GetY()
         {
-            IRState _wiimoteIRState = _wiimote.WiimoteState.IRState;
+            IRState _wiimoteIRState = Wiimote.WiimoteState.IRState;
             return _wiimoteIRState.Midpoint.Y;
         }
 
         public override float GetX()
         {
-            IRState _wiimoteIRState = _wiimote.WiimoteState.IRState;
+            IRState _wiimoteIRState = Wiimote.WiimoteState.IRState;
             return 1.0f - _wiimoteIRState.Midpoint.X;
         }
 
         public override bool GetFire()
         {
-            return _wiimote.WiimoteState.ButtonState.B;
+            return Wiimote.WiimoteState.ButtonState.B;
         }
 
         public override bool GetPause()
         {
-            return _wiimote.WiimoteState.ButtonState.Home;
+            return Wiimote.WiimoteState.ButtonState.Home;
         }
 
         private Wiimote InitWiimote(int wiimoteIndex)
@@ -200,37 +188,13 @@ namespace MyFirstGame.InputObject
 
     public class GamepadInput : PlayerInput
     {
-        private float _scrollSpeed;
-        private PlayerIndex _gamepadNumber;
+        public float ScrollSpeed { get; set;}
+        public PlayerIndex GamepadNumber { get; set; }
 
-        public float ScrollSpeed
-        {
-            get
-            {
-                return _scrollSpeed;
-            }
-            set
-            {
-                _scrollSpeed = value;
-            }
-        }
-
-        public PlayerIndex GamepadNumber
-        {
-            get
-            {
-                return _gamepadNumber;
-            }
-            set
-            {
-                _gamepadNumber = value;
-            }
-        }
-        
         public GamepadInput(PlayerIndex gamepadNumber, float scrollSpeed)
         {
-            _scrollSpeed = scrollSpeed;
-            _gamepadNumber = gamepadNumber;
+            ScrollSpeed = scrollSpeed;
+            GamepadNumber = gamepadNumber;
         }
 
         public override float GetY()

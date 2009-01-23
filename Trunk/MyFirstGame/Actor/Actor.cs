@@ -16,51 +16,10 @@ namespace MyFirstGame.GameObject
 {
     public abstract class Actor
     {
-        private string _tag;
-        private Vector2 _position;
-        private float _rotation;
-        
-        public string Tag
-        {
-            get
-            {
-                return _tag;
-            }
-            set
-            {
-                _tag = value;
-            }
-        }
-
-        public Vector2 Position
-        {
-            get
-            {
-                return _position;
-            }
-
-            set
-            {
-                _position = value;
-            }
-
-        }
-
+        public string Tag { get; set; }
+        public Vector2 Position { get; set; }
         public abstract Vector2 Origin { get; set; }
-        
-        public float Rotation
-        {
-            get
-            {
-                return _rotation;
-            }
-
-            set
-            {
-                _rotation = value;
-            }
-
-        }
+        public float Rotation { get; set; }
 
         public Actor()
         {

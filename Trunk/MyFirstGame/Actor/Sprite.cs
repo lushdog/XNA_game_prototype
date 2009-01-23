@@ -13,6 +13,8 @@ namespace MyFirstGame.GameObject
         //MATT: if this guy inherits from Actor you get tag, position, rotation etc. etc.
         //Are AIActor and Player going to inherit from this guy?
 
+        //TODO: let's switch the properties to those automatic properties you get in .net 3.0
+
 		//JOE: 
 		// I think Sprite might just be a reimagining of Actor.
 		// What do you think about changing Actor to assume it's got a Texture2D?

@@ -18,48 +18,19 @@ namespace MyFirstGame.GameObject
 {
     class Player : Actor
     {
-        private Texture2D _sprite;
-        private PlayerInput _activeInput;
-        private int _playerNumber;
         private Vector2 _origin;
-        private Color _spriteColor;
-        private string _spritePath;
-
+        
         public bool IsFiring { get; set; }
 
         public bool IsActive { get; set; }
-
         public bool IsPaused { get; set; }
-        
-        public string SpritePath 
-        {
-            get
-            {
-                return _spritePath;
-            }
-            set
-            {
-                _spritePath = value;
-            }
-        }
-
-        public Color SpriteColor 
-        {
-            get
-            {
-                return _spriteColor;
-            }
-            set
-            {
-                _spriteColor = value;
-            }
-        }
-
+        public string SpritePath{ get; set; }
+        public Color SpriteColor { get; set; }
         public override Vector2 Origin
         {
             get
             {
-                return new Vector2(_sprite.Width / 2, _sprite.Height / 2);
+                return new Vector2(Sprite.Width / 2, Sprite.Height / 2);
             }
             set
             {
@@ -67,50 +38,16 @@ namespace MyFirstGame.GameObject
             }
 
         }
-
-        public int PlayerNumber
-        {
-            get
-            {
-                return _playerNumber;
-            }
-            set
-            {
-                _playerNumber = value;
-            }
-        }        
-        
-        public Texture2D Sprite
-        {
-            get
-            {
-                return _sprite;
-            }
-            set
-            {
-                _sprite = value;
-            }
-        }
-
-        public PlayerInput ActiveInput
-        {
-            get
-            {
-                return _activeInput;
-            }
-            set
-            {
-                _activeInput = value;
-            }
-        }
+        public int PlayerNumber { get; set; }
+        public Texture2D Sprite { get; set; }
+        public PlayerInput ActiveInput { get; set; }
 
         public Player(PlayerInput activeInput, Color spriteColor, int playerNumber)
         {
-            _spritePath = "sprites//crosshair";
-            _spriteColor = spriteColor;
-            _activeInput = activeInput;
-            _playerNumber = playerNumber;
-            
+            SpritePath = "sprites//crosshair";
+            SpriteColor = spriteColor;
+            ActiveInput = activeInput;
+            PlayerNumber = playerNumber;
             base.Rotation = 0.0f;            
         }
 
