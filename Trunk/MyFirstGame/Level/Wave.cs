@@ -51,7 +51,7 @@ namespace MyFirstGame.LevelObject
             IsEnded = true;
             foreach (Target target in Targets)
             {
-                target.MoveTo(-100, -100);
+                target.MoveTo(new Vector2(-100, -100));
                 target.IsActive = false;
             }
         }

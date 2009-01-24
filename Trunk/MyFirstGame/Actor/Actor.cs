@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace MyFirstGame.GameObject
 {
-    public abstract class Actor
+    abstract class Actor
     {
         public string Tag { get; set; }
         public Vector2 Position { get; set; }
@@ -26,14 +26,14 @@ namespace MyFirstGame.GameObject
             
         }
 
-        public void MoveTo(float x, float y)
+        public void MoveTo(Vector2 position)
         {
-            this.Position = new Vector2(x, y);
+            this.Position = position;
         }
 
-        public void MoveRelative(int x, int y)
+        public void MoveRelative(Vector2 position)
         {
-            this.Position += new Vector2(x, y);
+            this.Position += position;
         }
     }
 }

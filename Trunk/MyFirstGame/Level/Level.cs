@@ -54,9 +54,6 @@ namespace MyFirstGame.LevelObject
             IsStarted = true;
         }
 
-        //TODO: based on this code levels start waves automatically and
-        //end automatically after the end of the last wave,
-        //how will we handle score tallying or basically level intro/outro?
         public virtual void UpdateLevel()
         {            
             if (!Waves[CurrentWaveIndex].IsEnded)

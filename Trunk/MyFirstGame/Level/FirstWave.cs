@@ -5,6 +5,7 @@ using System.Text;
 using MyFirstGame.GameObject;
 using Microsoft.Xna.Framework;
 using MyFirstGame.References;
+using MyFirstGame.LevelObject;
 
 namespace MyFirstGame.LevelObject
 {
@@ -15,26 +16,27 @@ namespace MyFirstGame.LevelObject
             Tag = "This is my first wave.";
             WaveLengthInSeconds = 10;
             Targets = new List<Target>();
+            
             AlienTarget t = new AlienTarget();
-            t.Position = new Vector2(300, 300);
+            t.Position = Settings.Instance.UpperLeft;
+            t.Pattern = new FirstPattern();
             t.IsActive = true;
             Targets.Add(t);
+
+            AlienTarget t1 = new AlienTarget();
+            t1.Position = Settings.Instance.MidTop;
+            t1.Pattern = new SecondPattern();
+            t1.IsActive = true;
+            Targets.Add(t1);
         }
 
         public override void UpdateWave()
         {
             base.UpdateWave();
 
-            //TODO: refactor this out as this is basis for movement everwhere
             foreach (Target target in Targets)
             {
-                float time = (float)Settings.Instance.GameTime.ElapsedGameTime.TotalSeconds;
-                int direction = 1;
-                float speed = 5.0f;
-                float distance = time * direction * speed;
-
-                target.Position = new Vector2(target.Position.X + distance,
-                    target.Position.Y + distance);
+                target.MoveRelative(target.Pattern.UpdatePattern());
             }
             
         }

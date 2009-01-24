@@ -100,7 +100,9 @@
     <Compile Include="Actor\Sprite.cs" />
     <Compile Include="Actor\Target.cs" />
     <Compile Include="Input\PlayerInput.cs" />
+    <Compile Include="Level\SecondPattern.cs" />
     <Compile Include="Level\FirstLevel.cs" />
+    <Compile Include="Level\FirstPattern.cs" />
     <Compile Include="Level\FirstWave.cs" />
     <Compile Include="Level\Wave.cs" />
     <Compile Include="Level\Level.cs" />

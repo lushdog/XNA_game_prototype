@@ -92,11 +92,6 @@ namespace MyFirstGame.GameObject
                 distanceY = time * inputY * speed;
                 newPosX = this.Position.X + (distanceX);
                 newPosY = this.Position.Y + (distanceY);
-
-                Console.WriteLine(Settings.Instance.GameTime.ElapsedGameTime);
-                    
-
-                
             }
             else if (ActiveInput is MouseInput)
             {

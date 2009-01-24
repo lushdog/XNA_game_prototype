@@ -32,8 +32,7 @@ namespace MyFirstGame
         private List<Sprite> sprites;
         private List<Level> levels;
         private int currentLevel;
-        private Vector2 foo;
-
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -129,7 +128,7 @@ namespace MyFirstGame
 
                         player.UpdatePlayerPosition();
                         //TODO: here is where we'd check for collisions with other objects, change target pos
-                        player.MoveTo(player.Position.X, player.Position.Y);
+                        player.MoveTo(new Vector2(player.Position.X, player.Position.Y));
                     }
                 }
             }
