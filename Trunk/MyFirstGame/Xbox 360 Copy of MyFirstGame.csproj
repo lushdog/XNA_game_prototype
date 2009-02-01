@@ -65,6 +65,7 @@
     <Compile Include="Actor\Actor.cs" />
     <Compile Include="Actor\AlienTarget.cs" />
     <Compile Include="Actor\EnemySprite.cs" />
+    <Compile Include="Actor\FirstSprite.cs" />
     <Compile Include="Actor\PlayerSprite.cs" />
     <Compile Include="Actor\Sprite.cs">
       <SubType>Code</SubType>

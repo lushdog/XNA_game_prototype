@@ -31,8 +31,6 @@ namespace MyFirstGame
         private SpriteBatch spriteBatch;
 
         private List<PlayerSprite> players;
-        //TODO: JOE: Sprites should belong to levels
-        private List<Sprite> sprites;
         private List<Level> levels;
         private int currentLevel;
         
@@ -52,7 +50,6 @@ namespace MyFirstGame
         {
             // TODO: Add your initialization logic here
             players = new List<PlayerSprite>();
-            sprites = new List<Sprite>();
             levels = new List<Level>();
 
 #if !XBOX
@@ -76,7 +73,6 @@ namespace MyFirstGame
             LoadTextures();            
             LoadViewport();
             LoadPlayers();
-            LoadSprites();
             LoadLevels();
         }           
 
@@ -99,6 +95,7 @@ namespace MyFirstGame
             Settings.Instance.GameTime = gameTime;
 
 #if !XBOX
+            //TODO: factor this out into a Menu item or something
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
                 resolution.Mode = ScreenMode.QVGA;
@@ -138,7 +135,14 @@ namespace MyFirstGame
 
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, resolution.Scale);
+            
+            //Draw level bg and its sprites
             spriteBatch.Draw(levels[0].Background, viewportRectangle, null, Color.White, 0.0f, new Vector2(0,0), SpriteEffects.None, 1.0f );
+            foreach (Sprite sprite in levels[0].Sprites)
+            {
+                spriteBatch.Draw(sprite.SpriteTexture, sprite.DrawRectangle, null,
+                    Color.White, sprite.Rotation, sprite.Origin, SpriteEffects.None, 0.9f);
+            }
 
             //Draw players
             foreach (PlayerSprite player in players)
@@ -157,7 +161,7 @@ namespace MyFirstGame
                 }
             }
 
-            //update targets
+            //draw targets
             //TOREMOVE: This fucking line is where all the hierarchy and polymorphism makes me jizz
             //TODO: of course this has to be the current, i.e. remove all references to levels[0]
             if (!levels[0].IsEnded)
@@ -167,20 +171,12 @@ namespace MyFirstGame
                     if (target.IsActive)
                     {
                         spriteBatch.Draw(target.SpriteTexture, target.DrawRectangle, null, 
-                            Color.White, 0.0f, target.Origin, SpriteEffects.None, 0.1f);
+                            Color.White, 0.0f, target.Origin, SpriteEffects.None, 0.5f);
                     }
                 }
             }
-            
-			//draw static sprites
-            foreach (Sprite sprite in sprites)
-            {
-                spriteBatch.Draw(sprite.SpriteTexture, sprite.DrawRectangle, null,
-                    Color.White, sprite.Rotation, sprite.Origin, SpriteEffects.None, 0.0f);
-            }
 
             spriteBatch.End();
-
             base.Draw(gameTime);
         }
 
@@ -359,21 +355,7 @@ namespace MyFirstGame
             References.Settings.Instance.AspectRatio = GraphicsDevice.Viewport.AspectRatio;
         }
 
-       	private void LoadSprites()
-		{
-			sprites.Add(LoadSprite());
-		}
-
-		private Sprite LoadSprite()
-		{
-			Sprite sprite = new Sprite();
-			sprite.SpritePath = "sprites\\testimage";
-			sprite.SpriteTexture = this.Content.Load<Texture2D>(sprite.SpritePath);
-            sprite.Position = new Vector2(300, 200);
-			return sprite;
-		}
-
-        private void LoadLevels()
+		private void LoadLevels()
         {
             levels.Add(new FirstLevel());
         }
@@ -382,13 +364,14 @@ namespace MyFirstGame
         {
             References.Textures.Instance.AlienTexture = this.Content.Load<Texture2D>("sprites\\alien");
             References.Textures.Instance.FirstLevelBackground = this.Content.Load<Texture2D>("sprites\\background");
+            References.Textures.Instance.FirstLevelSprite = this.Content.Load<Texture2D>("sprites\\testimage");
+            
         }
 
         private void LoadViewport()
         {
             viewportRectangle = new Rectangle(0, 0, (int)Settings.Instance.ScreenSize.X, (int)Settings.Instance.ScreenSize.Y);         
         }
-
        
     }
 }

@@ -13,6 +13,7 @@ namespace MyFirstGame.References
        
         public Texture2D AlienTexture { get; set; }
         public Texture2D FirstLevelBackground { get; set; }
+        public Texture2D FirstLevelSprite { get; set; }
 
         public static Textures Instance 
         {
