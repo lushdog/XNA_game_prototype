@@ -109,6 +109,7 @@ namespace MyFirstGame.GameObject
             this.Position = new Vector2(newPosX, newPosY);
         }
 
+        //TODO: you can hold the button to fire, it should have to fire, then reset then fire again
         public void UpdateFiringState()
         {
             if (ActiveInput.GetFire())

@@ -12,7 +12,8 @@
     <XnaFrameworkVersion>v3.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaCrossPlatformGroupID>265887b4-dcfa-44a3-aa0b-19c085edcc99</XnaCrossPlatformGroupID>
-    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ManifestCertificateThumbprint>42D53AF69E29E0BDE0B5F1100914713C51D9E259</ManifestCertificateThumbprint>
@@ -100,7 +101,6 @@
     <Compile Include="Actor\Sprite.cs" />
     <Compile Include="Actor\Target.cs" />
     <Compile Include="Input\PlayerInput.cs" />
-    <Compile Include="Level\SecondPattern.cs" />
     <Compile Include="Level\FirstLevel.cs" />
     <Compile Include="Level\FirstPattern.cs" />
     <Compile Include="Level\FirstWave.cs" />
@@ -112,6 +112,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="References\Settings.cs" />
     <Compile Include="References\Textures.cs" />
+    <Compile Include="Utilities\UtilityMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\XBOXconfig.xml">
@@ -120,8 +121,8 @@
     <Content Include="Config\PCconfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
+    <Content Include="Game.ico" />
   </ItemGroup>
   <ItemGroup>
     <NestedContentProject Include="Content\Content.contentproj">

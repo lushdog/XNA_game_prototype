@@ -12,7 +12,8 @@
     <XnaFrameworkVersion>v3.0</XnaFrameworkVersion>
     <XnaPlatform>Xbox 360</XnaPlatform>
     <XnaCrossPlatformGroupID>265887b4-dcfa-44a3-aa0b-19c085edcc99</XnaCrossPlatformGroupID>
-    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ManifestCertificateThumbprint>42D53AF69E29E0BDE0B5F1100914713C51D9E259</ManifestCertificateThumbprint>
@@ -75,7 +76,6 @@
     <Compile Include="Level\FirstWave.cs" />
     <Compile Include="Level\Level.cs" />
     <Compile Include="Level\Pattern.cs" />
-    <Compile Include="Level\SecondPattern.cs" />
     <Compile Include="Level\Wave.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -84,6 +84,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="References\Settings.cs" />
     <Compile Include="References\Textures.cs" />
+    <Compile Include="Utilities\UtilityMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\PCconfig.xml">

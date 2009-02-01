@@ -12,8 +12,11 @@ namespace MyFirstGame.LevelObject
             Tag = "This is the first level.";
             Background = References.Textures.Instance.FirstLevelBackground;
             Waves = new List<Wave>();
-            Waves.Add(new FirstWave());
-            Waves.Add(new FirstWave());
+
+            FirstWave fw = new FirstWave();
+            fw.Tag = "Wave1";
+            Waves.Add(fw);
+
         }
 
         public override void UpdateLevel()

@@ -8,6 +8,8 @@ namespace MyFirstGame.LevelObject
 {
     interface IPattern
     {
+        List<Vector2> ControlPoints { get; set; }
+        
         Vector2 UpdatePattern();
     }
 }

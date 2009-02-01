@@ -15,6 +15,7 @@ using MyFirstGame.GameObject;
 using MyFirstGame.InputObject;
 using MyFirstGame.LevelObject;
 using MyFirstGame.References;
+using MyFirstGame.Utilities;
 
 namespace MyFirstGame
 {
@@ -103,33 +104,9 @@ namespace MyFirstGame
                 //TOREMOVE: splooge! ahhh inheritance and polymorphism jizz all over the screen
                 levels[0].UpdateLevel();
 
-                //TODO: Refactor this to UpdatePlayer();
                 foreach (Player player in players)
                 {
-                    player.UpdatePlayerIsActive();
-                    if (player.IsActive)
-                    {
-                        player.UpdatePauseState();
-                        if (player.IsPaused)
-                            this.Exit();
-
-                        player.UpdateFiringState();
-                        if (player.IsFiring)
-                        {
-                            foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
-                            {
-                                //TODO: upgrade this from ghetto hit detection to alpha sprite based hit detection
-                                if (target.BoundingBox.Contains(new Rectangle((int)player.Position.X, (int)player.Position.Y, 1, 1)))
-                                {
-                                    target.IsActive = false;
-                                }
-                            }
-                        }
-
-                        player.UpdatePlayerPosition();
-                        //TODO: here is where we'd check for collisions with other objects, change target pos
-                        player.MoveTo(new Vector2(player.Position.X, player.Position.Y));
-                    }
+                    UpdatePlayer(player);
                 }
             }
 
@@ -187,6 +164,37 @@ namespace MyFirstGame
             base.Draw(gameTime);
         }
 
+
+
+
+        private void UpdatePlayer(Player player)
+        {
+            player.UpdatePlayerIsActive();
+            if (player.IsActive)
+            {
+                player.UpdatePauseState();
+                if (player.IsPaused)
+                    this.Exit();
+
+                player.UpdateFiringState();
+                if (player.IsFiring)
+                {
+                    foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
+                    {
+                        //TODO: upgrade this from ghetto hit detection to alpha sprite based hit detection
+                        if (target.BoundingBox.Contains(new Rectangle((int)player.Position.X, (int)player.Position.Y, 1, 1)))
+                        {
+                            target.IsActive = false;
+                        }
+                    }
+                }
+
+                player.UpdatePlayerPosition();
+                //TODO: here is where we'd check for collisions with other objects, change target pos
+                player.MoveTo(new Vector2(player.Position.X, player.Position.Y));
+            }
+        }
+        
         private void LoadPlayers()
         {
 #if !XBOX
@@ -279,7 +287,7 @@ namespace MyFirstGame
                             }
                         }
                         scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
-                        playerInputs[i] = new GamepadInput(NumToEnum<PlayerIndex>(numGamepadPlayers), scrollSpeed);
+                        playerInputs[i] = new GamepadInput(UtilityMethods.NumToEnum<PlayerIndex>(numGamepadPlayers), scrollSpeed);
                     }
                 }
                 return playerInputs;
@@ -308,7 +316,7 @@ namespace MyFirstGame
                 {
                     XmlNode inputNode = inputNodes[i];
                     float scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
-                    playerInputs[i] = new GamepadInput(NumToEnum<PlayerIndex>(i), scrollSpeed);
+                    playerInputs[i] = new GamepadInput(UtilityMethods.NumToEnum<PlayerIndex>(i), scrollSpeed);
                 }
                 return playerInputs;
             }
@@ -360,9 +368,6 @@ namespace MyFirstGame
             viewportRectangle = new Rectangle(0, 0, (int)Settings.Instance.ScreenSize.X, (int)Settings.Instance.ScreenSize.Y);         
         }
 
-        public T NumToEnum<T>(int number)
-        {
-            return (T)Enum.ToObject(typeof(T), number);
-        }
+       
     }
 }

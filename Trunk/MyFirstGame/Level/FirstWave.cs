@@ -13,21 +13,15 @@ namespace MyFirstGame.LevelObject
     {
         public FirstWave()
         {
-            Tag = "This is my first wave.";
             WaveLengthInSeconds = 10;
             Targets = new List<Target>();
             
             AlienTarget t = new AlienTarget();
-            t.Position = Settings.Instance.UpperLeft;
-            t.Pattern = new FirstPattern();
+            t.Position = Settings.Instance.OneThirdBottom;
+            t.Pattern = new FirstPattern(t.Position);
             t.IsActive = true;
             Targets.Add(t);
 
-            AlienTarget t1 = new AlienTarget();
-            t1.Position = Settings.Instance.MidTop;
-            t1.Pattern = new SecondPattern();
-            t1.IsActive = true;
-            Targets.Add(t1);
         }
 
         public override void UpdateWave()
@@ -36,9 +30,8 @@ namespace MyFirstGame.LevelObject
 
             foreach (Target target in Targets)
             {
-                target.MoveRelative(target.Pattern.UpdatePattern());
+                target.MoveTo(target.Pattern.UpdatePattern());
             }
-            
         }
     }
 }

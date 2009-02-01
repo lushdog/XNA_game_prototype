@@ -18,7 +18,7 @@ namespace MyFirstGame.LevelObject
         {
             get
             {
-                return Settings.Instance.GameTime.TotalRealTime.TotalSeconds - StartTimeInSeconds;
+                return Settings.Instance.GameTime.TotalGameTime.TotalSeconds - StartTimeInSeconds;
             }
         }
         public int CurrentWave { get; set; }
@@ -33,7 +33,7 @@ namespace MyFirstGame.LevelObject
 
         public void StartWave()
         {
-            StartTimeInSeconds = Settings.Instance.GameTime.TotalRealTime.TotalSeconds;
+            StartTimeInSeconds = Settings.Instance.GameTime.TotalGameTime.TotalSeconds;
             CurrentWave = 0;
             IsStarted = true;
         }
