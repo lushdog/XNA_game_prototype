@@ -16,6 +16,7 @@ using MyFirstGame.InputObject;
 using MyFirstGame.LevelObject;
 using MyFirstGame.References;
 using MyFirstGame.Utilities;
+using MyFirstGame.Graphics;
 
 namespace MyFirstGame
 {
@@ -25,6 +26,7 @@ namespace MyFirstGame
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         private GraphicsDeviceManager graphics;
+        private Resolution resolution;
         private Rectangle viewportRectangle;
         private SpriteBatch spriteBatch;
 
@@ -52,6 +54,10 @@ namespace MyFirstGame
             players = new List<PlayerSprite>();
             sprites = new List<Sprite>();
             levels = new List<Level>();
+
+#if !XBOX
+            resolution = new Resolution(graphics, ScreenMode.SVGA);           
+#endif   
 
             base.Initialize();
         }
@@ -91,7 +97,15 @@ namespace MyFirstGame
         protected override void Update(GameTime gameTime)
         {
             Settings.Instance.GameTime = gameTime;
-            
+
+#if !XBOX
+            if (Keyboard.GetState().IsKeyDown(Keys.F1))
+            {
+                resolution.Mode = ScreenMode.QVGA;
+                resolution.SetResolution(graphics);
+            }
+#endif
+
             //TODO: this will not be hardcoded (this forces level start when game is loaded)
             if (!levels[0].IsStarted)
             {
@@ -120,13 +134,10 @@ namespace MyFirstGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            //TODO: Have to handle different resolutions.
-            //http://games.fourtwo.se/xna/simple_2d_collision_detection_and_movement_xna/index.html
-            
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, resolution.Scale);
             spriteBatch.Draw(levels[0].Background, viewportRectangle, null, Color.White, 0.0f, new Vector2(0,0), SpriteEffects.None, 1.0f );
 
             //Draw players
@@ -175,7 +186,7 @@ namespace MyFirstGame
 
 
 
-
+        //TODO: much of UpdatePlayer() can be moved to the PlayerSprite class
         private void UpdatePlayer(PlayerSprite player)
         {
             player.UpdatePlayerIsActive();

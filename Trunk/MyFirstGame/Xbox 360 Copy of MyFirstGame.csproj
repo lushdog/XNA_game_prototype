@@ -70,6 +70,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Actor\Target.cs" />
+    <Compile Include="Graphics\Resolution.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Input\PlayerInput.cs" />
     <Compile Include="Level\FirstLevel.cs" />
     <Compile Include="Level\FirstPattern.cs" />
