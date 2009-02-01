@@ -13,9 +13,10 @@ namespace MyFirstGame.References
         private static Settings _settings = null;
 
         public Vector2 ScreenSize { get; set; }
+        public float AspectRatio { get; set; }
         public GameTime GameTime { get; set; }
 
-        public Vector2 UpperLeft
+        public Vector2 TopLeft
         {
             get
             {
@@ -23,7 +24,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 UpperRight
+        public Vector2 TopRight
         {
             get
             {
@@ -31,7 +32,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 LowerLeft
+        public Vector2 BottomLeft
         {
             get
             {
@@ -39,7 +40,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 LowerRight
+        public Vector2 BottomRight
         {
             get
             {

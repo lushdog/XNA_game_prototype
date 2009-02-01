@@ -8,7 +8,7 @@ using MyFirstGame.LevelObject;
 
 namespace MyFirstGame.GameObject
 {
-    abstract class Target : AIActor
+    abstract class Target : EnemySprite
     {
         public IPattern Pattern { get; set; }
         public int PointValue { get; set; }

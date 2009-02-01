@@ -18,9 +18,9 @@ namespace MyFirstGame.GameObject
     {
         public string Tag { get; set; }
         public Vector2 Position { get; set; }
-        public abstract Vector2 Origin { get; set; }
+        public abstract Vector2 Origin { get; }
         public float Rotation { get; set; }
-
+        
         public Actor()
         {
             

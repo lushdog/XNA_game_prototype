@@ -4,102 +4,32 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using MyFirstGame.References;
 
 namespace MyFirstGame.GameObject
 {
-	class Sprite
-	{
-		
-        //MATT: if this guy inherits from Actor you get tag, position, rotation etc. etc.
-        //Are AIActor and Player going to inherit from this guy?
+    class Sprite : Actor
+    {
+        private Vector2 origin;
 
-        //TODO: let's switch the properties to those automatic properties you get in .net 3.0
+        public Rectangle DrawRectangle
+        {
+            get
+            {
+                return new Rectangle((int)Position.X, (int)Position.Y,
+                    (int)(SpriteTexture.Width * Settings.Instance.AspectRatio), (int)(SpriteTexture.Height));
+            }
+        }
+        public string SpritePath { get; set; }
+        public Color SpriteColor { get; set; }
+        public Texture2D SpriteTexture { get; set; }
 
-		//JOE: 
-		// I think Sprite might just be a reimagining of Actor.
-		// What do you think about changing Actor to assume it's got a Texture2D?
-		// If Actor doesn't assume a visible element, then why even have position and rotation and so on?
-		// Otherwise, I don't think Sprite really fits in the hierarchy.  It could *belong* to
-		// AIActor and Player and AlienTarget, etc, without inheriting to them, I suppose.
-
-        private string _imagePath;
-		private Texture2D _image;
-		private float _rotation;
-		private Vector2 _origin;
-		private Vector2 _rotationOrigin;
-		private int _x;
-		private int _y;
-		private int _width;
-		private int _height;
-		private float _scaleX;
-		private float _scaleY;
-		private float _alpha;
-
-		public string ImagePath 
-		{ 
-			get
-			{
-				return _imagePath;
-			} 
-			set
-			{
-				_imagePath = value;
-			} 
-		}
-
-		public Texture2D Image
-		{
-			get
-			{
-				return _image;
-			}
-			set
-			{
-				_image = value;
-			}
-		}
-
-		public int X
-		{
-			get
-			{
-				return _x;
-			}
-			set
-			{
-				_x = value;
-			}
-		}
-
-		public int Y
-		{
-			get
-			{
-				return _y;
-			}
-			set
-			{
-				_y = value;
-			}
-		}
-
-		public Vector2 Location
-		{
-			get
-			{
-				return new Vector2(X, Y);
-			}
-			set
-			{
-				X = (int)value.X;
-				Y = (int)value.Y;
-			}
-		}
-
-		public Sprite()
-		{
-			X = 0;
-			Y = 0;
-		}
-	}
+        public override Vector2 Origin
+        {
+            get
+            {
+                return new Vector2(SpriteTexture.Width / 2, SpriteTexture.Height / 2);
+            }
+        }
+    }
 }

@@ -28,7 +28,7 @@ namespace MyFirstGame
         private Rectangle viewportRectangle;
         private SpriteBatch spriteBatch;
 
-        private List<Player> players;
+        private List<PlayerSprite> players;
         //TODO: JOE: Sprites should belong to levels
         private List<Sprite> sprites;
         private List<Level> levels;
@@ -49,7 +49,7 @@ namespace MyFirstGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            players = new List<Player>();
+            players = new List<PlayerSprite>();
             sprites = new List<Sprite>();
             levels = new List<Level>();
 
@@ -101,13 +101,14 @@ namespace MyFirstGame
             //TODO: JOE: If the game stops updating then its because of this, you are not crazy...
             if (!levels[0].IsEnded)
             {
-                //TOREMOVE: splooge! ahhh inheritance and polymorphism jizz all over the screen
-                levels[0].UpdateLevel();
-
-                foreach (Player player in players)
+                foreach (PlayerSprite player in players)
                 {
                     UpdatePlayer(player);
                 }
+                
+                //TOREMOVE: splooge! ahhh inheritance and polymorphism jizz all over the screen
+                levels[0].UpdateLevel();
+                                
             }
 
             base.Update(gameTime);
@@ -119,6 +120,9 @@ namespace MyFirstGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            //TODO: Have to handle different resolutions.
+            //http://games.fourtwo.se/xna/simple_2d_collision_detection_and_movement_xna/index.html
+            
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
@@ -126,16 +130,19 @@ namespace MyFirstGame
             spriteBatch.Draw(levels[0].Background, viewportRectangle, null, Color.White, 0.0f, new Vector2(0,0), SpriteEffects.None, 1.0f );
 
             //Draw players
-            foreach (Player player in players)
+            foreach (PlayerSprite player in players)
             {
                 if (player.IsActive)
                 {
                     Color playerColor = player.SpriteColor;
+                    //TODO: this should be done in player class
                     if (player.IsFiring)
                     {
                         playerColor = Color.Red;
                     }
-                    spriteBatch.Draw(player.Sprite, player.Position, null, playerColor, player.Rotation, player.Origin, 1.0f, SpriteEffects.None, 0.0f);
+                    spriteBatch.Draw(player.SpriteTexture, player.DrawRectangle, null,
+                        playerColor, player.Rotation, player.Origin, SpriteEffects.None, 0.0f);
+                    
                 }
             }
 
@@ -148,7 +155,8 @@ namespace MyFirstGame
                 {                    
                     if (target.IsActive)
                     {
-                        spriteBatch.Draw(target.Sprite, target.Position, null, Color.White, target.Rotation, target.Origin, 1.0f, SpriteEffects.None, 0.1f);
+                        spriteBatch.Draw(target.SpriteTexture, target.DrawRectangle, null, 
+                            Color.White, 0.0f, target.Origin, SpriteEffects.None, 0.1f);
                     }
                 }
             }
@@ -156,7 +164,8 @@ namespace MyFirstGame
 			//draw static sprites
             foreach (Sprite sprite in sprites)
             {
-                spriteBatch.Draw(sprite.Image, sprite.Location, Color.White);
+                spriteBatch.Draw(sprite.SpriteTexture, sprite.DrawRectangle, null,
+                    Color.White, sprite.Rotation, sprite.Origin, SpriteEffects.None, 0.0f);
             }
 
             spriteBatch.End();
@@ -167,7 +176,7 @@ namespace MyFirstGame
 
 
 
-        private void UpdatePlayer(Player player)
+        private void UpdatePlayer(PlayerSprite player)
         {
             player.UpdatePlayerIsActive();
             if (player.IsActive)
@@ -182,6 +191,7 @@ namespace MyFirstGame
                     foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
                     {
                         //TODO: upgrade this from ghetto hit detection to alpha sprite based hit detection
+                        //TODO: give points to correct player...
                         if (target.BoundingBox.Contains(new Rectangle((int)player.Position.X, (int)player.Position.Y, 1, 1)))
                         {
                             target.IsActive = false;
@@ -211,7 +221,7 @@ namespace MyFirstGame
             }
         }
 
-        private Player LoadPlayer(PlayerInput playerInput, int playerNumber)
+        private PlayerSprite LoadPlayer(PlayerInput playerInput, int playerNumber)
         {
             //TODO: this should be done via different sprites
             Color playerColor = Color.White;
@@ -230,8 +240,8 @@ namespace MyFirstGame
                     playerColor = Color.Green;
                     break;
             }
-            Player player = new Player(playerInput, playerColor, playerNumber);
-            player.Sprite = this.Content.Load<Texture2D>(player.SpritePath);
+            PlayerSprite player = new PlayerSprite(playerInput, playerColor, playerNumber);
+            player.SpriteTexture = this.Content.Load<Texture2D>(player.SpritePath);
             player.Position = new Vector2(Settings.Instance.ScreenSize.X / 2, Settings.Instance.ScreenSize.X / 2);
             return player;
         }
@@ -335,6 +345,7 @@ namespace MyFirstGame
         private void LoadSettings()
         {
             References.Settings.Instance.ScreenSize = new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            References.Settings.Instance.AspectRatio = GraphicsDevice.Viewport.AspectRatio;
         }
 
        	private void LoadSprites()
@@ -345,10 +356,9 @@ namespace MyFirstGame
 		private Sprite LoadSprite()
 		{
 			Sprite sprite = new Sprite();
-			sprite.ImagePath = "sprites\\testimage";
-			sprite.Image = this.Content.Load<Texture2D>(sprite.ImagePath);
-			sprite.X = 300;
-			sprite.Y = 20;
+			sprite.SpritePath = "sprites\\testimage";
+			sprite.SpriteTexture = this.Content.Load<Texture2D>(sprite.SpritePath);
+            sprite.Position = new Vector2(300, 200);
 			return sprite;
 		}
 

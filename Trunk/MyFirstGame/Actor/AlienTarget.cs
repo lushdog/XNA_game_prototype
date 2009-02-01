@@ -13,7 +13,7 @@ namespace MyFirstGame.GameObject
         public AlienTarget()
         {
             base.SpritePath = "sprites\\alien";
-            base.Sprite = Textures.Instance.AlienTexture;
+            base.SpriteTexture = Textures.Instance.AlienTexture;
             base.PointValue = 500;
         }
     }

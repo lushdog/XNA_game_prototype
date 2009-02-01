@@ -16,33 +16,18 @@ using MyFirstGame.References;
 
 namespace MyFirstGame.GameObject
 {
-    class Player : Actor
+    class PlayerSprite : Sprite
     {
-        private Vector2 _origin;
-        
+        private Vector2 origin;  
+      
         public bool IsFiring { get; set; }
-
         public bool IsActive { get; set; }
         public bool IsPaused { get; set; }
-        public string SpritePath{ get; set; }
-        public Color SpriteColor { get; set; }
-        public override Vector2 Origin
-        {
-            get
-            {
-                return new Vector2(Sprite.Width / 2, Sprite.Height / 2);
-            }
-            set
-            {
-                _origin = value;
-            }
-
-        }
-        public int PlayerNumber { get; set; }
-        public Texture2D Sprite { get; set; }
+        
         public PlayerInput ActiveInput { get; set; }
-
-        public Player(PlayerInput activeInput, Color spriteColor, int playerNumber)
+        public int PlayerNumber { get; set; }
+        
+        public PlayerSprite(PlayerInput activeInput, Color spriteColor, int playerNumber)
         {
             SpritePath = "sprites//crosshair";
             SpriteColor = spriteColor;

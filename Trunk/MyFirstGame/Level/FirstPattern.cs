@@ -13,6 +13,7 @@ namespace MyFirstGame.LevelObject
         public int CurrentPoint { get; set; }
         public float CurrentWeight { get; set; }
         public Vector2 LastPosition { get; set; }
+        public float CurrentSpeed { get; set; }
 
         public FirstPattern(Vector2 startPosition)
         {
@@ -29,12 +30,12 @@ namespace MyFirstGame.LevelObject
 
             CurrentWeight = 0.0f;
             CurrentPoint = 1;
+            CurrentSpeed = 50.0f;
         }
 
         public Vector2 UpdatePattern()
         {
             float time = (float)Settings.Instance.GameTime.ElapsedGameTime.TotalSeconds;
-            int speed = 100;           
             
             if (CurrentWeight >= 1) //reached next CP
             {
@@ -46,13 +47,12 @@ namespace MyFirstGame.LevelObject
             }
             else
             {
-                CurrentWeight += 0.01f * speed * time;
+                CurrentWeight += 0.01f * CurrentSpeed * time;
             }
 
             Vector2 newPos = Vector2.CatmullRom(ControlPoints[CurrentPoint - 1], ControlPoints[CurrentPoint],
                 ControlPoints[CurrentPoint + 1], ControlPoints[CurrentPoint + 2], CurrentWeight);
 
-            Console.WriteLine(newPos + ":" + CurrentPoint + ":" + CurrentWeight);
             return newPos;
         }
     }
