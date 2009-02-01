@@ -17,7 +17,7 @@ namespace MyFirstGame.GameObject
             get
             {
                 return new Rectangle((int)Position.X, (int)Position.Y,
-                    (int)(SpriteTexture.Width * Settings.Instance.AspectRatio), (int)(SpriteTexture.Height));
+                    (int)(SpriteTexture.Width), (int)(SpriteTexture.Height));
             }
         }
         public string SpritePath { get; set; }

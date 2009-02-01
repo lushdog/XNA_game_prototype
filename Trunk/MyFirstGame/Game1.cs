@@ -51,11 +51,7 @@ namespace MyFirstGame
             // TODO: Add your initialization logic here
             players = new List<PlayerSprite>();
             levels = new List<Level>();
-
-#if !XBOX
-            resolution = new Resolution(graphics, ScreenMode.SVGA);           
-#endif   
-
+            resolution = new Resolution(graphics, ScreenMode.tv720p);
             base.Initialize();
         }
 
@@ -98,7 +94,7 @@ namespace MyFirstGame
             //TODO: factor this out into a Menu item or something
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
-                resolution.Mode = ScreenMode.QVGA;
+                resolution.Mode = ScreenMode.SVGA;
                 resolution.SetResolution(graphics);
             }
 #endif
@@ -119,7 +115,6 @@ namespace MyFirstGame
                 
                 //TOREMOVE: splooge! ahhh inheritance and polymorphism jizz all over the screen
                 levels[0].UpdateLevel();
-                                
             }
 
             base.Update(gameTime);

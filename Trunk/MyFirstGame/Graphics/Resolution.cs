@@ -211,6 +211,8 @@ namespace MyFirstGame.Graphics
         {
             graphics.PreferredBackBufferWidth = this.screenWidth;
             graphics.PreferredBackBufferHeight = this.screenHeight;
+            //TODO: this scale needs to deal with switching resolutions from 4:3 to 16:9 and vice versa
+            //question posted here : http://www.ziggyware.com/readarticle.php?forum_id=18&thread_id=12700&article_id=148
             scale = Matrix.CreateScale(
                     (float)screenWidth / (float)resolutions[(int)baseMode, 0], 
                     (float)screenHeight / (float)resolutions[(int)baseMode, 1], 
