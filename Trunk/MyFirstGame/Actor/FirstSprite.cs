@@ -9,7 +9,9 @@ namespace MyFirstGame.GameObject
     {
         public FirstSprite()
         {
-            SpriteTexture = References.Textures.Instance.FirstLevelSprite;            
+            base.AnimationStartName = "testimage";
+            base.AnimationFrameCount = 1;
+            base.AnimationFramesPerSecond = 0;
         }
     }
 }

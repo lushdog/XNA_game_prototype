@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using SpriteSheetRuntime;
 
 namespace MyFirstGame.References
 {
@@ -11,9 +12,7 @@ namespace MyFirstGame.References
     {
         private static Textures _instance = null;
        
-        public Texture2D AlienTexture { get; set; }
-        public Texture2D FirstLevelBackground { get; set; }
-        public Texture2D FirstLevelSprite { get; set; }
+        public SpriteSheet SpriteSheet { get; set; }
 
         public static Textures Instance 
         {

@@ -12,9 +12,10 @@ namespace MyFirstGame.GameObject
     {
         public AlienTarget()
         {
-            base.SpritePath = "sprites\\alien";
-            base.SpriteTexture = Textures.Instance.AlienTexture;
             base.PointValue = 500;
+            base.AnimationFrameCount = 6;
+            base.AnimationFramesPerSecond = 15;
+            base.AnimationStartName = "alien1";
         }
     }
 }

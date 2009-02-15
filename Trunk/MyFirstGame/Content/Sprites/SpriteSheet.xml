@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<XnaContent>
+  <Asset Type="System.String[]">
+    <Item>sprites\alien1.png</Item>
+    <Item>sprites\alien2.png</Item>
+    <Item>sprites\alien3.png</Item>
+    <Item>sprites\alien4.png</Item>
+    <Item>sprites\alien5.png</Item>
+    <Item>sprites\alien6.png</Item>
+    <Item>sprites\crosshair.png</Item>
+    <Item>sprites\background.jpg</Item>
+    <Item>sprites\testimage.png</Item>
+  </Asset>
+</XnaContent>

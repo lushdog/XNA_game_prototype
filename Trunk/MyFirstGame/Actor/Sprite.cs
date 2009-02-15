@@ -10,26 +10,34 @@ namespace MyFirstGame.GameObject
 {
     class Sprite : Actor
     {
-        private Vector2 origin;
-
         public Rectangle DrawRectangle
         {
             get
             {
+                //TODO: this is where we'll implement scaling...
+                Rectangle sourceRectangle = Textures.Instance.SpriteSheet.SourceRectangle(GetSpriteSheetIndex());
                 return new Rectangle((int)Position.X, (int)Position.Y,
-                    (int)(SpriteTexture.Width), (int)(SpriteTexture.Height));
+                    (int)(sourceRectangle.Width), (int)(sourceRectangle.Height));
             }
         }
-        public string SpritePath { get; set; }
         public Color SpriteColor { get; set; }
-        public Texture2D SpriteTexture { get; set; }
-
         public override Vector2 Origin
         {
             get
             {
-                return new Vector2(SpriteTexture.Width / 2, SpriteTexture.Height / 2);
+                return new Vector2(DrawRectangle.Width / 2, DrawRectangle.Height / 2);
             }
+        }
+
+        public int AnimationFramesPerSecond { get; set; }
+        public int AnimationFrameCount { get; set; }
+        public string AnimationStartName { get; set; }
+
+        public int GetSpriteSheetIndex()
+        {
+            int index = Textures.Instance.SpriteSheet.GetIndex(AnimationStartName);
+            index += (int)(Settings.Instance.GameTime.TotalGameTime.TotalSeconds * AnimationFramesPerSecond) % AnimationFrameCount;
+            return index;
         }
     }
 }

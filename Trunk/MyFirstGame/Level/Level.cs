@@ -37,10 +37,10 @@ namespace MyFirstGame.LevelObject
             }
         }
         public int CurrentWaveIndex { get; set; }
-        public Texture2D Background { get; set; }
+        public string BackgroundSpriteSheetName { get; set; }
         public List<Sprite> Sprites { get; set; }
-        public bool IsStarted { get; private set; }
-        public bool IsEnded { get; private set; }
+        public bool IsStarted { get; set; }
+        public bool IsEnded { get; set; }
 
         public Level()
         {

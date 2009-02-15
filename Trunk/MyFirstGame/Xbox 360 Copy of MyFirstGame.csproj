@@ -78,8 +78,8 @@
     <Compile Include="Level\FirstLevel.cs" />
     <Compile Include="Level\FirstPattern.cs" />
     <Compile Include="Level\FirstWave.cs" />
+    <Compile Include="Level\IPattern.cs" />
     <Compile Include="Level\Level.cs" />
-    <Compile Include="Level\Pattern.cs" />
     <Compile Include="Level\Wave.cs">
       <SubType>Code</SubType>
     </Compile>

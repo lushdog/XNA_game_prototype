@@ -29,11 +29,14 @@ namespace MyFirstGame.GameObject
         
         public PlayerSprite(PlayerInput activeInput, Color spriteColor, int playerNumber)
         {
-            SpritePath = "sprites//crosshair";
+            
             SpriteColor = spriteColor;
             ActiveInput = activeInput;
             PlayerNumber = playerNumber;
-            base.Rotation = 0.0f;            
+            base.Rotation = 0.0f;
+            base.AnimationFrameCount = 1;
+            base.AnimationFramesPerSecond = 0;
+            base.AnimationStartName = "crosshair";
         }
 
         public void UpdatePlayerIsActive()

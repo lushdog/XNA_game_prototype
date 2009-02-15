@@ -12,7 +12,7 @@ namespace MyFirstGame.LevelObject
         public FirstLevel()
         {
             Tag = "This is the first level.";
-            Background = References.Textures.Instance.FirstLevelBackground;
+            BackgroundSpriteSheetName = "background";
 
             Sprites = new List<Sprite>();
             FirstSprite fs = new FirstSprite();

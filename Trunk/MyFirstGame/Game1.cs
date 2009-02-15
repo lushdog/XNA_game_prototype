@@ -17,6 +17,7 @@ using MyFirstGame.LevelObject;
 using MyFirstGame.References;
 using MyFirstGame.Utilities;
 using MyFirstGame.Graphics;
+using SpriteSheetRuntime;
 
 namespace MyFirstGame
 {
@@ -29,7 +30,7 @@ namespace MyFirstGame
         private Resolution resolution;
         private Rectangle viewportRectangle;
         private SpriteBatch spriteBatch;
-
+        
         private List<PlayerSprite> players;
         private List<Level> levels;
         private int currentLevel;
@@ -63,7 +64,7 @@ namespace MyFirstGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
             // TODO: use this.Content to load your game content here
             LoadSettings();
             LoadTextures();            
@@ -91,13 +92,22 @@ namespace MyFirstGame
             Settings.Instance.GameTime = gameTime;
 
 #if !XBOX
-            //TODO: factor this out into a Menu item or something
+            //TODO: factor this out into a Menu item or something, also when you hold F1 down it keeps switching rezzes
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
-                resolution.Mode = ScreenMode.SVGA;
+                if (resolution.Mode == ScreenMode.tv720p)
+                    resolution.Mode = ScreenMode.SVGA;
+                else
+                    resolution.Mode = ScreenMode.tv720p;
                 resolution.SetResolution(graphics);
             }
 #endif
+
+            //TODO: this is just to loop the level over and over for debug
+            if (levels[0].IsEnded)
+            {
+                levels[0] = new FirstLevel();
+            }
 
             //TODO: this will not be hardcoded (this forces level start when game is loaded)
             if (!levels[0].IsStarted)
@@ -105,7 +115,6 @@ namespace MyFirstGame
                 levels[0].StartLevel();
             }
 
-            //TODO: JOE: If the game stops updating then its because of this, you are not crazy...
             if (!levels[0].IsEnded)
             {
                 foreach (PlayerSprite player in players)
@@ -132,10 +141,11 @@ namespace MyFirstGame
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, resolution.Scale);
             
             //Draw level bg and its sprites
-            spriteBatch.Draw(levels[0].Background, viewportRectangle, null, Color.White, 0.0f, new Vector2(0,0), SpriteEffects.None, 1.0f );
+            spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, viewportRectangle, Textures.Instance.SpriteSheet.SourceRectangle(levels[0].BackgroundSpriteSheetName),
+                Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.0f);
             foreach (Sprite sprite in levels[0].Sprites)
             {
-                spriteBatch.Draw(sprite.SpriteTexture, sprite.DrawRectangle, null,
+                spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, sprite.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(sprite.GetSpriteSheetIndex()),
                     Color.White, sprite.Rotation, sprite.Origin, SpriteEffects.None, 0.9f);
             }
 
@@ -150,8 +160,7 @@ namespace MyFirstGame
                     {
                         playerColor = Color.Red;
                     }
-                    spriteBatch.Draw(player.SpriteTexture, player.DrawRectangle, null,
-                        playerColor, player.Rotation, player.Origin, SpriteEffects.None, 0.0f);
+                    spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, player.Position, Textures.Instance.SpriteSheet.SourceRectangle(player.AnimationStartName), playerColor, player.Rotation, player.Origin, 1.0f, SpriteEffects.None, 0.0f);
                     
                 }
             }
@@ -165,7 +174,8 @@ namespace MyFirstGame
                 {                    
                     if (target.IsActive)
                     {
-                        spriteBatch.Draw(target.SpriteTexture, target.DrawRectangle, null, 
+                        Console.WriteLine(target.GetSpriteSheetIndex());
+                        spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, target.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex()), 
                             Color.White, 0.0f, target.Origin, SpriteEffects.None, 0.5f);
                     }
                 }
@@ -243,7 +253,6 @@ namespace MyFirstGame
                     break;
             }
             PlayerSprite player = new PlayerSprite(playerInput, playerColor, playerNumber);
-            player.SpriteTexture = this.Content.Load<Texture2D>(player.SpritePath);
             player.Position = new Vector2(Settings.Instance.ScreenSize.X / 2, Settings.Instance.ScreenSize.X / 2);
             return player;
         }
@@ -357,10 +366,7 @@ namespace MyFirstGame
 
         private void LoadTextures()
         {
-            References.Textures.Instance.AlienTexture = this.Content.Load<Texture2D>("sprites\\alien");
-            References.Textures.Instance.FirstLevelBackground = this.Content.Load<Texture2D>("sprites\\background");
-            References.Textures.Instance.FirstLevelSprite = this.Content.Load<Texture2D>("sprites\\testimage");
-            
+            References.Textures.Instance.SpriteSheet = Content.Load<SpriteSheet>("Sprites\\SpriteSheet");
         }
 
         private void LoadViewport()

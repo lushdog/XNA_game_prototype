@@ -49,8 +49,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sprites\alien.png">
-      <Name>alien</Name>
+    <Compile Include="Sprites\alien1.png">
+      <Name>alien1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -58,6 +58,26 @@
   <ItemGroup>
     <Compile Include="Sprites\testimage.png">
       <Name>testimage</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sprites\SpriteSheet.xml">
+      <Name>SpriteSheet</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>SpriteSheetProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="E:\Documents and Settings\Matt\Desktop\SpriteSheetSample\SpriteSheetPipeline\SpriteSheetPipeline.csproj">
+      <Project>{288693A4-E777-4A32-A658-3AB8B48C8511}</Project>
+      <Name>SpriteSheetPipeline</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sprites\alien2.png">
+      <Name>alien2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
