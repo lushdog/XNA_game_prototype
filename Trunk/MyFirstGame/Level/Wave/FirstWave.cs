@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using MyFirstGame.GameObject;
-using Microsoft.Xna.Framework;
 using MyFirstGame.References;
-using MyFirstGame.LevelObject;
 
 namespace MyFirstGame.LevelObject
 {

@@ -1,11 +1,7 @@
 ﻿//Source: http://www.ziggyware.com/readarticle.php?article_id=148
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-
 
 namespace MyFirstGame.Graphics
 {

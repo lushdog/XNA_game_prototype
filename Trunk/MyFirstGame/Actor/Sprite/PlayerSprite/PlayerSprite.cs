@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Net;
-using Microsoft.Xna.Framework.Storage;
 using MyFirstGame.InputObject;
 using MyFirstGame.References;
 
@@ -18,8 +7,6 @@ namespace MyFirstGame.GameObject
 {
     class PlayerSprite : Sprite
     {
-        private Vector2 origin;  
-      
         public bool IsFiring { get; set; }
         public bool IsActive { get; set; }
         public bool IsPaused { get; set; }
@@ -28,8 +15,7 @@ namespace MyFirstGame.GameObject
         public int PlayerNumber { get; set; }
         
         public PlayerSprite(PlayerInput activeInput, Color spriteColor, int playerNumber)
-        {
-            
+        {            
             SpriteColor = spriteColor;
             ActiveInput = activeInput;
             PlayerNumber = playerNumber;
