@@ -5,9 +5,9 @@ namespace MyFirstGame.GameObject
     {
         public FirstBackgroundSprite()
         {
-            base.AnimationStartName = "testimage";
-            base.AnimationFrameCount = 1;
-            base.AnimationFramesPerSecond = 0;
+            base.AnimationStartName = "testimage1";
+            base.AnimationFrameCount = 5;
+            base.AnimationFramesPerSecond = 1;
         }
     }
 }

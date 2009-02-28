@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MyFirstGame.GameObject;
+using MyFirstGame.References;
 
 namespace MyFirstGame.LevelObject
 {
@@ -13,7 +14,7 @@ namespace MyFirstGame.LevelObject
 
             Sprites = new List<Sprite>();
             FirstBackgroundSprite fs = new FirstBackgroundSprite();
-            fs.Position = new Vector2(100, 200);
+            fs.Position = Settings.Instance.Center;
             Sprites.Add(fs);
                        
             Waves = new List<Wave>();

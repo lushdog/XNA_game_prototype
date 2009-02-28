@@ -138,6 +138,15 @@ namespace MyFirstGame.References
             }
         }
 
+        public Vector2 Center
+        {
+            get
+            {
+                return new Vector2(ScreenSize.X / 2, ScreenSize.Y / 2);
+            }
+        }
+
+
         public static Settings Instance 
         {
             get
