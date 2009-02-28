@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MyFirstGame.GameObject
 {
-    class FirstSprite : Sprite
+    class FirstBackgroundSprite : Sprite
     {
-        public FirstSprite()
+        public FirstBackgroundSprite()
         {
             base.AnimationStartName = "testimage";
             base.AnimationFrameCount = 1;

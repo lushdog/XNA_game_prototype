@@ -15,7 +15,7 @@ namespace MyFirstGame.LevelObject
             BackgroundSpriteSheetName = "background";
 
             Sprites = new List<Sprite>();
-            FirstSprite fs = new FirstSprite();
+            FirstBackgroundSprite fs = new FirstBackgroundSprite();
             fs.Position = new Vector2(100, 200);
             Sprites.Add(fs);
                        

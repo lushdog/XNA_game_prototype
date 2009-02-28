@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +7,7 @@ using MyFirstGame.References;
 
 namespace MyFirstGame.LevelObject
 {
-    class FirstPattern : IPattern
+    public abstract class Pattern
     {
         public List<Vector2> ControlPoints { get; set; }
         public int CurrentPoint { get; set; }
@@ -15,28 +15,10 @@ namespace MyFirstGame.LevelObject
         public Vector2 LastPosition { get; set; }
         public float CurrentSpeed { get; set; }
 
-        public FirstPattern(Vector2 startPosition)
-        {
-            ControlPoints = new List<Vector2>();
-            ControlPoints.Add(startPosition);  //First control point is never reached
-            ControlPoints.Add(startPosition);
-            ControlPoints.Add(new Vector2(75, 300));
-            ControlPoints.Add(new Vector2(400, 200));
-            ControlPoints.Add(new Vector2(400, 400));
-            ControlPoints.Add(new Vector2(100, 100));
-            ControlPoints.Add(new Vector2(500, 600));
-            ControlPoints.Add(new Vector2(500, 600)); //Second last control point is never reached
-            ControlPoints.Add(new Vector2(500, 600)); //Last control point is never reached 
-
-            CurrentWeight = 0.0f;
-            CurrentPoint = 1;
-            CurrentSpeed = 50.0f;
-        }
-
         public Vector2 UpdatePattern()
         {
             float time = (float)Settings.Instance.GameTime.ElapsedGameTime.TotalSeconds;
-            
+
             if (CurrentWeight >= 1) //reached next CP
             {
                 if (CurrentPoint < ControlPoints.Count - 3)
