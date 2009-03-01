@@ -122,7 +122,6 @@ namespace MyFirstGame
                     UpdatePlayer(player);
                 }
                 
-                //TOREMOVE: splooge! ahhh inheritance and polymorphism jizz all over the screen
                 levels[0].UpdateLevel();
             }
 
@@ -166,7 +165,6 @@ namespace MyFirstGame
             }
 
             //draw targets
-            //TOREMOVE: This fucking line is where all the hierarchy and polymorphism makes me jizz
             //TODO: of course this has to be the current, i.e. remove all references to levels[0]
             if (!levels[0].IsEnded)
             {
@@ -174,7 +172,6 @@ namespace MyFirstGame
                 {                    
                     if (target.IsActive)
                     {
-                        Console.WriteLine(target.GetSpriteSheetIndex());
                         spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, target.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex()), 
                             Color.White, 0.0f, target.Origin, SpriteEffects.None, 0.5f);
                     }
@@ -187,7 +184,7 @@ namespace MyFirstGame
 
 
 
-        //TODO: much of UpdatePlayer() can be moved to the PlayerSprite class
+        //TODO: refactor to PlayerSprite()
         private void UpdatePlayer(PlayerSprite player)
         {
             player.UpdatePlayerIsActive();
@@ -202,11 +199,22 @@ namespace MyFirstGame
                 {
                     foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
                     {
-                        //TODO: upgrade this from ghetto hit detection to alpha sprite based hit detection
                         //TODO: give points to correct player...
+                        //TODO: factor this out so pixel based hit detection can be used elsewhere
+                        
+                        //only do pixel detection if mouse in area
                         if (target.BoundingBox.Contains(new Rectangle((int)player.Position.X, (int)player.Position.Y, 1, 1)))
                         {
-                            target.IsActive = false;
+                            //do we hit alpha pixel or 'body' pixel?
+                            Vector2 relativeShotLocation = new Vector2(player.Position.X - target.BoundingBox.X, player.Position.Y - target.BoundingBox.Y); 
+                            Rectangle targetTexturePixels = Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex());
+                            Vector2 hitPointOnSpriteSheet = new Vector2(targetTexturePixels.X + relativeShotLocation.X, targetTexturePixels.Y + relativeShotLocation.Y);
+                            int hitPointOnSpriteSheetIndex = (int)hitPointOnSpriteSheet.Y * Textures.Instance.SpriteSheet.Texture.Width + (int)hitPointOnSpriteSheet.X;
+                            Color pixelColor = Textures.Instance.SpriteSheetColors[hitPointOnSpriteSheetIndex];
+                            if (pixelColor.A != 0)
+                            {
+                                target.IsActive = false;
+                            }                            
                         }
                     }
                 }
@@ -366,7 +374,10 @@ namespace MyFirstGame
 
         private void LoadTextures()
         {
-            References.Textures.Instance.SpriteSheet = Content.Load<SpriteSheet>("Sprites\\SpriteSheet");
+            Textures.Instance.SpriteSheet = Content.Load<SpriteSheet>("Sprites\\SpriteSheet");
+            Color[] spriteSheetColors = new Color[Textures.Instance.SpriteSheet.Texture.Width * Textures.Instance.SpriteSheet.Texture.Height];
+            Textures.Instance.SpriteSheet.Texture.GetData<Color>(spriteSheetColors);
+            Textures.Instance.SpriteSheetColors = spriteSheetColors;
         }
 
         private void LoadViewport()

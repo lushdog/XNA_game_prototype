@@ -213,7 +213,6 @@ namespace MyFirstGame.Graphics
                     (float)screenWidth / (float)resolutions[(int)baseMode, 0], 
                     (float)screenHeight / (float)resolutions[(int)baseMode, 1], 
                     1f);
-            Console.WriteLine(scale);
             graphics.ApplyChanges();
         }
     }
