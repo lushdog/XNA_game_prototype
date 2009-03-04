@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework;
 
 namespace MyFirstGame.LevelObject
 {
-    class FirstPattern : Pattern
+    class TestPattern : Pattern
     {
-        public FirstPattern(Vector2 startPosition, float speed)
+        public TestPattern(Vector2 startPosition, float speed)
         {
             ControlPoints = new List<Vector2>();
             ControlPoints.Add(startPosition);  //First control point is never reached

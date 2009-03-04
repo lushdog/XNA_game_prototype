@@ -11,21 +11,21 @@ namespace MyFirstGame.LevelObject
             WaveLengthInSeconds = 15;
             base.Targets = new List<Target>();
 
-            AlienTarget t = new AlienTarget();
+            TestTarget t = new TestTarget();
             t.Position = Settings.Instance.OneThirdBottom;
-            t.Pattern = new FirstPattern(t.Position, 10f);
+            t.Pattern = new TestPattern(t.Position, 10f);
             t.IsActive = true;
             base.Targets.Add(t);
 
-            AlienTarget t1 = new AlienTarget();
+            TestTarget t1 = new TestTarget();
             t1.Position = Settings.Instance.BottomLeft;
-            t1.Pattern = new FirstPattern(t1.Position, 10f);
+            t1.Pattern = new TestPattern(t1.Position, 10f);
             t1.IsActive = true;
             base.Targets.Add(t1);
 
-            AlienTarget t2 = new AlienTarget();
+            TestTarget t2 = new TestTarget();
             t2.Position = Settings.Instance.MidRight;
-            t2.Pattern = new FirstPattern(t2.Position, 10f);
+            t2.Pattern = new TestPattern(t2.Position, 10f);
             t2.IsActive = true;
             base.Targets.Add(t2);
 

@@ -1,14 +1,15 @@
 ﻿
 namespace MyFirstGame.GameObject
 {
-    class AlienTarget : Target
+    class TestTarget : Target
     {
-        public AlienTarget()
+        public TestTarget()
         {
             base.PointValue = 500;
             base.AnimationFrameCount = 6;
             base.AnimationFramesPerSecond = 15;
             base.AnimationStartName = "alien1";
+            base.Scale = 2.0f;
         }
     }
 }

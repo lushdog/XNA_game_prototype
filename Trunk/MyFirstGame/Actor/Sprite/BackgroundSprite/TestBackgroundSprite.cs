@@ -1,13 +1,15 @@
-﻿
+﻿using Microsoft.Xna.Framework;
+
 namespace MyFirstGame.GameObject
 {
-    class FirstBackgroundSprite : Sprite
+    class TestBackgroundSprite : BackgroundSprite
     {
-        public FirstBackgroundSprite()
+        public TestBackgroundSprite()
         {
             base.AnimationStartName = "testimage1";
             base.AnimationFrameCount = 5;
             base.AnimationFramesPerSecond = 1;
+            base.Scale = 7.0f;
         }
     }
 }

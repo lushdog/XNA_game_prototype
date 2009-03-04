@@ -23,6 +23,7 @@ namespace MyFirstGame.GameObject
             base.AnimationFrameCount = 1;
             base.AnimationFramesPerSecond = 0;
             base.AnimationStartName = "crosshair";
+            base.Scale = 1.0f;
         }
 
         public void UpdatePlayerIsActive()
@@ -114,5 +115,9 @@ namespace MyFirstGame.GameObject
             }
         }
 
+        public Vector2 GetShotLocation()
+        {
+            return new Vector2(Position.X, Position.Y);
+        }
     }
 }

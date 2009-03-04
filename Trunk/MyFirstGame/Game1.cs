@@ -106,7 +106,7 @@ namespace MyFirstGame
             //TODO: this is just to loop the level over and over for debug
             if (levels[0].IsEnded)
             {
-                levels[0] = new FirstLevel();
+                levels[0] = new TestLevel();
             }
 
             //TODO: this will not be hardcoded (this forces level start when game is loaded)
@@ -142,10 +142,12 @@ namespace MyFirstGame
             //Draw level bg and its sprites
             spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, viewportRectangle, Textures.Instance.SpriteSheet.SourceRectangle(levels[0].BackgroundSpriteSheetName),
                 Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.0f);
+
             foreach (Sprite sprite in levels[0].Sprites)
             {
                 spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, sprite.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(sprite.GetSpriteSheetIndex()),
-                    Color.White, sprite.Rotation, sprite.Origin, SpriteEffects.None, 0.9f);
+                    Color.White, sprite.Rotation, new Vector2(0,0), SpriteEffects.None, 0.9f);
+
             }
 
             //Draw players
@@ -159,8 +161,15 @@ namespace MyFirstGame
                     {
                         playerColor = Color.Red;
                     }
-                    spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, player.Position, Textures.Instance.SpriteSheet.SourceRectangle(player.AnimationStartName), playerColor, player.Rotation, player.Origin, 1.0f, SpriteEffects.None, 0.0f);
+                    player.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, player.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(player.GetSpriteSheetIndex()),
+                        playerColor, player.Rotation, player.Origin, SpriteEffects.None, 0.0f);
                     
+                    #if DEBUG
+                    spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, new Rectangle((int)player.GetShotLocation().X, (int)player.GetShotLocation().Y, 5, 5), Textures.Instance.SpriteSheet.SourceRectangle("hitbox"),
+                        playerColor, 0.0f, new Vector2(0,0), SpriteEffects.None, 0.0f);
+                    #endif
+
                 }
             }
 
@@ -172,8 +181,14 @@ namespace MyFirstGame
                 {                    
                     if (target.IsActive)
                     {
-                        spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, target.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex()), 
-                            Color.White, 0.0f, target.Origin, SpriteEffects.None, 0.5f);
+                        target.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, target.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex()),
+                            Color.White, target.Rotation, target.Origin, SpriteEffects.None, 0.5f);
+
+                        #if DEBUG
+                        spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, target.BoundingBox, Textures.Instance.SpriteSheet.SourceRectangle("hitbox"),
+                            Color.White, 0.0f, new Vector2(0,0), SpriteEffects.None, 0.6f);
+                        #endif
                     }
                 }
             }
@@ -197,16 +212,19 @@ namespace MyFirstGame
                 player.UpdateFiringState();
                 if (player.IsFiring)
                 {
+                    Vector2 shotLocation = player.GetShotLocation();
+                    Console.WriteLine(shotLocation);
                     foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
                     {
-                        //TODO: give points to correct player...
                         //TODO: factor this out so pixel based hit detection can be used elsewhere
+                        //TODO: pixel based hit detection does not work when target is rotated...
                         
                         //only do pixel detection if mouse in area
-                        if (target.BoundingBox.Contains(new Rectangle((int)player.Position.X, (int)player.Position.Y, 1, 1)))
+                        if (target.BoundingBox.Contains(new Rectangle((int)shotLocation.X, (int)shotLocation.Y, 1, 1)))
                         {
                             //do we hit alpha pixel or 'body' pixel?
-                            Vector2 relativeShotLocation = new Vector2(player.Position.X - target.BoundingBox.X, player.Position.Y - target.BoundingBox.Y); 
+                            Vector2 relativeShotLocation = new Vector2(shotLocation.X - target.BoundingBox.X, shotLocation.Y - target.BoundingBox.Y);
+                            relativeShotLocation = Vector2.Divide(relativeShotLocation, target.Scale);
                             Rectangle targetTexturePixels = Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex());
                             Vector2 hitPointOnSpriteSheet = new Vector2(targetTexturePixels.X + relativeShotLocation.X, targetTexturePixels.Y + relativeShotLocation.Y);
                             int hitPointOnSpriteSheetIndex = (int)hitPointOnSpriteSheet.Y * Textures.Instance.SpriteSheet.Texture.Width + (int)hitPointOnSpriteSheet.X;
@@ -214,6 +232,7 @@ namespace MyFirstGame
                             if (pixelColor.A != 0)
                             {
                                 target.IsActive = false;
+                                //TODO: give points to correct player...                        
                             }                            
                         }
                     }
@@ -369,7 +388,7 @@ namespace MyFirstGame
 
 		private void LoadLevels()
         {
-            levels.Add(new FirstLevel());
+            levels.Add(new TestLevel());
         }
 
         private void LoadTextures()

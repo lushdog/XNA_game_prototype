@@ -95,16 +95,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actor\Actor.cs" />
-    <Compile Include="Actor\Sprite\BackgroundSprite\FirstBackgroundSprite.cs" />
+    <Compile Include="Actor\Sprite\BackgroundSprite\BackgroundSprite.cs" />
+    <Compile Include="Actor\Sprite\BackgroundSprite\TestBackgroundSprite.cs" />
     <Compile Include="Actor\Sprite\PlayerSprite\PlayerSprite.cs" />
     <Compile Include="Actor\Sprite\Sprite.cs" />
     <Compile Include="Actor\Sprite\Target\Target.cs" />
-    <Compile Include="Actor\Sprite\Target\AlienTarget.cs" />
+    <Compile Include="Actor\Sprite\Target\TestTarget.cs" />
     <Compile Include="Graphics\Resolution.cs" />
     <Compile Include="Input\PlayerInput.cs" />
-    <Compile Include="Level\Level\FirstLevel.cs" />
+    <Compile Include="Level\Level\TestLevel.cs" />
     <Compile Include="Level\Level\Level.cs" />
-    <Compile Include="Level\Pattern\FirstPattern.cs" />
+    <Compile Include="Level\Pattern\TestPattern.cs" />
     <Compile Include="Level\Wave\FirstWave.cs" />
     <Compile Include="Level\Pattern\Pattern.cs" />
     <Compile Include="Level\Wave\Wave.cs" />

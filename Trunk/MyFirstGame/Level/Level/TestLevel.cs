@@ -5,15 +5,15 @@ using MyFirstGame.References;
 
 namespace MyFirstGame.LevelObject
 {
-    class FirstLevel : Level
+    class TestLevel : Level
     {
-        public FirstLevel()
+        public TestLevel()
         {
             Tag = "This is the first level.";
             BackgroundSpriteSheetName = "background";
 
             Sprites = new List<Sprite>();
-            FirstBackgroundSprite fs = new FirstBackgroundSprite();
+            TestBackgroundSprite fs = new TestBackgroundSprite();
             fs.Position = Settings.Instance.Center;
             Sprites.Add(fs);
                        
