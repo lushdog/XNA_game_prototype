@@ -8,8 +8,12 @@ namespace MyFirstGame.GameObject
     class PlayerSprite : Sprite
     {
         public bool IsFiring { get; set; }
+        public bool CanFire { get; set; }
         public bool IsActive { get; set; }
         public bool IsPaused { get; set; }
+        
+        public int LastFireTime { get; set; }
+
         
         public PlayerInput ActiveInput { get; set; }
         public int PlayerNumber { get; set; }
@@ -84,19 +88,25 @@ namespace MyFirstGame.GameObject
             this.Position = new Vector2(newPosX, newPosY);
         }
 
-        //TODO: you can hold the button to fire, it should have to fire, then reset then fire again
         public void UpdateFiringState()
         {
             if (ActiveInput.GetFire())
             {
-                if (!this.IsFiring)
+                if (CanFire)
                 {
-                    this.IsFiring = true;
-                }                
-            }
+                    IsFiring = true;
+                    CanFire = false;
+                    //LastFireTime = References.Settings.Instance.GameTime.TotalGameTime.Seconds;
+                }
+                else
+                {
+                    IsFiring = false;
+                }
+            }     
             else
             {
-                this.IsFiring = false;
+                CanFire = true;
+                IsFiring = false;
             }
         }
 

@@ -74,11 +74,7 @@ namespace MyFirstGame.LevelObject
         
         public void EndLevel()
         {
-            IsEnded = true;
-            foreach (Wave wave in Waves)
-            {
-                //TODO:clean up waves
-            }
+            IsEnded = true;            
         }
 
     }

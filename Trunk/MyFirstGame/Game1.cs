@@ -49,7 +49,6 @@ namespace MyFirstGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             players = new List<PlayerSprite>();
             levels = new List<Level>();
             resolution = new Resolution(graphics, ScreenMode.tv720p);
@@ -62,10 +61,8 @@ namespace MyFirstGame
         /// </summary>
         protected override void LoadContent()
         {
-            /// Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
-            // TODO: use this.Content to load your game content here
             LoadSettings();
             LoadTextures();            
             LoadViewport();
@@ -79,7 +76,7 @@ namespace MyFirstGame
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            
         }
 
         /// <summary>
@@ -136,7 +133,6 @@ namespace MyFirstGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, resolution.Scale);
             
             //Draw level bg and its sprites
@@ -161,7 +157,7 @@ namespace MyFirstGame
                     {
                         playerColor = Color.Red;
                     }
-                    player.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    //player.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
                     spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, player.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(player.GetSpriteSheetIndex()),
                         playerColor, player.Rotation, player.Origin, SpriteEffects.None, 0.0f);
                     
@@ -181,7 +177,7 @@ namespace MyFirstGame
                 {                    
                     if (target.IsActive)
                     {
-                        target.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        //target.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
                         spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, target.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex()),
                             Color.White, target.Rotation, target.Origin, SpriteEffects.None, 0.5f);
 
@@ -213,7 +209,6 @@ namespace MyFirstGame
                 if (player.IsFiring)
                 {
                     Vector2 shotLocation = player.GetShotLocation();
-                    Console.WriteLine(shotLocation);
                     foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
                     {
                         //TODO: factor this out so pixel based hit detection can be used elsewhere
@@ -222,13 +217,17 @@ namespace MyFirstGame
                         //only do pixel detection if mouse in area
                         if (target.BoundingBox.Contains(new Rectangle((int)shotLocation.X, (int)shotLocation.Y, 1, 1)))
                         {
-                            //do we hit alpha pixel or 'body' pixel?
+                            //do we hit alpha pixel or 'body' pixel?                            
+                            
                             Vector2 relativeShotLocation = new Vector2(shotLocation.X - target.BoundingBox.X, shotLocation.Y - target.BoundingBox.Y);
                             relativeShotLocation = Vector2.Divide(relativeShotLocation, target.Scale);
+                            
                             Rectangle targetTexturePixels = Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex());
                             Vector2 hitPointOnSpriteSheet = new Vector2(targetTexturePixels.X + relativeShotLocation.X, targetTexturePixels.Y + relativeShotLocation.Y);
+                            
                             int hitPointOnSpriteSheetIndex = (int)hitPointOnSpriteSheet.Y * Textures.Instance.SpriteSheet.Texture.Width + (int)hitPointOnSpriteSheet.X;
                             Color pixelColor = Textures.Instance.SpriteSheetColors[hitPointOnSpriteSheetIndex];
+                            
                             if (pixelColor.A != 0)
                             {
                                 target.IsActive = false;
@@ -343,11 +342,7 @@ namespace MyFirstGame
             catch (Exception ex)
             {
                 throw;
-            }
-            finally
-            {
-                //TODO: do we have to dispose of XmlDocument?
-            }
+            }            
         }
 #endif
 
@@ -371,11 +366,7 @@ namespace MyFirstGame
             catch (Exception ex)
             {
                 throw;
-            }
-            finally
-            {
-                //TODO: do we have to dispose of XmlDocument?
-            }
+            }            
         }
 
 #endif
