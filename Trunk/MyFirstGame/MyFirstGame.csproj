@@ -99,6 +99,10 @@
     <Compile Include="Actor\Sprite\BackgroundSprite\TestBackgroundSprite.cs" />
     <Compile Include="Actor\Sprite\PlayerSprite\PlayerSprite.cs" />
     <Compile Include="Actor\Sprite\Sprite.cs" />
+    <Compile Include="Actor\Sprite\Target\BearTarget.cs" />
+    <Compile Include="Actor\Sprite\Target\SquidTarget.cs" />
+    <Compile Include="Actor\Sprite\Target\CatTarget.cs" />
+    <Compile Include="Actor\Sprite\Target\ZombieTarget.cs" />
     <Compile Include="Actor\Sprite\Target\Target.cs" />
     <Compile Include="Actor\Sprite\Target\TestTarget.cs" />
     <Compile Include="Graphics\Resolution.cs" />

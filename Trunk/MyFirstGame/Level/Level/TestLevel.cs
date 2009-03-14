@@ -18,7 +18,7 @@ namespace MyFirstGame.LevelObject
             Sprites.Add(fs);
                        
             Waves = new List<Wave>();
-            FirstWave fw = new FirstWave();
+            TestWave fw = new TestWave();
             fw.Tag = "Wave1";
             Waves.Add(fw);
 

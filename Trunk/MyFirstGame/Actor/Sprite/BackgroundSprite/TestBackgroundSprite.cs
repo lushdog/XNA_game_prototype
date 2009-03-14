@@ -9,7 +9,7 @@ namespace MyFirstGame.GameObject
             base.AnimationStartName = "testimage1";
             base.AnimationFrameCount = 5;
             base.AnimationFramesPerSecond = 1;
-            base.Scale = 7.0f;
+            base.Scale = 3.0f;
         }
     }
 }

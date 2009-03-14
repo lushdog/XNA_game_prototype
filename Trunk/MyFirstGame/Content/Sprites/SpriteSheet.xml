@@ -15,5 +15,9 @@
     <Item>sprites\testimage4.png</Item>
     <Item>sprites\testimage5.png</Item>
     <Item>sprites\hitbox.png</Item>
+    <Item>sprites\bear.png</Item>
+    <Item>sprites\squid.png</Item>
+    <Item>sprites\zombie.png</Item>
+    <Item>sprites\cat.png</Item>
   </Asset>
 </XnaContent>
