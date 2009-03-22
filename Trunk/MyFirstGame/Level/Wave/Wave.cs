@@ -8,9 +8,13 @@ namespace MyFirstGame.LevelObject
     abstract class Wave
     {
         public string Tag { get; set; }
+
         public List<Target> Targets { get; set; }
+        
         public double StartTimeInSeconds { get; set; }
+        
         public double WaveLengthInSeconds { get; set; }
+        
         public double WaveElapsedTimeInSeconds
         {
             get
@@ -18,12 +22,16 @@ namespace MyFirstGame.LevelObject
                 return Settings.Instance.GameTime.TotalGameTime.TotalSeconds - StartTimeInSeconds;
             }
         }
+        
         public int CurrentWave { get; set; }
+        
         public bool IsStarted { get; private set; }
+        
         public bool IsEnded { get; private set; }
 
-        public Wave()
+        public Wave(int waveLengthInSeconds)
         {
+            WaveLengthInSeconds = waveLengthInSeconds;
             IsStarted = false;
             IsEnded = false;
         }

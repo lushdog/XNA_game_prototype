@@ -4,12 +4,7 @@ namespace MyFirstGame.GameObject
     class TestTarget : Target
     {
         public TestTarget()
-        {
-            base.PointValue = 500;
-            base.AnimationFrameCount = 6;
-            base.AnimationFramesPerSecond = 15;
-            base.AnimationStartName = "alien1";
-            base.Scale = 2.0f;
-        }
+            : base(500, 6, 15, "alien1", 1.5f)
+        { }
     }
 }

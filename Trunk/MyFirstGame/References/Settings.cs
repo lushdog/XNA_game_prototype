@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace MyFirstGame.References
 {
@@ -9,16 +10,34 @@ namespace MyFirstGame.References
         public Vector2 ScreenSize { get; set; }
         public float AspectRatio { get; set; }
         public GameTime GameTime { get; set; }
-
-        public Vector2 TopLeft
+        
+        //Screen location grid
+        public const int numGridPointsHorizontal = 7;
+        public const int numGridPointsVertical = 7;        
+        
+        /// <summary>
+        /// Returns a point on screen based on given inputs using a grid based system, (0,0) being upper left, (7,7) being lower right.
+        /// </summary>
+        /// <param name="indexHorizontal">Horizontal index of point, valid values 0-7.</param>
+        /// <param name="indexVertical">Vertical index of point, valid values 0-7.</param>
+        /// <returns>Location of point requested.</returns>
+        public Vector2 GetScreenGridLocation(int indexHorizontal, int indexVertical)
         {
-            get
+            if (indexHorizontal < 0 || indexHorizontal > numGridPointsHorizontal)
             {
-                return new Vector2(0, 0);
+                throw new Exception("indexHorizontal must be greater than zero and less than numGridPointsHorizontal.");
             }
+
+            if (indexVertical < 0 || indexVertical > numGridPointsVertical)
+            {
+                throw new Exception("indexVertical must be greater than zero and less than numGridPointsVertical.");
+            }
+            
+            return new Vector2(ScreenSize.X * indexHorizontal / numGridPointsHorizontal,
+                ScreenSize.Y * indexVertical / numGridPointsVertical);
         }
 
-        public Vector2 TopRight
+        public Vector2 ScreenTopRight
         {
             get
             {
@@ -26,7 +45,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 BottomLeft
+        public Vector2 ScreenBottomLeft
         {
             get
             {
@@ -34,7 +53,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 BottomRight
+        public Vector2 ScreenBottomRight
         {
             get
             {
@@ -42,7 +61,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 OneThirdLeft
+        public Vector2 ScreenOneThirdLeft
         {
             get
             {
@@ -50,7 +69,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 MidLeft
+        public Vector2 ScreenMidLeft
         {
             get
             {
@@ -58,7 +77,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 TwoThirdsLeft
+        public Vector2 ScreenTwoThirdsLeft
         {
             get
             {
@@ -66,7 +85,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 OneThirdRight
+        public Vector2 ScreenOneThirdRight
         {
             get
             {
@@ -74,7 +93,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 MidRight
+        public Vector2 ScreenMidRight
         {
             get
             {
@@ -82,7 +101,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 TwoThirdsRight
+        public Vector2 ScreenTwoThirdsRight
         {
             get
             {
@@ -90,7 +109,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 OneThirdTop
+        public Vector2 ScreenOneThirdTop
         {
             get
             {
@@ -98,7 +117,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 MidTop
+        public Vector2 ScreenMidTop
         {
             get
             {
@@ -106,7 +125,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 TwoThirdsTop
+        public Vector2 ScreenTwoThirdsTop
         {
             get
             {
@@ -114,7 +133,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 OneThirdBottom
+        public Vector2 ScreenOneThirdBottom
         {
             get
             {
@@ -122,7 +141,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 MidBottom
+        public Vector2 ScreenMidBottom
         {
             get
             {
@@ -130,7 +149,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 TwoThirdsBottom
+        public Vector2 ScreenTwoThirdsBottom
         {
             get
             {
@@ -138,7 +157,7 @@ namespace MyFirstGame.References
             }
         }
 
-        public Vector2 Center
+        public Vector2 ScreenCenter
         {
             get
             {

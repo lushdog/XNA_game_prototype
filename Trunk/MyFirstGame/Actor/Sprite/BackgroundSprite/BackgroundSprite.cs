@@ -17,6 +17,14 @@ namespace MyFirstGame.GameObject
                 return drawRectangle;
             }
         }
+
+        public BackgroundSprite(int animationFrameCount, int animationFramesPerSecond, string animationStartName, float scale)
+            : base(animationFrameCount, animationFramesPerSecond, animationStartName, scale)
+        { }
+
+
+
+
     }
 
 }

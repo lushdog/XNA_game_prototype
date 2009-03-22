@@ -8,26 +8,25 @@ namespace MyFirstGame.GameObject
     class PlayerSprite : Sprite
     {
         public bool IsFiring { get; set; }
+
         public bool CanFire { get; set; }
+        
         public bool IsActive { get; set; }
+        
         public bool IsPaused { get; set; }
         
-        public int LastFireTime { get; set; }
-
-        
         public PlayerInput ActiveInput { get; set; }
+        
         public int PlayerNumber { get; set; }
         
-        public PlayerSprite(PlayerInput activeInput, Color spriteColor, int playerNumber)
+        public PlayerSprite(PlayerInput activeInput, Color spriteColor, int playerNumber, 
+            int animationFrameCount, int animationFramesPerSecond, string animationStartName, float scale)
+            : base(animationFrameCount, animationFramesPerSecond, animationStartName, scale)
         {            
             SpriteColor = spriteColor;
             ActiveInput = activeInput;
             PlayerNumber = playerNumber;
-            base.Rotation = 0.0f;
-            base.AnimationFrameCount = 1;
-            base.AnimationFramesPerSecond = 0;
-            base.AnimationStartName = "crosshair";
-            base.Scale = 1.0f;
+            base.Rotation = 0.0f;            
         }
 
         public void UpdatePlayerIsActive()

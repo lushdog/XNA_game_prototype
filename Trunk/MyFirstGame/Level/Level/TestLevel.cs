@@ -14,7 +14,7 @@ namespace MyFirstGame.LevelObject
 
             Sprites = new List<Sprite>();
             TestBackgroundSprite fs = new TestBackgroundSprite();
-            fs.Position = Settings.Instance.Center;
+            fs.Position = Settings.Instance.ScreenCenter;
             Sprites.Add(fs);
                        
             Waves = new List<Wave>();

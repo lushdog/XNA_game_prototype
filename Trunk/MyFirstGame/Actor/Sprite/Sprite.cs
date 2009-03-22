@@ -7,6 +7,7 @@ namespace MyFirstGame.GameObject
     class Sprite : Actor
     {
         public float Scale { get; set; }
+
         public virtual Rectangle DrawRectangle
         {
             get
@@ -18,7 +19,9 @@ namespace MyFirstGame.GameObject
                     (int)(sourceRectangle.Width), (int)(sourceRectangle.Height));
             }
         }
+        
         public Color SpriteColor { get; set; }
+        
         public override Vector2 Origin
         {
             get
@@ -29,7 +32,9 @@ namespace MyFirstGame.GameObject
         }
 
         public int AnimationFramesPerSecond { get; set; }
+        
         public int AnimationFrameCount { get; set; }
+        
         public string AnimationStartName { get; set; }
 
         public int GetSpriteSheetIndex()
@@ -39,9 +44,13 @@ namespace MyFirstGame.GameObject
             return index;
         }
 
-        public Sprite()
+        public Sprite(int animationFrameCount,int animationFramesPerSecond, string animationStartName, 
+            float scale)
         {
-            Scale = 1.0f;
+            AnimationFrameCount = animationFrameCount;
+            AnimationFramesPerSecond = animationFramesPerSecond;
+            AnimationStartName = animationStartName;
+            Scale = scale;
         }
     }
 }

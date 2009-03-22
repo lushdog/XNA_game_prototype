@@ -278,7 +278,7 @@ namespace MyFirstGame
                     playerColor = Color.Green;
                     break;
             }
-            PlayerSprite player = new PlayerSprite(playerInput, playerColor, playerNumber);
+            PlayerSprite player = new PlayerSprite(playerInput, playerColor, playerNumber, 1, 0, "crosshair", 1.0f);
             player.Position = new Vector2(Settings.Instance.ScreenSize.X / 2, Settings.Instance.ScreenSize.X / 2);
             return player;
         }
