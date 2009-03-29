@@ -12,8 +12,8 @@ namespace MyFirstGame.References
         public GameTime GameTime { get; set; }
         
         //Screen location grid
-        public const int numGridPointsHorizontal = 7;
-        public const int numGridPointsVertical = 7;        
+        private const int numGridPointsHorizontal = 7;
+        private const int numGridPointsVertical = 7;        
         
         /// <summary>
         /// Returns a point on screen based on given inputs using a grid based system, (0,0) being upper left, (7,7) being lower right.
@@ -37,6 +37,14 @@ namespace MyFirstGame.References
                 ScreenSize.Y * indexVertical / numGridPointsVertical);
         }
 
+        public Vector2 ScreenTopLeft
+        {
+            get
+            {
+                return new Vector2(0, 0);
+            }
+        }
+        
         public Vector2 ScreenTopRight
         {
             get

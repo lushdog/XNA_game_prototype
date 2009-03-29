@@ -18,6 +18,10 @@ using MyFirstGame.References;
 using MyFirstGame.Utilities;
 using MyFirstGame.Graphics;
 using SpriteSheetRuntime;
+using System.Text;
+
+//TODO: Convert Vector2 to Points where possible (save mem)
+//TODO: Draw FPS in debug mode.
 
 namespace MyFirstGame
 {
@@ -30,6 +34,8 @@ namespace MyFirstGame
         private Resolution resolution;
         private Rectangle viewportRectangle;
         private SpriteBatch spriteBatch;
+        private SpriteFont scoreFont;
+        private Rectangle[] scorePanels;
         
         private List<PlayerSprite> players;
         private List<Level> levels;
@@ -49,9 +55,6 @@ namespace MyFirstGame
         /// </summary>
         protected override void Initialize()
         {
-            players = new List<PlayerSprite>();
-            levels = new List<Level>();
-            resolution = new Resolution(graphics, ScreenMode.tv720p);
             base.Initialize();
         }
 
@@ -61,14 +64,16 @@ namespace MyFirstGame
         /// </summary>
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+            LoadSpriteBatch();
+            LoadResolution();
             LoadSettings();
             LoadTextures();            
             LoadViewport();
             LoadPlayers();
             LoadLevels();
-        }           
+            LoadFonts();
+            LoadScorePanels();
+        }        
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -135,18 +140,16 @@ namespace MyFirstGame
 
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, resolution.Scale);
             
-            //Draw level bg and its sprites
+            //Draw level background and level sprites
             spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, viewportRectangle, Textures.Instance.SpriteSheet.SourceRectangle(levels[0].BackgroundSpriteSheetName),
                 Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.0f);
-
+                        
             foreach (Sprite sprite in levels[0].Sprites)
             {
                 spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, sprite.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(sprite.GetSpriteSheetIndex()),
-                    Color.White, sprite.Rotation, new Vector2(0,0), SpriteEffects.None, 0.9f);
-
+                    Color.White, sprite.Rotation, new Vector2(0, 0), SpriteEffects.None, 0.9f);
             }
 
-            //Draw players
             foreach (PlayerSprite player in players)
             {
                 if (player.IsActive)
@@ -158,12 +161,17 @@ namespace MyFirstGame
                         playerColor = Color.Red;
                     }
                     //player.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    
+                    //draw player
                     spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, player.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(player.GetSpriteSheetIndex()),
                         playerColor, player.Rotation, player.Origin, SpriteEffects.None, 0.0f);
-                    
+
+                    //draw player score
+                    spriteBatch.DrawString(scoreFont, player.Score.ToString(), new Vector2(scorePanels[player.PlayerNumber - 1].Location.X, scorePanels[player.PlayerNumber - 1].Location.Y), Color.White, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.95f);
+                                        
                     #if DEBUG
-                    spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, new Rectangle((int)player.GetShotLocation().X, (int)player.GetShotLocation().Y, 5, 5), Textures.Instance.SpriteSheet.SourceRectangle("hitbox"),
-                        playerColor, 0.0f, new Vector2(0,0), SpriteEffects.None, 0.0f);
+                        spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, new Rectangle((int)player.GetShotLocation().X, (int)player.GetShotLocation().Y, 5, 5), Textures.Instance.SpriteSheet.SourceRectangle("hitbox"),
+                            playerColor, 0.0f, new Vector2(0,0), SpriteEffects.None, 0.0f);
                     #endif
 
                 }
@@ -193,9 +201,6 @@ namespace MyFirstGame
             base.Draw(gameTime);
         }
 
-
-
-        //TODO: refactor to PlayerSprite()
         private void UpdatePlayer(PlayerSprite player)
         {
             player.UpdatePlayerIsActive();
@@ -231,26 +236,24 @@ namespace MyFirstGame
                             if (pixelColor.A != 0)
                             {
                                 target.IsActive = false;
-                                //TODO: give points to correct player...                        
+                                player.Score += target.PointValue;                        
                             }                            
                         }
                     }
                 }
 
                 player.UpdatePlayerPosition();
-                //TODO: here is where we'd check for collisions with other objects, change target pos
                 player.MoveTo(new Vector2(player.Position.X, player.Position.Y));
             }
         }
         
         private void LoadPlayers()
         {
-#if !XBOX
-            PlayerInput[] playerInputs = LoadPCPlayerInputs(); // move to Initialize?
-#endif
-#if XBOX
-            PlayerInput[] playerInputs = LoadXBOXPlayerInputs(); // move to Initialize?
-#endif
+            players = new List<PlayerSprite>();
+            
+           
+            PlayerInput[] playerInputs = LoadPlayerInputs();
+
             int playerNumber = 1;
             foreach (PlayerInput playerInput in playerInputs)
             {
@@ -266,24 +269,34 @@ namespace MyFirstGame
             switch (playerNumber)
             {
                 case 1:
-                    playerColor = Color.Brown;
+                    playerColor = Color.White;
                     break;
                 case 2:
-                    playerColor = Color.Blue;
+                    playerColor = Color.Black;
                     break;
                 case 3:
-                    playerColor = Color.DimGray;
+                    playerColor = Color.Green;
                     break;
                 case 4:
-                    playerColor = Color.Green;
+                    playerColor = Color.Yellow;
                     break;
             }
             PlayerSprite player = new PlayerSprite(playerInput, playerColor, playerNumber, 1, 0, "crosshair", 1.0f);
-            player.Position = new Vector2(Settings.Instance.ScreenSize.X / 2, Settings.Instance.ScreenSize.X / 2);
             return player;
         }
 
-#if !XBOX
+        private PlayerInput[] LoadPlayerInputs()
+        {
+            #if !XBOX
+                return LoadPCPlayerInputs(); // move to Initialize?
+            #endif
+            #if XBOX
+                return LoadXboxPlayerInputs(); // move to Initialize?
+            #endif            
+        }
+        
+        #if !XBOX
+
         private PlayerInput[] LoadPCPlayerInputs()
         {
             PlayerInput[] playerInputs = new PlayerInput[4];
@@ -344,32 +357,67 @@ namespace MyFirstGame
                 throw;
             }            
         }
-#endif
+        
+        #endif
 
-#if XBOX
-        private PlayerInput[] LoadXBOXPlayerInputs()
-        {
-            PlayerInput[] playerInputs = new PlayerInput[4];
-            XmlDocument configDocument = new XmlDocument();
-            configDocument.Load(".//Config//XBOXconfig.xml");
-            XmlNodeList inputNodes = configDocument.SelectNodes("/config/input");
-            try
+        //LoadXboxPlayerInputs()
+        #if XBOX
+                        
+            private PlayerInput[] LoadXboxPlayerInputs()
             {
-                for (int i = 0; i < playerInputs.Length; i++)
+                PlayerInput[] playerInputs = new PlayerInput[4];
+                XmlDocument configDocument = new XmlDocument();
+                configDocument.Load(".//Config//XBOXconfig.xml");
+                XmlNodeList inputNodes = configDocument.SelectNodes("/config/input");
+                try
                 {
-                    XmlNode inputNode = inputNodes[i];
-                    float scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
-                    playerInputs[i] = new GamepadInput(UtilityMethods.NumToEnum<PlayerIndex>(i), scrollSpeed);
+                    for (int i = 0; i < playerInputs.Length; i++)
+                    {
+                        XmlNode inputNode = inputNodes[i];
+                        float scrollSpeed = float.Parse(inputNode.Attributes["scrollSpeed"].Value);
+                        playerInputs[i] = new GamepadInput(UtilityMethods.NumToEnum<PlayerIndex>(i), scrollSpeed);
+                    }
+                    return playerInputs;
                 }
-                return playerInputs;
+                catch (Exception ex)
+                {
+                    throw;
+                }            
             }
-            catch (Exception ex)
-            {
-                throw;
-            }            
+                
+        #endif
+
+        private void LoadResolution()
+        {
+            resolution = new Resolution(graphics, ScreenMode.tv720p);
         }
 
-#endif
+        private void LoadSpriteBatch()
+        {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+        }
+
+        private void LoadScorePanels()
+        {
+            scorePanels = new Rectangle[4];
+            const int scorePanelWidth = 300;
+            const int scorePanelHeight = 200;
+
+            //TODO: these could just be Vector2s
+            scorePanels[0] = new Rectangle((int)Settings.Instance.ScreenTopLeft.X, (int)Settings.Instance.ScreenTopLeft.Y,
+                                    scorePanelWidth, scorePanelHeight);
+            scorePanels[1] = new Rectangle((int)Settings.Instance.ScreenTopRight.X - scorePanelWidth, (int)Settings.Instance.ScreenTopRight.Y,
+                                    scorePanelWidth, scorePanelHeight);
+            scorePanels[2] = new Rectangle((int)Settings.Instance.ScreenBottomLeft.X, (int)Settings.Instance.ScreenBottomLeft.Y - scorePanelHeight,
+                                    scorePanelWidth, scorePanelHeight);
+            scorePanels[3] = new Rectangle((int)Settings.Instance.ScreenBottomRight.X - scorePanelWidth, (int)Settings.Instance.ScreenBottomRight.Y - scorePanelHeight,
+                                                scorePanelWidth, scorePanelHeight);        
+        }
+
+        private void LoadFonts()
+        {
+            scoreFont = Content.Load<SpriteFont>("Fonts\\Kootenay");
+        }           
 
         private void LoadSettings()
         {
@@ -379,6 +427,7 @@ namespace MyFirstGame
 
 		private void LoadLevels()
         {
+            levels = new List<Level>();
             levels.Add(new TestLevel());
         }
 

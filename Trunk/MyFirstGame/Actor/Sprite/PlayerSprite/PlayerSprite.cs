@@ -18,6 +18,8 @@ namespace MyFirstGame.GameObject
         public PlayerInput ActiveInput { get; set; }
         
         public int PlayerNumber { get; set; }
+
+        public int Score { get; set; }
         
         public PlayerSprite(PlayerInput activeInput, Color spriteColor, int playerNumber, 
             int animationFrameCount, int animationFramesPerSecond, string animationStartName, float scale)
@@ -26,6 +28,7 @@ namespace MyFirstGame.GameObject
             SpriteColor = spriteColor;
             ActiveInput = activeInput;
             PlayerNumber = playerNumber;
+            Position = Settings.Instance.ScreenCenter;
             base.Rotation = 0.0f;            
         }
 
