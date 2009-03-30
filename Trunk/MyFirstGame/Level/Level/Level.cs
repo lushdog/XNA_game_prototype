@@ -36,7 +36,7 @@ namespace MyFirstGame.LevelObject
         public bool IsStarted { get; set; }
         public bool IsEnded { get; set; }
 
-        public Level()
+        protected Level()
         {
             IsStarted = false;
             IsEnded = false;

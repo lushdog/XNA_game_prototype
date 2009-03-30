@@ -49,6 +49,12 @@ namespace MyFirstGame.LevelObject
             {
                 EndWave();
             }
+
+            //TODO: inactive targets are still moving...
+            foreach (Target target in Targets)
+            {
+                target.MoveTo(target.Pattern.UpdatePattern());
+            }
         }
         
         public void EndWave()

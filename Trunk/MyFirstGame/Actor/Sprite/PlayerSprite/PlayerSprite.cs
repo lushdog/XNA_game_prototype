@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MyFirstGame.InputObject;
 using MyFirstGame.References;
+using Microsoft.Xna.Framework.Input;
 
 namespace MyFirstGame.GameObject
 {
@@ -15,13 +16,13 @@ namespace MyFirstGame.GameObject
         
         public bool IsPaused { get; set; }
         
-        public PlayerInput ActiveInput { get; set; }
+        public IPlayerInput ActiveInput { get; set; }
         
         public int PlayerNumber { get; set; }
 
         public int Score { get; set; }
         
-        public PlayerSprite(PlayerInput activeInput, Color spriteColor, int playerNumber, 
+        public PlayerSprite(IPlayerInput activeInput, Color spriteColor, int playerNumber, 
             int animationFrameCount, int animationFramesPerSecond, string animationStartName, float scale)
             : base(animationFrameCount, animationFramesPerSecond, animationStartName, scale)
         {            
@@ -74,6 +75,10 @@ namespace MyFirstGame.GameObject
                 newPosX = this.Position.X + (distanceX);
                 newPosY = this.Position.Y + (distanceY);
             }
+            
+            //TODO: ScreenSize.X = 1280 (basemode) even if rez is changed to 640 
+            //but Mouse.GetState() will change if rez changed therefore maxing at 640
+            //have to relativize newPosX to inputX and screen difference
             else if (ActiveInput is MouseInput)
             {
                 newPosX = inputX;
@@ -84,7 +89,8 @@ namespace MyFirstGame.GameObject
                 newPosX = inputX * (float)Settings.Instance.ScreenSize.X;
                 newPosY = inputY * (float)Settings.Instance.ScreenSize.Y;
             }
-#endif
+#endif      
+            
             newPosX = MathHelper.Clamp(newPosX, 0.0f, Settings.Instance.ScreenSize.X);
             newPosY = MathHelper.Clamp(newPosY, 0.0f, Settings.Instance.ScreenSize.Y);
             this.Position = new Vector2(newPosX, newPosY);

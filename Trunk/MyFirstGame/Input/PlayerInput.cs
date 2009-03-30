@@ -8,22 +8,17 @@ using Microsoft.Xna.Framework;
 
 namespace MyFirstGame.InputObject
 {
-    public abstract class PlayerInput
+    public interface IPlayerInput
     {
-        public PlayerInput()
-        {
-
-        }
-
-        public abstract float GetX(); 
-        public abstract float GetY();
-        public abstract bool GetFire();
-        public abstract bool GetPause();
+        float GetX(); 
+        float GetY();
+        bool GetFire();
+        bool GetPause();
     }
 
 #if !XBOX
 
-    public class KeyboardInput : PlayerInput
+    public class KeyboardInput : IPlayerInput
     {
         public float ScrollSpeed { get; set; }
         
@@ -32,7 +27,7 @@ namespace MyFirstGame.InputObject
             ScrollSpeed = scrollSpeed;
         }
 
-        public override float GetY()
+        public float GetY()
         {
             KeyboardState _keyboardState = Keyboard.GetState();
             if (_keyboardState.IsKeyDown(Keys.Up))
@@ -49,7 +44,7 @@ namespace MyFirstGame.InputObject
             }
         }
 
-        public override float GetX()
+        public float GetX()
         {
             KeyboardState _keyboardState = Keyboard.GetState();
             if (_keyboardState.IsKeyDown(Keys.Left))
@@ -66,18 +61,18 @@ namespace MyFirstGame.InputObject
             }
         }
 
-        public override bool GetFire()
+        public bool GetFire()
         {
             return Keyboard.GetState().IsKeyDown(Keys.Space);            
         }
 
-        public override bool GetPause()
+        public bool GetPause()
         {
             return Keyboard.GetState().IsKeyDown(Keys.Escape);  
         }
     }
 
-    public class WiiInput : PlayerInput
+    public class WiiInput : IPlayerInput
     {
         Wiimote Wiimote {get; set;}
 
@@ -95,24 +90,24 @@ namespace MyFirstGame.InputObject
         //|                   |
         //|-------------------|
 
-        public override float GetY()
+        public float GetY()
         {
             IRState _wiimoteIRState = Wiimote.WiimoteState.IRState;
             return _wiimoteIRState.Midpoint.Y;
         }
 
-        public override float GetX()
+        public float GetX()
         {
             IRState _wiimoteIRState = Wiimote.WiimoteState.IRState;
             return 1.0f - _wiimoteIRState.Midpoint.X;
         }
 
-        public override bool GetFire()
+        public bool GetFire()
         {
             return Wiimote.WiimoteState.ButtonState.B;
         }
 
-        public override bool GetPause()
+        public bool GetPause()
         {
             return Wiimote.WiimoteState.ButtonState.Home;
         }
@@ -150,24 +145,22 @@ namespace MyFirstGame.InputObject
         }
     }
 
-    public class MouseInput : PlayerInput
+    public class MouseInput : IPlayerInput
     {
         public MouseInput()
-        {
-
-        }
-
-        public override float GetY()
+        {}
+        
+        public float GetY()
         {
             return Mouse.GetState().Y;
         }
 
-        public override float GetX()
+        public float GetX()
         {
             return Mouse.GetState().X;
         }
 
-        public override bool GetFire()
+        public bool GetFire()
         {
             if (Mouse.GetState().LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
                 return true;
@@ -175,7 +168,7 @@ namespace MyFirstGame.InputObject
                 return false;
         }
 
-        public override bool GetPause()
+        public bool GetPause()
         {
             return Keyboard.GetState().IsKeyDown(Keys.Escape);
         }
@@ -183,7 +176,7 @@ namespace MyFirstGame.InputObject
 
 #endif
 
-    public class GamepadInput : PlayerInput
+    public class GamepadInput : IPlayerInput
     {
         public float ScrollSpeed { get; set;}
         public PlayerIndex GamepadNumber { get; set; }
@@ -194,22 +187,22 @@ namespace MyFirstGame.InputObject
             GamepadNumber = gamepadNumber;
         }
 
-        public override float GetY()
+        public float GetY()
         {
             return GamePad.GetState(GamepadNumber).ThumbSticks.Left.Y;
         }
 
-        public override float GetX()
+        public float GetX()
         {
             return GamePad.GetState(GamepadNumber).ThumbSticks.Left.X;
         }
 
-        public override bool GetFire()
+        public bool GetFire()
         {
             return (GamePad.GetState(GamepadNumber).Triggers.Right > 0.9f);
         }
 
-        public override bool GetPause()
+        public bool GetPause()
         {
             return (GamePad.GetState(GamepadNumber).Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed);
         }

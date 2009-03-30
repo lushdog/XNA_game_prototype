@@ -20,7 +20,7 @@ namespace MyFirstGame.GameObject
 
         public Pattern Pattern { get; set; }
 
-        public Target(int pointValue, int animationFrameCount, int animationFramesPerSecond, string animationStartName, float scale) 
+        protected Target(int pointValue, int animationFrameCount, int animationFramesPerSecond, string animationStartName, float scale) 
             : base(animationFrameCount, animationFramesPerSecond, animationStartName, scale)
         {
             PointValue = pointValue;

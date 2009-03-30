@@ -4,7 +4,7 @@ using MyFirstGame.References;
 
 namespace MyFirstGame.LevelObject
 {
-    public abstract class Pattern
+    abstract class Pattern
     {
         /// <summary>
         /// List of control points that patter will follow using Catmull-Rom interpolation.
@@ -43,7 +43,7 @@ namespace MyFirstGame.LevelObject
             return newPos;
         }
 
-        public Pattern(Vector2 startPosition, float speed)
+        protected Pattern(Vector2 startPosition, float speed)
         {
             ControlPoints = new List<Vector2>();
             ControlPoints.Add(startPosition);  

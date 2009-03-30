@@ -4,7 +4,7 @@ using MyFirstGame.References;
 
 namespace MyFirstGame.GameObject
 {
-    class Sprite : Actor
+    abstract class Sprite : Actor
     {
         public float Scale { get; set; }
 
@@ -44,7 +44,7 @@ namespace MyFirstGame.GameObject
             return index;
         }
 
-        public Sprite(int animationFrameCount,int animationFramesPerSecond, string animationStartName, 
+        protected Sprite(int animationFrameCount,int animationFramesPerSecond, string animationStartName, 
             float scale)
         {
             AnimationFrameCount = animationFrameCount;

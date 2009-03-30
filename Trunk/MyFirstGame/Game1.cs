@@ -22,6 +22,7 @@ using System.Text;
 
 //TODO: Convert Vector2 to Points where possible (save mem)
 //TODO: Draw FPS in debug mode.
+//TODO: Implement pause.
 
 namespace MyFirstGame
 {
@@ -55,6 +56,7 @@ namespace MyFirstGame
         /// </summary>
         protected override void Initialize()
         {
+            IsMouseVisible = true;
             base.Initialize();
         }
 
@@ -65,7 +67,7 @@ namespace MyFirstGame
         protected override void LoadContent()
         {
             LoadSpriteBatch();
-            LoadResolution();
+            LoadBaseResolution();
             LoadSettings();
             LoadTextures();            
             LoadViewport();
@@ -235,6 +237,7 @@ namespace MyFirstGame
                             
                             if (pixelColor.A != 0)
                             {
+                                //TODO: setting IsActive to false doesn't mean you can't keep hitting it!
                                 target.IsActive = false;
                                 player.Score += target.PointValue;                        
                             }                            
@@ -252,17 +255,17 @@ namespace MyFirstGame
             players = new List<PlayerSprite>();
             
            
-            PlayerInput[] playerInputs = LoadPlayerInputs();
+            IPlayerInput[] playerInputs = LoadPlayerInputs();
 
             int playerNumber = 1;
-            foreach (PlayerInput playerInput in playerInputs)
+            foreach (IPlayerInput playerInput in playerInputs)
             {
                 players.Add(LoadPlayer(playerInput, playerNumber));
                 playerNumber += 1;
             }
         }
 
-        private PlayerSprite LoadPlayer(PlayerInput playerInput, int playerNumber)
+        private PlayerSprite LoadPlayer(IPlayerInput playerInput, int playerNumber)
         {
             //TODO: this should be done via different sprites
             Color playerColor = Color.White;
@@ -285,7 +288,7 @@ namespace MyFirstGame
             return player;
         }
 
-        private PlayerInput[] LoadPlayerInputs()
+        private IPlayerInput[] LoadPlayerInputs()
         {
             #if !XBOX
                 return LoadPCPlayerInputs(); // move to Initialize?
@@ -297,9 +300,9 @@ namespace MyFirstGame
         
         #if !XBOX
 
-        private PlayerInput[] LoadPCPlayerInputs()
+        private IPlayerInput[] LoadPCPlayerInputs()
         {
-            PlayerInput[] playerInputs = new PlayerInput[4];
+            IPlayerInput[] playerInputs = new IPlayerInput[4];
             XmlDocument configDocument = new XmlDocument();
             configDocument.Load(".//Config//PCconfig.xml");
             XmlNodeList inputNodes = configDocument.SelectNodes("/config/input");
@@ -321,7 +324,7 @@ namespace MyFirstGame
                         //if we have Wiimote, Mouse, Wiimote, 
                         //the last Wiimote is player 3 but Wiimote index 1.
                         int numWiimotePlayers = 0;
-                        foreach (PlayerInput input in playerInputs)
+                        foreach (IPlayerInput input in playerInputs)
                         {
                             if (input is WiiInput)
                             {
@@ -339,7 +342,7 @@ namespace MyFirstGame
                         //if we have Gamepad, Mouse, Gamepad
                         //the last Gamepad is player 3 but Gamepad PlayerIndex.Two.
                         int numGamepadPlayers = 0;
-                        foreach (PlayerInput input in playerInputs)
+                        foreach (IPlayerInput input in playerInputs)
                         {
                             if (input is GamepadInput)
                             {
@@ -363,9 +366,9 @@ namespace MyFirstGame
         //LoadXboxPlayerInputs()
         #if XBOX
                         
-            private PlayerInput[] LoadXboxPlayerInputs()
+            private IPlayerInput[] LoadXboxPlayerInputs()
             {
-                PlayerInput[] playerInputs = new PlayerInput[4];
+                IPlayerInput[] playerInputs = new IPlayerInput[4];
                 XmlDocument configDocument = new XmlDocument();
                 configDocument.Load(".//Config//XBOXconfig.xml");
                 XmlNodeList inputNodes = configDocument.SelectNodes("/config/input");
@@ -387,9 +390,14 @@ namespace MyFirstGame
                 
         #endif
 
-        private void LoadResolution()
+        private void LoadBaseResolution()
         {
+#if !debug
+            graphics.IsFullScreen = true;
+#endif
             resolution = new Resolution(graphics, ScreenMode.tv720p);
+            References.Settings.Instance.ScreenSize = new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            References.Settings.Instance.AspectRatio = GraphicsDevice.Viewport.AspectRatio;
         }
 
         private void LoadSpriteBatch()
@@ -421,8 +429,7 @@ namespace MyFirstGame
 
         private void LoadSettings()
         {
-            References.Settings.Instance.ScreenSize = new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-            References.Settings.Instance.AspectRatio = GraphicsDevice.Viewport.AspectRatio;
+            //nothing for now...
         }
 
 		private void LoadLevels()

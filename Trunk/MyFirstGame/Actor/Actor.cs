@@ -9,7 +9,7 @@ namespace MyFirstGame.GameObject
         public abstract Vector2 Origin { get; }
         public float Rotation { get; set; }
         
-        public Actor()
+        protected Actor()
         {
             
         }

@@ -35,7 +35,7 @@ namespace MyFirstGame.LevelObject
             base.Targets.Add(t4);
 
             BearTarget t5 = new BearTarget();
-            t5.Position = Settings.Instance.GetScreenGridLocation(5, 1);
+            t5.Position = Settings.Instance.GetScreenGridLocation(7, 1);
             t5.Pattern = new TestPattern(t5.Position, 1f);
             t5.IsActive = true;
             base.Targets.Add(t5);
@@ -52,16 +52,6 @@ namespace MyFirstGame.LevelObject
             t7.IsActive = true;
             base.Targets.Add(t7);
 
-        }
-
-        public override void UpdateWave()
-        {
-            base.UpdateWave();
-
-            foreach (Target target in Targets)
-            {
-                target.MoveTo(target.Pattern.UpdatePattern());
-            }
-        }
+        }        
     }
 }
