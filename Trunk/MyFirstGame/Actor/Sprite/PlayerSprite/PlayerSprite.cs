@@ -76,13 +76,17 @@ namespace MyFirstGame.GameObject
                 newPosY = this.Position.Y + (distanceY);
             }
             
-            //TODO: ScreenSize.X = 1280 (basemode) even if rez is changed to 640 
+            //ScreenSize.X = 1280 (basemode) even if rez is changed to 640 
             //but Mouse.GetState() will change if rez changed therefore maxing at 640
             //have to relativize newPosX to inputX and screen difference
             else if (ActiveInput is MouseInput)
             {
-                newPosX = inputX;
-                newPosY = inputY;
+                int baseWidth = (int)Settings.Instance.ScreenSize.X;
+                int baseHeight = (int)Settings.Instance.ScreenSize.Y;
+                int currentWidth = Settings.Instance.Resolution.ScreenWidth;
+                int currentHeight = Settings.Instance.Resolution.ScreenHeight;
+                newPosX = (inputX / currentWidth) * baseWidth;
+                newPosY = (inputY / currentHeight) * baseHeight;
             }
             else if (ActiveInput is WiiInput)
             {

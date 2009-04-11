@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using MyFirstGame.Graphics;
 
 namespace MyFirstGame.References
 {
@@ -10,6 +11,7 @@ namespace MyFirstGame.References
         public Vector2 ScreenSize { get; set; }
         public float AspectRatio { get; set; }
         public GameTime GameTime { get; set; }
+        public Resolution Resolution { get; set; }
         
         //Screen location grid
         public const int numGridPointsHorizontal = 7;

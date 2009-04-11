@@ -32,7 +32,6 @@ namespace MyFirstGame
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         private GraphicsDeviceManager graphics;
-        private Resolution resolution;
         private Rectangle viewportRectangle;
         private SpriteBatch spriteBatch;
         private SpriteFont scoreFont;
@@ -56,7 +55,12 @@ namespace MyFirstGame
         /// </summary>
         protected override void Initialize()
         {
-            IsMouseVisible = true;
+            #if DEBUG
+
+            IsMouseVisible = true;           
+
+            #endif
+
             base.Initialize();
         }
 
@@ -99,11 +103,11 @@ namespace MyFirstGame
             //TODO: factor this out into a Menu item or something, also when you hold F1 down it keeps switching rezzes
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
-                if (resolution.Mode == ScreenMode.tv720p)
-                    resolution.Mode = ScreenMode.SVGA;
+                if (Settings.Instance.Resolution.Mode == ScreenMode.tv720p)
+                    Settings.Instance.Resolution.Mode = ScreenMode.SVGA;
                 else
-                    resolution.Mode = ScreenMode.tv720p;
-                resolution.SetResolution(graphics);
+                    Settings.Instance.Resolution.Mode = ScreenMode.tv720p;
+                Settings.Instance.Resolution.SetResolution(graphics);
             }
 #endif
 
@@ -140,7 +144,7 @@ namespace MyFirstGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, resolution.Scale);
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, Settings.Instance.Resolution.Scale);
             
             //Draw level background and level sprites
             spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, viewportRectangle, Textures.Instance.SpriteSheet.SourceRectangle(levels[0].BackgroundSpriteSheetName),
@@ -218,29 +222,31 @@ namespace MyFirstGame
                     Vector2 shotLocation = player.GetShotLocation();
                     foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
                     {
-                        //TODO: factor this out so pixel based hit detection can be used elsewhere
-                        //TODO: pixel based hit detection does not work when target is rotated...
-                        
-                        //only do pixel detection if mouse in area
-                        if (target.BoundingBox.Contains(new Rectangle((int)shotLocation.X, (int)shotLocation.Y, 1, 1)))
+                        if (target.IsActive)
                         {
-                            //do we hit alpha pixel or 'body' pixel?                            
-                            
-                            Vector2 relativeShotLocation = new Vector2(shotLocation.X - target.BoundingBox.X, shotLocation.Y - target.BoundingBox.Y);
-                            relativeShotLocation = Vector2.Divide(relativeShotLocation, target.Scale);
-                            
-                            Rectangle targetTexturePixels = Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex());
-                            Vector2 hitPointOnSpriteSheet = new Vector2(targetTexturePixels.X + relativeShotLocation.X, targetTexturePixels.Y + relativeShotLocation.Y);
-                            
-                            int hitPointOnSpriteSheetIndex = (int)hitPointOnSpriteSheet.Y * Textures.Instance.SpriteSheet.Texture.Width + (int)hitPointOnSpriteSheet.X;
-                            Color pixelColor = Textures.Instance.SpriteSheetColors[hitPointOnSpriteSheetIndex];
-                            
-                            if (pixelColor.A != 0)
+                            //TODO: factor this out so pixel based hit detection can be used elsewhere
+                            //TODO: pixel based hit detection does not work when target is rotated...
+
+                            //only do pixel detection if mouse in area
+                            if (target.BoundingBox.Contains(new Rectangle((int)shotLocation.X, (int)shotLocation.Y, 1, 1)))
                             {
-                                //TODO: setting IsActive to false doesn't mean you can't keep hitting it!
-                                target.IsActive = false;
-                                player.Score += target.PointValue;                        
-                            }                            
+                                //do we hit alpha pixel or 'body' pixel?                            
+
+                                Vector2 relativeShotLocation = new Vector2(shotLocation.X - target.BoundingBox.X, shotLocation.Y - target.BoundingBox.Y);
+                                relativeShotLocation = Vector2.Divide(relativeShotLocation, target.Scale);
+
+                                Rectangle targetTexturePixels = Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex());
+                                Vector2 hitPointOnSpriteSheet = new Vector2(targetTexturePixels.X + relativeShotLocation.X, targetTexturePixels.Y + relativeShotLocation.Y);
+
+                                int hitPointOnSpriteSheetIndex = (int)hitPointOnSpriteSheet.Y * Textures.Instance.SpriteSheet.Texture.Width + (int)hitPointOnSpriteSheet.X;
+                                Color pixelColor = Textures.Instance.SpriteSheetColors[hitPointOnSpriteSheetIndex];
+
+                                if (pixelColor.A != 0)
+                                {
+                                    target.IsActive = false;
+                                    player.Score += target.PointValue;
+                                }
+                            }
                         }
                     }
                 }
@@ -392,10 +398,13 @@ namespace MyFirstGame
 
         private void LoadBaseResolution()
         {
-#if !debug
+            #if !DEBUG
+            
             graphics.IsFullScreen = true;
-#endif
-            resolution = new Resolution(graphics, ScreenMode.tv720p);
+            
+            #endif
+            
+            References.Settings.Instance.Resolution = new Resolution(graphics, ScreenMode.tv720p);
             References.Settings.Instance.ScreenSize = new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             References.Settings.Instance.AspectRatio = GraphicsDevice.Viewport.AspectRatio;
         }
@@ -411,7 +420,6 @@ namespace MyFirstGame
             const int scorePanelWidth = 300;
             const int scorePanelHeight = 200;
 
-            //TODO: these could just be Vector2s
             scorePanels[0] = new Rectangle((int)Settings.Instance.ScreenTopLeft.X, (int)Settings.Instance.ScreenTopLeft.Y,
                                     scorePanelWidth, scorePanelHeight);
             scorePanels[1] = new Rectangle((int)Settings.Instance.ScreenTopRight.X - scorePanelWidth, (int)Settings.Instance.ScreenTopRight.Y,
