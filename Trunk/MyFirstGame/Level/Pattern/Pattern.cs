@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MyFirstGame.References;
 
-namespace MyFirstGame.LevelObject
+namespace MyFirstGame
 {
     abstract class Pattern
     {

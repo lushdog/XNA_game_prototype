@@ -1,7 +1,7 @@
 ﻿using SpriteSheetRuntime;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MyFirstGame.References
+namespace MyFirstGame
 {
     public sealed class Textures
     {

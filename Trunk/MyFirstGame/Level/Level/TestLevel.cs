@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MyFirstGame.GameObject;
-using MyFirstGame.References;
 
-namespace MyFirstGame.LevelObject
+
+namespace MyFirstGame
 {
     class TestLevel : Level
     {

@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using MyFirstGame.Graphics;
 
-namespace MyFirstGame.References
+namespace MyFirstGame
 {
     public sealed class Settings
     {
@@ -174,7 +173,6 @@ namespace MyFirstGame.References
                 return new Vector2(ScreenSize.X / 2, ScreenSize.Y / 2);
             }
         }
-
 
         public static Settings Instance 
         {

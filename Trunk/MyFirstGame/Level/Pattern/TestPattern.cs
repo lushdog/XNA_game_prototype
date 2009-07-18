@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace MyFirstGame.LevelObject
+namespace MyFirstGame
 {
     class TestPattern : Pattern
     {

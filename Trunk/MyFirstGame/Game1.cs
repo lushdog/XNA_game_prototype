@@ -11,12 +11,6 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 using System.Xml;
-using MyFirstGame.GameObject;
-using MyFirstGame.InputObject;
-using MyFirstGame.LevelObject;
-using MyFirstGame.References;
-using MyFirstGame.Utilities;
-using MyFirstGame.Graphics;
 using SpriteSheetRuntime;
 using System.Text;
 
@@ -33,18 +27,20 @@ namespace MyFirstGame
     {
         private GraphicsDeviceManager graphics;
         private Rectangle viewportRectangle;
-        private SpriteBatch spriteBatch;
+        public SpriteBatch spriteBatch;
         private SpriteFont scoreFont;
         private Rectangle[] scorePanels;
         
         private List<PlayerSprite> players;
         private List<Level> levels;
+        private TargetExplosionParticleSystem targetExplosionParticleSystem;
         private int currentLevel;
         
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            LoadParticleSystems();
         }
 
         /// <summary>
@@ -78,8 +74,8 @@ namespace MyFirstGame
             LoadPlayers();
             LoadLevels();
             LoadFonts();
-            LoadScorePanels();
-        }        
+            LoadScorePanels();            
+        }              
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -241,10 +237,18 @@ namespace MyFirstGame
                                 int hitPointOnSpriteSheetIndex = (int)hitPointOnSpriteSheet.Y * Textures.Instance.SpriteSheet.Texture.Width + (int)hitPointOnSpriteSheet.X;
                                 Color pixelColor = Textures.Instance.SpriteSheetColors[hitPointOnSpriteSheetIndex];
 
+                                //hit!
                                 if (pixelColor.A != 0)
                                 {
                                     target.IsActive = false;
                                     player.Score += target.PointValue;
+
+                                    //take targetTexturePixels' pixels and pass them to particle generator
+                                    //init pixels in particle generator to same location so as to have desired effect
+                                    Color[] particlesToExplode = new Color[targetTexturePixels.Width * targetTexturePixels.Height];
+                                    Textures.Instance.SpriteSheet.Texture.GetData<Color>(0, targetTexturePixels, particlesToExplode, 0,particlesToExplode.Length);
+                                    //targetExplosionParticleSystem.AddParticles(particlesToExplode, target.DrawRectangle);
+                                        
                                 }
                             }
                         }
@@ -404,9 +408,9 @@ namespace MyFirstGame
             
             #endif
             
-            References.Settings.Instance.Resolution = new Resolution(graphics, ScreenMode.tv720p);
-            References.Settings.Instance.ScreenSize = new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-            References.Settings.Instance.AspectRatio = GraphicsDevice.Viewport.AspectRatio;
+            Settings.Instance.Resolution = new Resolution(graphics, ScreenMode.tv720p);
+            Settings.Instance.ScreenSize = new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            Settings.Instance.AspectRatio = GraphicsDevice.Viewport.AspectRatio;
         }
 
         private void LoadSpriteBatch()
@@ -458,6 +462,12 @@ namespace MyFirstGame
         {
             viewportRectangle = new Rectangle(0, 0, (int)Settings.Instance.ScreenSize.X, (int)Settings.Instance.ScreenSize.Y);         
         }
+
+        private void LoadParticleSystems()
+        {
+            targetExplosionParticleSystem = new TargetExplosionParticleSystem(this, 10);
+            Components.Add(targetExplosionParticleSystem);
+        }  
        
     }
 }

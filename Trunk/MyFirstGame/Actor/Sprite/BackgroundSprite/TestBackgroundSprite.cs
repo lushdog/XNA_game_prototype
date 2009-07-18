@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MyFirstGame.GameObject
+namespace MyFirstGame
 {
     class TestBackgroundSprite : BackgroundSprite
     {

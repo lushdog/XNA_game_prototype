@@ -1,5 +1,5 @@
 ﻿
-namespace MyFirstGame.GameObject
+namespace MyFirstGame
 {
     class TestTarget : Target
     {

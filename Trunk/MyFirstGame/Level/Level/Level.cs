@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using MyFirstGame.GameObject;
-using MyFirstGame.References;
 
-namespace MyFirstGame.LevelObject
+namespace MyFirstGame
 {
     abstract class Level
     {

@@ -3,7 +3,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace MyFirstGame.Graphics
+namespace MyFirstGame
 {
     /// <summary>
     /// Enum that can represent a screen resolution

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
     using WiimoteLib;
 #endif
 
-namespace MyFirstGame.InputObject
+namespace MyFirstGame
 {
     public interface IPlayerInput
     {

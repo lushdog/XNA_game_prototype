@@ -1,10 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MyFirstGame.InputObject;
-using MyFirstGame.References;
 using Microsoft.Xna.Framework.Input;
 
-namespace MyFirstGame.GameObject
+namespace MyFirstGame
 {
     class PlayerSprite : Sprite
     {

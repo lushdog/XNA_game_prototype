@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MyFirstGame.References;
 
-namespace MyFirstGame.GameObject
+namespace MyFirstGame
 {
     abstract class Sprite : Actor
     {

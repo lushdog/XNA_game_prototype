@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using MyFirstGame.GameObject;
 
-namespace MyFirstGame.GameObject
+namespace MyFirstGame
 {
     abstract class BackgroundSprite : Sprite
     {
