@@ -19,5 +19,6 @@
     <Item>sprites\squid.png</Item>
     <Item>sprites\zombie.png</Item>
     <Item>sprites\cat.png</Item>
+    <Item>Sprites\explosion.png</Item>
   </Asset>
 </XnaContent>
