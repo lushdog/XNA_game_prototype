@@ -33,7 +33,7 @@ namespace MyFirstGame
         
         private List<PlayerSprite> players;
         private List<Level> levels;
-        private ExplosionEmitterParticleSystem explosionEmitterParticleSystem;
+        private ExplosionParticleSystem explosionEmitterParticleSystem;
         private int currentLevel;
         
         public Game1()
@@ -243,10 +243,7 @@ namespace MyFirstGame
                                     target.IsActive = false;
                                     player.Score += target.PointValue;
 
-                                    //take targetTexturePixels' pixels and pass them to particle generator
-                                    //init pixels in particle generator to same location so as to have desired effect
-                                    //Color[] particlesToExplode = new Color[targetTexturePixels.Width * targetTexturePixels.Height];
-                                    //Textures.Instance.SpriteSheet.Texture.GetData<Color>(0, targetTexturePixels, particlesToExplode, 0,particlesToExplode.Length);
+                                    //Explosion particle
                                     explosionEmitterParticleSystem.AddParticles(new Vector2(target.BoundingBox.Center.X, target.BoundingBox.Center.Y));
                                         
                                 }
@@ -465,8 +462,8 @@ namespace MyFirstGame
 
         private void LoadParticleSystems()
         {
-            explosionEmitterParticleSystem = new ExplosionEmitterParticleSystem(this, 2);
-            Components.Add(explosionEmitterParticleSystem);
+            explosionEmitterParticleSystem = new ExplosionParticleSystem(this, 5);
+            Components.Add(explosionEmitterParticleSystem);            
         }  
        
     }
