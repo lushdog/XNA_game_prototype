@@ -35,12 +35,14 @@ namespace MyFirstGame
         private List<Level> levels;
         private ExplosionParticleSystem explosionEmitterParticleSystem;
         private int currentLevel;
+
+        private Effect effect;
         
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            LoadParticleSystems();
+            LoadParticleSystems();                      
         }
 
         /// <summary>
@@ -56,6 +58,8 @@ namespace MyFirstGame
             IsMouseVisible = true;           
 
             #endif
+
+            effect = Content.Load<Effect>("Shaders\\shader");
 
             base.Initialize();
         }
@@ -74,7 +78,8 @@ namespace MyFirstGame
             LoadPlayers();
             LoadLevels();
             LoadFonts();
-            LoadScorePanels();            
+            LoadScorePanels();
+             
         }              
 
         /// <summary>
@@ -141,16 +146,51 @@ namespace MyFirstGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, Settings.Instance.Resolution.Scale);
-            
+
             //Draw level background and level sprites
             spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, viewportRectangle, Textures.Instance.SpriteSheet.SourceRectangle(levels[0].BackgroundSpriteSheetName),
                 Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.0f);
-                        
+
+                                    
             foreach (Sprite sprite in levels[0].Sprites)
             {
                 spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, sprite.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(sprite.GetSpriteSheetIndex()),
                     Color.White, sprite.Rotation, new Vector2(0, 0), SpriteEffects.None, 0.9f);
             }
+
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.None, Settings.Instance.Resolution.Scale);
+
+            //draw targets
+            //TODO: of course this has to be the current level, i.e. remove all references to levels[0]
+            if (!levels[0].IsEnded)
+            {
+                effect.Begin();
+                effect.CurrentTechnique.Passes[0].Begin();
+
+                foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
+                {
+                    if (target.IsActive)
+                    {
+                        //target.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, target.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex()),
+                            Color.White, target.Rotation, target.Origin, SpriteEffects.None, 0.5f);
+
+
+#if DEBUG
+                        spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, target.BoundingBox, Textures.Instance.SpriteSheet.SourceRectangle("hitbox"),
+                            Color.White, 0.0f, new Vector2(0,0), SpriteEffects.None, 0.6f);
+#endif
+                    }
+                }
+
+                effect.CurrentTechnique.Passes[0].End();
+                effect.End();
+            }
+
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, Settings.Instance.Resolution.Scale);
 
             foreach (PlayerSprite player in players)
             {
@@ -176,26 +216,6 @@ namespace MyFirstGame
                             playerColor, 0.0f, new Vector2(0,0), SpriteEffects.None, 0.0f);
                     #endif
 
-                }
-            }
-
-            //draw targets
-            //TODO: of course this has to be the current, i.e. remove all references to levels[0]
-            if (!levels[0].IsEnded)
-            {
-                foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
-                {                    
-                    if (target.IsActive)
-                    {
-                        //target.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, target.DrawRectangle, Textures.Instance.SpriteSheet.SourceRectangle(target.GetSpriteSheetIndex()),
-                            Color.White, target.Rotation, target.Origin, SpriteEffects.None, 0.5f);
-
-                        #if DEBUG
-                        spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, target.BoundingBox, Textures.Instance.SpriteSheet.SourceRectangle("hitbox"),
-                            Color.White, 0.0f, new Vector2(0,0), SpriteEffects.None, 0.6f);
-                        #endif
-                    }
                 }
             }
 
