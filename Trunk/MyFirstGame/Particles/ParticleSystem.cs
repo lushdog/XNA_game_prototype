@@ -9,21 +9,34 @@ namespace MyFirstGame
     public abstract class ParticleSystem : DrawableGameComponent
     {        
         protected Game1 game;
-
         private int maxConcurrentEffects;
-        
+        protected string textureFilename;
         protected Particle[] particles;
-
         protected Queue<Particle> freeParticles;
+        protected float minStartSpeed;
+        protected float maxStartSpeed;
+        protected float minAcceleration;
+        protected float maxAcceleration;
+        protected float minLifetime;
+        protected float maxLifetime;
+        protected float minScale;
+        protected float maxScale;
+        protected float minRotationSpeed;
+        protected float maxRotationSpeed;
+        protected int minNumParticles;
+        protected int maxNumParticles;
+        protected int minInitialSpeed;
+        protected int maxInitialSpeed;
+        protected SpriteBlendMode spriteBlendMode;
 
-        protected ParticleSystemSettings ParticleSystemSettings { get; set; }
+        public const int AlphaBlendDrawOrder = 100; 
+        public const int AdditiveDrawOrder = 200; 
 
         protected ParticleSystem(Game1 game, int maxConcurrentEffects)
             : base(game)
         {            
             this.game = game;
             this.maxConcurrentEffects = maxConcurrentEffects;
-            ParticleSystemSettings = new ParticleSystemSettings();
         }
 
         public override void Initialize()
@@ -32,8 +45,8 @@ namespace MyFirstGame
             // max number of effects and the max number of particles per effect.
             // once these particles are allocated, they will be reused, so that
             // we don't put any pressure on the garbage collector.
-            particles = new Particle[maxConcurrentEffects * ParticleSystemSettings.MaxNumParticles];
-            freeParticles = new Queue<Particle>(maxConcurrentEffects * ParticleSystemSettings.MaxNumParticles);
+            particles = new Particle[maxConcurrentEffects * maxNumParticles];
+            freeParticles = new Queue<Particle>(maxConcurrentEffects * maxNumParticles);
             for (int i = 0; i < particles.Length; i++)
             {
                 particles[i] = new Particle();
@@ -44,12 +57,14 @@ namespace MyFirstGame
             //TODO: validate settings in ParticleSystemSettings.
         }
 
+        protected abstract void InitializeParameters();
+
         public void AddParticles(Vector2 effectLocation)
         {
             // the number of particles we want for this effect is a random number
             // somewhere between the two constants specified by the subclasses.
             int numParticles =
-                new Random().Next(ParticleSystemSettings.MinNumParticles, ParticleSystemSettings.MaxNumParticles);
+                new Random().Next(minNumParticles, maxNumParticles);
 
             // create that many particles, if you can.
             for (int i = 0; i < numParticles && freeParticles.Count > 0; i++)
@@ -76,15 +91,15 @@ namespace MyFirstGame
 
             // pick some random values for our particle
             float velocity =
-                UtilityMethods.RandomBetween(ParticleSystemSettings.MinStartSpeed, ParticleSystemSettings.MaxStartSpeed);
+                UtilityMethods.RandomBetween(minStartSpeed, maxStartSpeed);
             float acceleration =
-                UtilityMethods.RandomBetween(ParticleSystemSettings.MinAcceleration, ParticleSystemSettings.MaxAcceleration);
+                UtilityMethods.RandomBetween(minAcceleration, maxAcceleration);
             float lifetime =
-                UtilityMethods.RandomBetween(ParticleSystemSettings.MinLifetime, ParticleSystemSettings.MaxLifetime);
+                UtilityMethods.RandomBetween(minLifetime, maxLifetime);
             float scale =
-                UtilityMethods.RandomBetween(ParticleSystemSettings.MinScale, ParticleSystemSettings.MaxScale);
+                UtilityMethods.RandomBetween(minScale, maxScale);
             float rotationSpeed =
-                UtilityMethods.RandomBetween(ParticleSystemSettings.MinRotationSpeed, ParticleSystemSettings.MaxRotationSpeed);
+                UtilityMethods.RandomBetween(minRotationSpeed, maxRotationSpeed);
 
             // then initialize it with those random values. initialize will save those,
             // and make sure it is marked as active.
@@ -120,9 +135,8 @@ namespace MyFirstGame
 
         public override void Draw(GameTime gameTime)
         {
-            // tell sprite batch to begin, using the spriteBlendMode specified in
-            // initializeConstants
-            game.spriteBatch.Begin(ParticleSystemSettings.SpriteBlendMode, SpriteSortMode.BackToFront, SaveStateMode.None, Settings.Instance.Resolution.Scale);
+            // tell sprite batch to begin, using the spriteBlendMode specified in initializeConstants
+            game.spriteBatch.Begin(spriteBlendMode, SpriteSortMode.BackToFront, SaveStateMode.None, Settings.Instance.Resolution.Scale);
 
             foreach (Particle p in particles)
             {
@@ -153,7 +167,7 @@ namespace MyFirstGame
                 // and increase to 100% once they're finished.
                 float scale = p.Scale * (.75f + .25f * normalizedLifetime);
 
-                Rectangle sourceRectangle = Textures.Instance.SpriteSheet.SourceRectangle(ParticleSystemSettings.TextureName);
+                Rectangle sourceRectangle = Textures.Instance.SpriteSheet.SourceRectangle(textureFilename);
 
                 game.spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, p.Position, sourceRectangle,
                             color, p.Rotation, new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2),
