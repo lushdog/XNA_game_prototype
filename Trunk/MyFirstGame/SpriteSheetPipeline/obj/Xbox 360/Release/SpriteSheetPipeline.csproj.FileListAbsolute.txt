@@ -1,0 +1,5 @@
+C:\Source\Trunk\MyFirstGame\SpriteSheetPipeline\bin\Xbox 360\Release\SpriteSheetPipeline.dll
+C:\Source\Trunk\MyFirstGame\SpriteSheetPipeline\bin\Xbox 360\Release\SpriteSheetPipeline.pdb
+C:\Source\Trunk\MyFirstGame\SpriteSheetPipeline\obj\Xbox 360\Release\ResolveAssemblyReference.cache
+C:\Source\Trunk\MyFirstGame\SpriteSheetPipeline\obj\Xbox 360\Release\SpriteSheetPipeline.dll
+C:\Source\Trunk\MyFirstGame\SpriteSheetPipeline\obj\Xbox 360\Release\SpriteSheetPipeline.pdb
