@@ -37,6 +37,7 @@ namespace MyFirstGame
         {            
             this.game = game;
             this.maxConcurrentEffects = maxConcurrentEffects;
+            InitializeParameters();
         }
 
         public override void Initialize()
