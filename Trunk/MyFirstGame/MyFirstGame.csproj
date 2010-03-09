@@ -116,7 +116,6 @@
     <Compile Include="Particles\ExplosionParticleSystem.cs" />
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\ParticleSystem.cs" />
-    <Compile Include="Particles\ParticleSystemSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
