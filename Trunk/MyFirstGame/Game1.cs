@@ -78,8 +78,7 @@ namespace MyFirstGame
             LoadPlayers();
             LoadLevels();
             LoadFonts();
-            LoadScorePanels();
-             
+            LoadScorePanels();             
         }              
 
         /// <summary>
@@ -148,8 +147,8 @@ namespace MyFirstGame
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, Settings.Instance.Resolution.Scale);
 
             //Draw level background and level sprites
-            spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, viewportRectangle, Textures.Instance.SpriteSheet.SourceRectangle(levels[0].BackgroundSpriteSheetName),
-                Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.0f);
+            //spriteBatch.Draw(Textures.Instance.SpriteSheet.Texture, viewportRectangle, Textures.Instance.SpriteSheet.SourceRectangle(levels[0].BackgroundSpriteSheetName),
+            //    Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 1.0f);
 
                                     
             foreach (Sprite sprite in levels[0].Sprites)
@@ -165,8 +164,8 @@ namespace MyFirstGame
             //TODO: of course this has to be the current level, i.e. remove all references to levels[0]
             if (!levels[0].IsEnded)
             {
-                effect.Begin();
-                effect.CurrentTechnique.Passes[0].Begin();
+                //effect.Begin();
+                //effect.CurrentTechnique.Passes[0].Begin();
 
                 foreach (Target target in levels[0].Waves[levels[0].CurrentWaveIndex].Targets)
                 {
@@ -185,8 +184,8 @@ namespace MyFirstGame
                     }
                 }
 
-                effect.CurrentTechnique.Passes[0].End();
-                effect.End();
+                //effect.CurrentTechnique.Passes[0].End();
+                //effect.End();
             }
 
             spriteBatch.End();

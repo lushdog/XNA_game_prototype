@@ -4,3 +4,9 @@ C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\obj\Xbox 360\Release\ResolveAssem
 C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\obj\Xbox 360\Release\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\obj\Xbox 360\Release\SpriteSheetRuntime.dll
 C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\obj\Xbox 360\Release\SpriteSheetRuntime.pdb
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\bin\Xbox 360\Release\SpriteSheetRuntime.dll
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\bin\Xbox 360\Release\SpriteSheetRuntime.pdb
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\obj\Xbox 360\Release\ResolveAssemblyReference.cache
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\obj\Xbox 360\Release\Microsoft.Xna.Framework.RuntimeProfile.txt
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\obj\Xbox 360\Release\SpriteSheetRuntime.dll
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\obj\Xbox 360\Release\SpriteSheetRuntime.pdb

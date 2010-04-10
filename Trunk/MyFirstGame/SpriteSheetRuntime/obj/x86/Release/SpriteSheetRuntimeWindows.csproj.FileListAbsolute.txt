@@ -4,3 +4,9 @@ C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\obj\x86\Release\ResolveAssemblyRe
 C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\obj\x86\Release\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\obj\x86\Release\SpriteSheetRuntime.dll
 C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\obj\x86\Release\SpriteSheetRuntime.pdb
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\bin\x86\Release\SpriteSheetRuntime.dll
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\bin\x86\Release\SpriteSheetRuntime.pdb
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\obj\x86\Release\ResolveAssemblyReference.cache
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\obj\x86\Release\Microsoft.Xna.Framework.RuntimeProfile.txt
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\obj\x86\Release\SpriteSheetRuntime.dll
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\obj\x86\Release\SpriteSheetRuntime.pdb

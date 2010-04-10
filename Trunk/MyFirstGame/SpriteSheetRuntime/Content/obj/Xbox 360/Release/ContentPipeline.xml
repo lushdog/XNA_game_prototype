@@ -6,15 +6,15 @@
       <TargetPlatform>Xbox360</TargetPlatform>
       <BuildConfiguration>Release</BuildConfiguration>
       <CompressContent>true</CompressContent>
-      <RootDirectory>C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\Content\</RootDirectory>
-      <LoggerRootDirectory>C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\</LoggerRootDirectory>
-      <IntermediateDirectory>C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\Content\obj\Xbox 360\Release\</IntermediateDirectory>
-      <OutputDirectory>C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\bin\Xbox 360\Release\Content\</OutputDirectory>
+      <RootDirectory>F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\Content\</RootDirectory>
+      <LoggerRootDirectory>F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\</LoggerRootDirectory>
+      <IntermediateDirectory>F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\Content\obj\Xbox 360\Release\</IntermediateDirectory>
+      <OutputDirectory>F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\bin\Xbox 360\Release\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
-        <Key>E:\WINDOWS\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.0.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2009-01-10T18:10:11.875-05:00</Value>
+        <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.1.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2010-03-07T20:22:23.7089573-05:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>

@@ -1,1 +1,2 @@
 C:\Source\Trunk\MyFirstGame\SpriteSheetRuntime\Content\obj\x86\Release\ResolveAssemblyReference.cache
+F:\Code\lulz_repos\MyFirstGame\SpriteSheetRuntime\Content\obj\x86\Release\ResolveAssemblyReference.cache
